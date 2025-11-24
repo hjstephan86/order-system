@@ -99,15 +99,18 @@ data-source add --name=PostgresDS --jndi-name=java:jboss/datasources/PostgresDS 
 exit
 ```
 
-## Build
+## Test
 
 ```bash
-mvn clean package
+mvn clean verify
 ```
 
 ## Deploy
 
 ```bash
+# Build application
+mvn clean package
+
 # Deploy application
 cp target/order-system.war /opt/wildfly/standalone/deployments/
 

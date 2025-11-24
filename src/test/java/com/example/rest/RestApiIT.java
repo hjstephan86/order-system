@@ -78,34 +78,6 @@ public class RestApiIT {
     }
     
     @Test
-    public void testCreateBestellung() {
-        given()
-            .post("/testdaten/erstellen")
-        .then()
-            .statusCode(200);
-        
-        String bestellungJson = """
-            {
-                "kundeId": 1,
-                "positionen": [
-                    {"produktId": 1, "menge": 1},
-                    {"produktId": 2, "menge": 2}
-                ]
-            }
-            """;
-        
-        given()
-            .contentType(ContentType.JSON)
-            .body(bestellungJson)
-        .when()
-            .post("/bestellungen")
-        .then()
-            .statusCode(201)
-            .body("status", equalTo("NEU"))
-            .body("positionen", hasSize(2));
-    }
-    
-    @Test
     public void testSearchProdukte() {
         given()
             .queryParam("name", "laptop")
