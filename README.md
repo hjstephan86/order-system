@@ -137,9 +137,9 @@ curl http://localhost:8080/order-system/api/produkte
 curl -X POST http://localhost:8080/order-system/api/kunden \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Thomas Müller",
-    "email": "thomas@example.com",
-    "adresse": "Hauptstraße 10, 80331 München"
+    "name": "Hanna Meier",
+    "email": "meier@example.com",
+    "adresse": "Am Anger 33, 33332 Gütersloh"
   }'
 
 # Create order

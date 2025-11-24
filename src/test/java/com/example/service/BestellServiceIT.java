@@ -55,7 +55,7 @@ public class BestellServiceIT {
     private Kunde testKunde;
     private Produkt testProdukt1;
     private Produkt testProdukt2;
-    
+
     private static long testCounter = 0;
 
     @BeforeEach
@@ -74,8 +74,8 @@ public class BestellServiceIT {
 
     @Test
     public void testErstelleBestellung() {
-        BestellService.BestellPositionDTO pos1 = new BestellService.BestellPositionDTO(testProdukt1.getId(), 2);
-        BestellService.BestellPositionDTO pos2 = new BestellService.BestellPositionDTO(testProdukt2.getId(), 3);
+        BestellPositionDTO pos1 = new BestellPositionDTO(testProdukt1.getId(), 2);
+        BestellPositionDTO pos2 = new BestellPositionDTO(testProdukt2.getId(), 3);
 
         Bestellung bestellung = bestellService.erstelleBestellung(
                 testKunde.getId(),
@@ -94,7 +94,7 @@ public class BestellServiceIT {
 
     @Test
     public void testErstelleBestellungMitUnzureichendemLagerbestand() {
-        BestellService.BestellPositionDTO pos = new BestellService.BestellPositionDTO(testProdukt1.getId(), 100);
+        BestellPositionDTO pos = new BestellPositionDTO(testProdukt1.getId(), 100);
 
         try {
             bestellService.erstelleBestellung(testKunde.getId(), Arrays.asList(pos));
@@ -106,7 +106,7 @@ public class BestellServiceIT {
 
     @Test
     public void testAktualisiereBestellstatus() {
-        BestellService.BestellPositionDTO pos = new BestellService.BestellPositionDTO(testProdukt1.getId(), 1);
+        BestellPositionDTO pos = new BestellPositionDTO(testProdukt1.getId(), 1);
         Bestellung bestellung = bestellService.erstelleBestellung(
                 testKunde.getId(), Arrays.asList(pos));
 
@@ -118,8 +118,8 @@ public class BestellServiceIT {
 
     @Test
     public void testBestellungGesamtpreis() {
-        BestellService.BestellPositionDTO pos1 = new BestellService.BestellPositionDTO(testProdukt1.getId(), 2);
-        BestellService.BestellPositionDTO pos2 = new BestellService.BestellPositionDTO(testProdukt2.getId(), 3);
+        BestellPositionDTO pos1 = new BestellPositionDTO(testProdukt1.getId(), 2);
+        BestellPositionDTO pos2 = new BestellPositionDTO(testProdukt2.getId(), 3);
 
         Bestellung bestellung = bestellService.erstelleBestellung(
                 testKunde.getId(), Arrays.asList(pos1, pos2));
