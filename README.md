@@ -29,7 +29,7 @@ order-system/
 
 ## Prerequisites
 
-- JDK 17 or higher
+- JDK 17 or higher (test run succeeded with JDK 17 and JDK 21)
 - Maven 3.8+
 - PostgreSQL 14+
 - WildFly 27+ (or other Jakarta EE 10 compatible server)
