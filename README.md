@@ -18,6 +18,7 @@ order-system/
 │   │   │   └── META-INF/
 │   │   │       └── persistence.xml # JPA Configuration
 │   │   └── webapp/
+|   |       └── index.html          # HTML web application
 │   │       └── WEB-INF/
 │   │           └── beans.xml       # CDI Configuration
 │   └── test/
@@ -119,6 +120,12 @@ ls -l /opt/wildfly/standalone/deployments/
 
 # Watch logs
 tail -f /opt/wildfly/standalone/log/server.log
+```
+
+## HTML Web Application
+```bash
+# Access via web application
+http://localhost:8080/order-system/
 ```
 
 ## REST API Testing

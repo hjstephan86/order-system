@@ -28,6 +28,22 @@ public class BestellService {
     @Inject
     private ProduktRepository produktRepo;
 
+    /**
+     * Ruft alle Bestellungen ab und initialisiert die lazy-geladene 'positionen' Kollektion.
+     * Dadurch wird die LazyInitializationException während der JSON-Serialisierung vermieden.
+     */
+    public List<Bestellung> findAllAndInitializePositions() {
+        List<Bestellung> bestellungen = bestellungRepo.findAll();
+
+        // Explizite Initialisierung der lazy-geladenen Kollektion
+        for (Bestellung bestellung : bestellungen) {
+            // Durch Aufruf einer Methode auf der Collection wird sie geladen
+            bestellung.getPositionen().size(); 
+        }
+        
+        return bestellungen;
+    }
+    
     public Bestellung erstelleBestellung(Long kundeId, List<BestellPositionDTO> positionen) {
         Kunde kunde = kundeRepo.findById(kundeId)
                 .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
