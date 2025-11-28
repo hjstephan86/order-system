@@ -193,6 +193,15 @@ cp target/order-system.war /opt/wildfly/standalone/deployments/
 tail -f /opt/wildfly/standalone/log/server.log
 ```
 
+## ER-Diagram Overview Generation
+```bash
+# Download schemaspy JAR from GitHub
+curl -L https://github.com/schemaspy/schemaspy/releases/download/v7.0.2/schemaspy-app.jar -o schemaspy-app.jar  
+
+# Generate schema overview as HTML
+java -jar schemaspy-app.jar -t pgsql -host localhost:5432 -db bestellsystem -s public -u dbuser -p dbpassword -dp ~/.m2/repository/org/postgresql/postgresql/42.7.8/postgresql-42.7.8.jar -o doc/schemaspy -vizjs
+```
+
 ## Entities
 
 - **Kunde** (Customer)
