@@ -14,11 +14,13 @@
     <description>JEE Order Management System with Hibernate and PostgreSQL</description>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>21</java.version>
         <jakarta.version>11.0.0</jakarta.version>
         <hibernate.version>7.2.0.CR3</hibernate.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.url>https://gitlab.com/Stephan_Epp/order-system</project.url>
     </properties>
 
     <dependencies>
@@ -115,7 +117,7 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.14.1</version>
             <configuration>
-                <release>21</release>
+                <release>${java.version}</release>
             </configuration>
         </plugin>
         <plugin>
@@ -148,6 +150,18 @@
               </execution>
           </executions>
       </plugin>
+      <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>3.28.0</version>
+            <configuration>
+                <rulesets>
+                    <ruleset>pmd-ruleset.xml</ruleset>
+                </rulesets>
+                <targetJdk>${java.version}</targetJdk>
+                <outputDirectory>${project.basedir}/doc/pmd/</outputDirectory>
+            </configuration>
+        </plugin>
     </plugins>
   </build>
 </project>

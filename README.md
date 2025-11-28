@@ -193,7 +193,16 @@ cp target/order-system.war /opt/wildfly/standalone/deployments/
 tail -f /opt/wildfly/standalone/log/server.log
 ```
 
-## ER-Diagram Overview Generation
+## Cyclomatic Complexity Overview
+```bash
+# Run pmd code analysis
+mvn pmd:pmd
+
+# Generate cyclomatic complexity overview as TXT
+python3 cc.py
+```
+
+## Database Schema Overview
 ```bash
 # Download schemaspy JAR from GitHub
 curl -L https://github.com/schemaspy/schemaspy/releases/download/v7.0.2/schemaspy-app.jar -o schemaspy-app.jar  

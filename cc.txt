@@ -1,0 +1,259 @@
+================================================================================
+CYCLOMATIC COMPLEXITY REPORT
+================================================================================
+
+
+Class: BestellPosition
+Package: com.example.entity
+Total Complexity: 13
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - BestellPosition: 1 (line 41)
+  - BestellPosition: 1 (line 44)
+  - getId: 1 (line 51)
+  - setId: 1 (line 55)
+  - getBestellung: 1 (line 59)
+  - setBestellung: 1 (line 63)
+  - getProdukt: 1 (line 67)
+  - setProdukt: 1 (line 71)
+  - getMenge: 1 (line 75)
+  - setMenge: 1 (line 79)
+  - getEinzelpreis: 1 (line 83)
+  - setEinzelpreis: 1 (line 87)
+  - getGesamtpreis: 1 (line 91)
+
+
+Class: Bestellung
+Package: com.example.entity
+Total Complexity: 13
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - Bestellung: 1 (line 48)
+  - getId: 1 (line 54)
+  - setId: 1 (line 58)
+  - getKunde: 1 (line 62)
+  - setKunde: 1 (line 66)
+  - getBestelldatum: 1 (line 70)
+  - setBestelldatum: 1 (line 74)
+  - getStatus: 1 (line 78)
+  - setStatus: 1 (line 82)
+  - getPositionen: 1 (line 86)
+  - setPositionen: 1 (line 90)
+  - addPosition: 1 (line 95)
+  - getGesamtpreis: 1 (line 100)
+
+
+Class: Kunde
+Package: com.example.entity
+Total Complexity: 13
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - Kunde: 1 (line 39)
+  - Kunde: 1 (line 42)
+  - getId: 1 (line 49)
+  - setId: 1 (line 53)
+  - getName: 1 (line 57)
+  - setName: 1 (line 61)
+  - getEmail: 1 (line 65)
+  - setEmail: 1 (line 69)
+  - getAdresse: 1 (line 73)
+  - setAdresse: 1 (line 77)
+  - getBestellungen: 1 (line 81)
+  - setBestellungen: 1 (line 85)
+  - addBestellung: 1 (line 90)
+
+
+Class: Produkt
+Package: com.example.entity
+Total Complexity: 12
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - Produkt: 1 (line 33)
+  - Produkt: 1 (line 36)
+  - getId: 1 (line 44)
+  - setId: 1 (line 48)
+  - getName: 1 (line 52)
+  - setName: 1 (line 56)
+  - getBeschreibung: 1 (line 60)
+  - setBeschreibung: 1 (line 64)
+  - getPreis: 1 (line 68)
+  - setPreis: 1 (line 72)
+  - getLagerbestand: 1 (line 76)
+  - setLagerbestand: 1 (line 80)
+
+
+Class: BestellungResource
+Package: com.example.rest
+Total Complexity: 8
+Highest Method Complexity: 2
+--------------------------------------------------------------------------------
+Methods:
+  - createBestellung: 2 (line 52)
+  - updateStatus: 2 (line 68)
+  - getAllBestellungen: 1 (line 35)
+  - getBestellung: 1 (line 44)
+  - getBestellungenByKunde: 1 (line 84)
+  - getBestellungenByStatus: 1 (line 92)
+
+
+Class: KundeRepository
+Package: com.example.repository
+Total Complexity: 7
+Highest Method Complexity: 2
+--------------------------------------------------------------------------------
+Methods:
+  - save: 2 (line 19)
+  - delete: 2 (line 43)
+  - findById: 1 (line 28)
+  - findByEmail: 1 (line 32)
+  - findAll: 1 (line 39)
+
+
+Class: ProduktRepository
+Package: com.example.repository
+Total Complexity: 7
+Highest Method Complexity: 2
+--------------------------------------------------------------------------------
+Methods:
+  - save: 2 (line 18)
+  - delete: 2 (line 42)
+  - findById: 1 (line 27)
+  - findAll: 1 (line 31)
+  - findByNameContaining: 1 (line 35)
+
+
+Class: BestellService
+Package: com.example.service
+Total Complexity: 7
+Highest Method Complexity: 4
+--------------------------------------------------------------------------------
+Methods:
+  - erstelleBestellung: 4 (line 47)
+  - findAllAndInitializePositions: 2 (line 35)
+  - aktualisiereStatus: 1 (line 73)
+
+
+Class: BestellungRepository
+Package: com.example.repository
+Total Complexity: 6
+Highest Method Complexity: 2
+--------------------------------------------------------------------------------
+Methods:
+  - save: 2 (line 20)
+  - findById: 1 (line 29)
+  - findByKundeId: 1 (line 33)
+  - findByStatus: 1 (line 41)
+  - findAll: 1 (line 48)
+
+
+Class: KundeResource
+Package: com.example.rest
+Total Complexity: 6
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - getAllKunden: 1 (line 30)
+  - getKunde: 1 (line 38)
+  - createKunde: 1 (line 46)
+  - updateKunde: 1 (line 54)
+  - deleteKunde: 1 (line 67)
+  - getKundeByEmail: 1 (line 79)
+
+
+Class: ProduktResource
+Package: com.example.rest
+Total Complexity: 6
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - getAllProdukte: 1 (line 31)
+  - getProdukt: 1 (line 39)
+  - createProdukt: 1 (line 47)
+  - updateProdukt: 1 (line 55)
+  - deleteProdukt: 1 (line 68)
+  - searchProdukte: 1 (line 80)
+
+
+Class: BestellPositionDTO
+Package: com.example.service
+Total Complexity: 6
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - BestellPositionDTO: 1 (line 9)
+  - BestellPositionDTO: 1 (line 12)
+  - getProduktId: 1 (line 18)
+  - getMenge: 1 (line 22)
+  - setProduktId: 1 (line 27)
+  - setMenge: 1 (line 31)
+
+
+Class: BestellungCreateRequest
+Package: com.example.rest
+Total Complexity: 4
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - getKundeId: 1 (line 102)
+  - setKundeId: 1 (line 106)
+  - getPositionen: 1 (line 110)
+  - setPositionen: 1 (line 114)
+
+
+Class: ErrorResponse
+Package: com.example.rest
+Total Complexity: 3
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - ErrorResponse: 1 (line 136)
+  - getMessage: 1 (line 140)
+  - setMessage: 1 (line 144)
+
+
+Class: TestdatenResponse
+Package: com.example.rest
+Total Complexity: 3
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - TestdatenResponse: 1 (line 53)
+  - getMessage: 1 (line 57)
+  - setMessage: 1 (line 61)
+
+
+Class: StatusUpdateRequest
+Package: com.example.rest
+Total Complexity: 2
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - getStatus: 1 (line 123)
+  - setStatus: 1 (line 127)
+
+
+Class: JacksonConfig
+Package: com.example.rest
+Total Complexity: 2
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - JacksonConfig: 1 (line 14)
+  - getContext: 1 (line 20)
+
+
+Class: TestdatenResource
+Package: com.example.rest
+Total Complexity: 1
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - erstelleTestdaten: 1 (line 30)
+
+================================================================================
+END OF REPORT
+================================================================================
