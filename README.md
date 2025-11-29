@@ -172,13 +172,23 @@ curl http://localhost:8080/order-system/api/produkte/suche?name=laptop
 # Open PostgreSQL console
 psql -h localhost -U dbuser -d bestellsystem
 
-# In psql:
-\dt                    # Show all tables
-\d kunde              # Show table structure
-SELECT * FROM kunde;  # Show all customers
+# Describe or show all tables
+\dt
+
+# Describe table kunde
+\d kunde
+
+# Query all customers in SQL syntax
+SELECT * FROM kunde;
+
+# Query all products in SQL syntax
 SELECT * FROM produkt;
+
+# Query all orders in SQL syntax
 SELECT * FROM bestellung;
-\q                    # Exit
+
+# Exit PostgreSQL console
+\q                
 ```
 
 ## Development Workflow

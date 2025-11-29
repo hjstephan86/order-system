@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KundeRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Order System</a> &gt; <a href="index.source.html" class="el_package">com.example.repository</a> &gt; <span class="el_source">KundeRepository.java</span></div><h1>KundeRepository.java</h1><pre class="source lang-java linenums">package com.example.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.example.entity.Kunde;
+
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+
+@Stateless
+<span class="fc" id="L14">public class KundeRepository {</span>
+
+    @PersistenceContext
+    private EntityManager em;
+
+    public Kunde save(Kunde kunde) {
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (kunde.getId() == null) {</span>
+<span class="fc" id="L21">            em.persist(kunde);</span>
+<span class="fc" id="L22">            return kunde;</span>
+        } else {
+<span class="nc" id="L24">            return em.merge(kunde);</span>
+        }
+    }
+
+    public Optional&lt;Kunde&gt; findById(Long id) {
+<span class="fc" id="L29">        return Optional.ofNullable(em.find(Kunde.class, id));</span>
+    }
+
+    public Optional&lt;Kunde&gt; findByEmail(String email) {
+<span class="fc" id="L33">        TypedQuery&lt;Kunde&gt; query = em.createQuery(</span>
+                &quot;SELECT k FROM Kunde k WHERE k.email = :email&quot;, Kunde.class);
+<span class="fc" id="L35">        query.setParameter(&quot;email&quot;, email);</span>
+<span class="fc" id="L36">        return query.getResultList().stream().findFirst();</span>
+    }
+
+    public List&lt;Kunde&gt; findAll() {
+<span class="fc" id="L40">        return em.createQuery(&quot;SELECT k FROM Kunde k&quot;, Kunde.class).getResultList();</span>
+    }
+
+    public void delete(Kunde kunde) {
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        em.remove(em.contains(kunde) ? kunde : em.merge(kunde));</span>
+<span class="fc" id="L45">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

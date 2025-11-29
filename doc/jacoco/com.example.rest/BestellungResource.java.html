@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BestellungResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Order System</a> &gt; <a href="index.source.html" class="el_package">com.example.rest</a> &gt; <span class="el_source">BestellungResource.java</span></div><h1>BestellungResource.java</h1><pre class="source lang-java linenums">package com.example.rest;
+
+import java.util.List;
+
+import com.example.entity.BestellStatus;
+import com.example.entity.Bestellung;
+import com.example.repository.BestellungRepository;
+import com.example.service.BestellPositionDTO;
+import com.example.service.BestellService;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path(&quot;/bestellungen&quot;)
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+<span class="nc" id="L25">public class BestellungResource {</span>
+
+    @Inject
+    private BestellungRepository bestellungRepository;
+
+    @Inject
+    private BestellService bestellService;
+
+    // GET /api/bestellungen - Alle Bestellungen abrufen
+    @GET
+    public Response getAllBestellungen() {
+        // FIX: Nutzen Sie den Service, um Bestellungen abzurufen und die lazy-Kollektionen zu initialisieren
+<span class="nc" id="L37">        List&lt;Bestellung&gt; bestellungen = bestellService.findAllAndInitializePositions();</span>
+<span class="nc" id="L38">        return Response.ok(bestellungen).build();</span>
+    }
+
+    // GET /api/bestellungen/{id} - Einzelne Bestellung abrufen
+    @GET
+    @Path(&quot;/{id}&quot;)
+    public Response getBestellung(@PathParam(&quot;id&quot;) Long id) {
+        // FIX: Rufen Sie die Methode im Service auf, die die Initialisierung durchführt.
+<span class="nc" id="L46">        List&lt;Bestellung&gt; bestellungen = bestellService.findAllAndInitializePositions();</span>
+<span class="nc" id="L47">        return Response.ok(bestellungen).build();</span>
+    }
+
+    // POST /api/bestellungen - Neue Bestellung erstellen
+    @POST
+    public Response createBestellung(BestellungCreateRequest request) {
+        try {
+<span class="nc" id="L54">            Bestellung bestellung = bestellService.erstelleBestellung(</span>
+<span class="nc" id="L55">                    request.getKundeId(),</span>
+<span class="nc" id="L56">                    request.getPositionen());</span>
+<span class="nc" id="L57">            return Response.status(Response.Status.CREATED).entity(bestellung).build();</span>
+<span class="nc" id="L58">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L59">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L60">                    .entity(new ErrorResponse(e.getMessage()))</span>
+<span class="nc" id="L61">                    .build();</span>
+        }
+    }
+
+    // PUT /api/bestellungen/{id}/status - Status einer Bestellung ändern
+    @PUT
+    @Path(&quot;/{id}/status&quot;)
+    public Response updateStatus(@PathParam(&quot;id&quot;) Long id, StatusUpdateRequest request) {
+        try {
+<span class="nc" id="L70">            bestellService.aktualisiereStatus(id, request.getStatus());</span>
+<span class="nc" id="L71">            return bestellungRepository.findById(id)</span>
+<span class="nc" id="L72">                    .map(bestellung -&gt; Response.ok(bestellung).build())</span>
+<span class="nc" id="L73">                    .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+<span class="nc" id="L74">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L75">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L76">                    .entity(new ErrorResponse(e.getMessage()))</span>
+<span class="nc" id="L77">                    .build();</span>
+        }
+    }
+
+    // GET /api/bestellungen/kunde/{kundeId} - Bestellungen eines Kunden
+    @GET
+    @Path(&quot;/kunde/{kundeId}&quot;)
+    public Response getBestellungenByKunde(@PathParam(&quot;kundeId&quot;) Long kundeId) {
+<span class="nc" id="L85">        List&lt;Bestellung&gt; bestellungen = bestellungRepository.findByKundeId(kundeId);</span>
+<span class="nc" id="L86">        return Response.ok(bestellungen).build();</span>
+    }
+
+    // GET /api/bestellungen/status/{status} - Bestellungen nach Status
+    @GET
+    @Path(&quot;/status/{status}&quot;)
+    public Response getBestellungenByStatus(@PathParam(&quot;status&quot;) BestellStatus status) {
+<span class="nc" id="L93">        List&lt;Bestellung&gt; bestellungen = bestellungRepository.findByStatus(status);</span>
+<span class="nc" id="L94">        return Response.ok(bestellungen).build();</span>
+    }
+
+    // DTO für Bestellung erstellen
+<span class="nc" id="L98">    public static class BestellungCreateRequest {</span>
+        private Long kundeId;
+        private List&lt;BestellPositionDTO&gt; positionen;
+
+        public Long getKundeId() {
+<span class="nc" id="L103">            return kundeId;</span>
+        }
+
+        public void setKundeId(Long kundeId) {
+<span class="nc" id="L107">            this.kundeId = kundeId;</span>
+<span class="nc" id="L108">        }</span>
+
+        public List&lt;BestellPositionDTO&gt; getPositionen() {
+<span class="nc" id="L111">            return positionen;</span>
+        }
+
+        public void setPositionen(List&lt;BestellPositionDTO&gt; positionen) {
+<span class="nc" id="L115">            this.positionen = positionen;</span>
+<span class="nc" id="L116">        }</span>
+    }
+
+    // DTO für Status-Update
+<span class="nc" id="L120">    public static class StatusUpdateRequest {</span>
+        private BestellStatus status;
+
+        public BestellStatus getStatus() {
+<span class="nc" id="L124">            return status;</span>
+        }
+
+        public void setStatus(BestellStatus status) {
+<span class="nc" id="L128">            this.status = status;</span>
+<span class="nc" id="L129">        }</span>
+    }
+
+    // Error Response DTO
+    public static class ErrorResponse {
+        private String message;
+
+<span class="nc" id="L136">        public ErrorResponse(String message) {</span>
+<span class="nc" id="L137">            this.message = message;</span>
+<span class="nc" id="L138">        }</span>
+
+        public String getMessage() {
+<span class="nc" id="L141">            return message;</span>
+        }
+
+        public void setMessage(String message) {
+<span class="nc" id="L145">            this.message = message;</span>
+<span class="nc" id="L146">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
