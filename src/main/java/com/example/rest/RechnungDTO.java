@@ -1,54 +1,21 @@
-package com.example.entity;
+package com.example.rest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "rechnung")
-public class Rechnung {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RechnungDTO {
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String rechnungsnummer;
-
-    @OneToOne
-    @JoinColumn(name = "bestellung_id", nullable = false)
-    @JsonIgnoreProperties({ "positionen" })
-    private Bestellung bestellung;
-
-    @Column(nullable = false)
+    private Long bestellungId;
+    private String kundeName;
     private LocalDateTime erstellungsdatum;
-
-    @Column(nullable = false)
     private BigDecimal gesamtbetrag;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private RechnungsStatus status = RechnungsStatus.OFFEN;
-
+    private String status;
     private LocalDateTime bezahltAm;
+    private String bezahltVon;
 
-    private String bezahltVon; // Username/System user who marked as paid
-
-    // Constructors
-    public Rechnung() {
-        this.erstellungsdatum = LocalDateTime.now();
+    // Constructor
+    public RechnungDTO() {
     }
 
     // Getters and Setters
@@ -68,12 +35,20 @@ public class Rechnung {
         this.rechnungsnummer = rechnungsnummer;
     }
 
-    public Bestellung getBestellung() {
-        return bestellung;
+    public Long getBestellungId() {
+        return bestellungId;
     }
 
-    public void setBestellung(Bestellung bestellung) {
-        this.bestellung = bestellung;
+    public void setBestellungId(Long bestellungId) {
+        this.bestellungId = bestellungId;
+    }
+
+    public String getKundeName() {
+        return kundeName;
+    }
+
+    public void setKundeName(String kundeName) {
+        this.kundeName = kundeName;
     }
 
     public LocalDateTime getErstellungsdatum() {
@@ -92,11 +67,11 @@ public class Rechnung {
         this.gesamtbetrag = gesamtbetrag;
     }
 
-    public RechnungsStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(RechnungsStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

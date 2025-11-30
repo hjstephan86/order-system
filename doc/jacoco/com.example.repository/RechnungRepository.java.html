@@ -10,57 +10,59 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-<span class="nc" id="L15">public class RechnungRepository {</span>
+@Transactional
+<span class="fc" id="L17">public class RechnungRepository {</span>
 
     @PersistenceContext
     private EntityManager em;
 
     public Rechnung save(Rechnung rechnung) {
-<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (rechnung.getId() == null) {</span>
-<span class="nc" id="L22">            em.persist(rechnung);</span>
-<span class="nc" id="L23">            return rechnung;</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (rechnung.getId() == null) {</span>
+<span class="fc" id="L24">            em.persist(rechnung);</span>
+<span class="fc" id="L25">            return rechnung;</span>
         } else {
-<span class="nc" id="L25">            return em.merge(rechnung);</span>
+<span class="fc" id="L27">            return em.merge(rechnung);</span>
         }
     }
 
     public Optional&lt;Rechnung&gt; findById(Long id) {
-<span class="nc" id="L30">        Rechnung rechnung = em.find(Rechnung.class, id);</span>
-<span class="nc" id="L31">        return Optional.ofNullable(rechnung);</span>
+<span class="fc" id="L32">        Rechnung rechnung = em.find(Rechnung.class, id);</span>
+<span class="fc" id="L33">        return Optional.ofNullable(rechnung);</span>
     }
 
     public List&lt;Rechnung&gt; findAll() {
-<span class="nc" id="L35">        TypedQuery&lt;Rechnung&gt; query = em.createQuery(</span>
+<span class="fc" id="L37">        TypedQuery&lt;Rechnung&gt; query = em.createQuery(</span>
                 &quot;SELECT r FROM Rechnung r ORDER BY r.erstellungsdatum DESC&quot;,
                 Rechnung.class);
-<span class="nc" id="L38">        return query.getResultList();</span>
+<span class="fc" id="L40">        return query.getResultList();</span>
     }
 
     public Rechnung findByBestellungId(Long bestellungId) {
-<span class="nc" id="L42">        TypedQuery&lt;Rechnung&gt; query = em.createQuery(</span>
+<span class="fc" id="L44">        TypedQuery&lt;Rechnung&gt; query = em.createQuery(</span>
                 &quot;SELECT r FROM Rechnung r WHERE r.bestellung.id = :bestellungId&quot;,
                 Rechnung.class);
-<span class="nc" id="L45">        query.setParameter(&quot;bestellungId&quot;, bestellungId);</span>
-<span class="nc" id="L46">        List&lt;Rechnung&gt; results = query.getResultList();</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        return results.isEmpty() ? null : results.get(0);</span>
+<span class="fc" id="L47">        query.setParameter(&quot;bestellungId&quot;, bestellungId);</span>
+<span class="fc" id="L48">        List&lt;Rechnung&gt; results = query.getResultList();</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        return results.isEmpty() ? null : results.get(0);</span>
     }
 
     public List&lt;Rechnung&gt; findByStatus(RechnungsStatus status) {
-<span class="nc" id="L51">        TypedQuery&lt;Rechnung&gt; query = em.createQuery(</span>
+<span class="fc" id="L53">        TypedQuery&lt;Rechnung&gt; query = em.createQuery(</span>
                 &quot;SELECT r FROM Rechnung r WHERE r.status = :status ORDER BY r.erstellungsdatum DESC&quot;,
                 Rechnung.class);
-<span class="nc" id="L54">        query.setParameter(&quot;status&quot;, status);</span>
-<span class="nc" id="L55">        return query.getResultList();</span>
+<span class="fc" id="L56">        query.setParameter(&quot;status&quot;, status);</span>
+<span class="fc" id="L57">        return query.getResultList();</span>
     }
 
     public void delete(Rechnung rechnung) {
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (em.contains(rechnung)) {</span>
-<span class="nc" id="L60">            em.remove(rechnung);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (em.contains(rechnung)) {</span>
+<span class="nc" id="L62">            em.remove(rechnung);</span>
         } else {
-<span class="nc" id="L62">            em.remove(em.merge(rechnung));</span>
+<span class="fc" id="L64">            em.remove(em.merge(rechnung));</span>
         }
-<span class="nc" id="L64">    }</span>
+<span class="fc" id="L66">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

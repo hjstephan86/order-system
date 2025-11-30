@@ -157,13 +157,22 @@ curl -X POST http://localhost:8080/order-system/api/bestellungen \
 # Get customer orders
 curl http://localhost:8080/order-system/api/bestellungen/kunde/1
 
-# Update order status
-curl -X PUT http://localhost:8080/order-system/api/bestellungen/1/status \
-  -H "Content-Type: application/json" \
-  -d '{"status": "IN_BEARBEITUNG"}'
+# Create bill for order with ID 1
+curl -X POST http://localhost:8080/order-system/api/rechnungen/erstellen/1
 
-# Search products
-curl http://localhost:8080/order-system/api/produkte/suche?name=laptop
+# Get all bills
+curl http://localhost:8080/order-system/api/rechnungen
+
+# Download bill with ID 1 as PDF
+curl http://localhost:8080/order-system/api/rechnungen/1/pdf -o rechnung.pdf
+
+# Mark bill with ID 1 as payed
+curl -X PUT http://localhost:8080/order-system/api/rechnungen/1/bezahlen \
+  -H "Content-Type: application/json" \
+  -d '{"bearbeiter": "Stephan"}'
+
+# Check bill with ID 1 (status should be completed)
+curl http://localhost:8080/order-system/api/bestellungen/1
 ```
 
 ## Database Queries

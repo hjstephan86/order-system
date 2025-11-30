@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,8 +29,7 @@ public class Bestellung {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "kunde_id", nullable = false)
     private Kunde kunde;
 
@@ -42,6 +41,7 @@ public class Bestellung {
     private BestellStatus status;
 
     @OneToMany(mappedBy = "bestellung", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<BestellPosition> positionen = new ArrayList<>();
 
     // Konstruktoren

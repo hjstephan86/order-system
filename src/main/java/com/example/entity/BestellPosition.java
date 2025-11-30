@@ -2,7 +2,7 @@ package com.example.entity;
 
 import java.math.BigDecimal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,9 +22,9 @@ public class BestellPosition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bestellung_id", nullable = false)
+    @JsonBackReference
     private Bestellung bestellung;
 
     @ManyToOne(fetch = FetchType.EAGER)

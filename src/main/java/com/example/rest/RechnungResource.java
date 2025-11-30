@@ -2,6 +2,7 @@ package com.example.rest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.example.entity.Rechnung;
 import com.example.service.PdfService;
@@ -29,12 +30,30 @@ public class RechnungResource {
     @Inject
     private PdfService pdfService;
 
+    private RechnungDTO toDTO(Rechnung rechnung) {
+        RechnungDTO dto = new RechnungDTO();
+        dto.setId(rechnung.getId());
+        dto.setRechnungsnummer(rechnung.getRechnungsnummer());
+        dto.setBestellungId(rechnung.getBestellung().getId());
+        dto.setKundeName(rechnung.getBestellung().getKunde().getName());
+        dto.setErstellungsdatum(rechnung.getErstellungsdatum());
+        dto.setGesamtbetrag(rechnung.getGesamtbetrag());
+        dto.setStatus(rechnung.getStatus().toString());
+        dto.setBezahltAm(rechnung.getBezahltAm());
+        dto.setBezahltVon(rechnung.getBezahltVon());
+        return dto;
+    }
+
     @GET
     public Response getAlleRechnungen() {
         try {
             List<Rechnung> rechnungen = rechnungService.findeAlleRechnungen();
-            return Response.ok(rechnungen).build();
+            List<RechnungDTO> dtos = rechnungen.stream()
+                    .map(this::toDTO)
+                    .collect(Collectors.toList());
+            return Response.ok(dtos).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Map.of("error", e.getMessage()))
                     .build();
@@ -46,7 +65,7 @@ public class RechnungResource {
     public Response getRechnungById(@PathParam("id") Long id) {
         try {
             Rechnung rechnung = rechnungService.findeRechnungById(id);
-            return Response.ok(rechnung).build();
+            return Response.ok(toDTO(rechnung)).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", e.getMessage()))
@@ -64,7 +83,7 @@ public class RechnungResource {
                         .entity(Map.of("error", "Keine Rechnung für diese Bestellung gefunden"))
                         .build();
             }
-            return Response.ok(rechnung).build();
+            return Response.ok(toDTO(rechnung)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Map.of("error", e.getMessage()))
@@ -77,7 +96,10 @@ public class RechnungResource {
     public Response getOffeneRechnungen() {
         try {
             List<Rechnung> rechnungen = rechnungService.findeOffeneRechnungen();
-            return Response.ok(rechnungen).build();
+            List<RechnungDTO> dtos = rechnungen.stream()
+                    .map(this::toDTO)
+                    .collect(Collectors.toList());
+            return Response.ok(dtos).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Map.of("error", e.getMessage()))
@@ -90,7 +112,7 @@ public class RechnungResource {
     public Response erstelleRechnung(@PathParam("bestellungId") Long bestellungId) {
         try {
             Rechnung rechnung = rechnungService.erstelleRechnung(bestellungId);
-            return Response.status(Response.Status.CREATED).entity(rechnung).build();
+            return Response.status(Response.Status.CREATED).entity(toDTO(rechnung)).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", e.getMessage()))
@@ -110,7 +132,7 @@ public class RechnungResource {
         try {
             String bearbeiter = requestBody.getOrDefault("bearbeiter", "System");
             Rechnung rechnung = rechnungService.markiereAlsBezahlt(id, bearbeiter);
-            return Response.ok(rechnung).build();
+            return Response.ok(toDTO(rechnung)).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", e.getMessage()))
@@ -128,7 +150,6 @@ public class RechnungResource {
 
     @GET
     @Path("/{id}/pdf")
-    @Produces("application/pdf")
     public Response downloadPdf(@PathParam("id") Long id) {
         try {
             Rechnung rechnung = rechnungService.findeRechnungById(id);
@@ -137,14 +158,21 @@ public class RechnungResource {
             return Response.ok(pdfBytes)
                     .header("Content-Disposition",
                             "attachment; filename=\"" + rechnung.getRechnungsnummer() + ".pdf\"")
+                    .header("Content-Type", "application/pdf")
                     .build();
         } catch (IllegalArgumentException e) {
+            System.err.println("Rechnung nicht gefunden: " + e.getMessage());
+            e.printStackTrace();
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity(Map.of("error", e.getMessage()))
+                    .entity("Rechnung nicht gefunden")
+                    .type(MediaType.TEXT_PLAIN)
                     .build();
         } catch (Exception e) {
+            System.err.println("Fehler beim PDF-Generieren: " + e.getMessage());
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Map.of("error", e.getMessage()))
+                    .entity("Fehler beim Generieren des PDFs: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
                     .build();
         }
     }

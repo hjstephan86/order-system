@@ -2,6 +2,7 @@
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.example.entity.Rechnung;
 import com.example.service.PdfService;
@@ -21,7 +22,7 @@ import jakarta.ws.rs.core.Response;
 @Path(&quot;/rechnungen&quot;)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-<span class="nc" id="L24">public class RechnungResource {</span>
+<span class="nc" id="L25">public class RechnungResource {</span>
 
     @Inject
     private RechnungService rechnungService;
@@ -29,15 +30,33 @@ import jakarta.ws.rs.core.Response;
     @Inject
     private PdfService pdfService;
 
+    private RechnungDTO toDTO(Rechnung rechnung) {
+<span class="nc" id="L34">        RechnungDTO dto = new RechnungDTO();</span>
+<span class="nc" id="L35">        dto.setId(rechnung.getId());</span>
+<span class="nc" id="L36">        dto.setRechnungsnummer(rechnung.getRechnungsnummer());</span>
+<span class="nc" id="L37">        dto.setBestellungId(rechnung.getBestellung().getId());</span>
+<span class="nc" id="L38">        dto.setKundeName(rechnung.getBestellung().getKunde().getName());</span>
+<span class="nc" id="L39">        dto.setErstellungsdatum(rechnung.getErstellungsdatum());</span>
+<span class="nc" id="L40">        dto.setGesamtbetrag(rechnung.getGesamtbetrag());</span>
+<span class="nc" id="L41">        dto.setStatus(rechnung.getStatus().toString());</span>
+<span class="nc" id="L42">        dto.setBezahltAm(rechnung.getBezahltAm());</span>
+<span class="nc" id="L43">        dto.setBezahltVon(rechnung.getBezahltVon());</span>
+<span class="nc" id="L44">        return dto;</span>
+    }
+
     @GET
     public Response getAlleRechnungen() {
         try {
-<span class="nc" id="L35">            List&lt;Rechnung&gt; rechnungen = rechnungService.findeAlleRechnungen();</span>
-<span class="nc" id="L36">            return Response.ok(rechnungen).build();</span>
-<span class="nc" id="L37">        } catch (Exception e) {</span>
-<span class="nc" id="L38">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L39">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L40">                    .build();</span>
+<span class="nc" id="L50">            List&lt;Rechnung&gt; rechnungen = rechnungService.findeAlleRechnungen();</span>
+<span class="nc" id="L51">            List&lt;RechnungDTO&gt; dtos = rechnungen.stream()</span>
+<span class="nc" id="L52">                    .map(this::toDTO)</span>
+<span class="nc" id="L53">                    .collect(Collectors.toList());</span>
+<span class="nc" id="L54">            return Response.ok(dtos).build();</span>
+<span class="nc" id="L55">        } catch (Exception e) {</span>
+<span class="nc" id="L56">            e.printStackTrace();</span>
+<span class="nc" id="L57">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L58">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L59">                    .build();</span>
         }
     }
 
@@ -45,12 +64,12 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/{id}&quot;)
     public Response getRechnungById(@PathParam(&quot;id&quot;) Long id) {
         try {
-<span class="nc" id="L48">            Rechnung rechnung = rechnungService.findeRechnungById(id);</span>
-<span class="nc" id="L49">            return Response.ok(rechnung).build();</span>
-<span class="nc" id="L50">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L51">            return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L52">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L53">                    .build();</span>
+<span class="nc" id="L67">            Rechnung rechnung = rechnungService.findeRechnungById(id);</span>
+<span class="nc" id="L68">            return Response.ok(toDTO(rechnung)).build();</span>
+<span class="nc" id="L69">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L70">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L71">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L72">                    .build();</span>
         }
     }
 
@@ -58,17 +77,17 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/bestellung/{bestellungId}&quot;)
     public Response getRechnungByBestellungId(@PathParam(&quot;bestellungId&quot;) Long bestellungId) {
         try {
-<span class="nc" id="L61">            Rechnung rechnung = rechnungService.findeRechnungByBestellungId(bestellungId);</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">            if (rechnung == null) {</span>
-<span class="nc" id="L63">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L64">                        .entity(Map.of(&quot;error&quot;, &quot;Keine Rechnung für diese Bestellung gefunden&quot;))</span>
-<span class="nc" id="L65">                        .build();</span>
+<span class="nc" id="L80">            Rechnung rechnung = rechnungService.findeRechnungByBestellungId(bestellungId);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">            if (rechnung == null) {</span>
+<span class="nc" id="L82">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L83">                        .entity(Map.of(&quot;error&quot;, &quot;Keine Rechnung für diese Bestellung gefunden&quot;))</span>
+<span class="nc" id="L84">                        .build();</span>
             }
-<span class="nc" id="L67">            return Response.ok(rechnung).build();</span>
-<span class="nc" id="L68">        } catch (Exception e) {</span>
-<span class="nc" id="L69">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L70">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L71">                    .build();</span>
+<span class="nc" id="L86">            return Response.ok(toDTO(rechnung)).build();</span>
+<span class="nc" id="L87">        } catch (Exception e) {</span>
+<span class="nc" id="L88">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L89">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L90">                    .build();</span>
         }
     }
 
@@ -76,12 +95,15 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/offen&quot;)
     public Response getOffeneRechnungen() {
         try {
-<span class="nc" id="L79">            List&lt;Rechnung&gt; rechnungen = rechnungService.findeOffeneRechnungen();</span>
-<span class="nc" id="L80">            return Response.ok(rechnungen).build();</span>
-<span class="nc" id="L81">        } catch (Exception e) {</span>
-<span class="nc" id="L82">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L83">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L84">                    .build();</span>
+<span class="nc" id="L98">            List&lt;Rechnung&gt; rechnungen = rechnungService.findeOffeneRechnungen();</span>
+<span class="nc" id="L99">            List&lt;RechnungDTO&gt; dtos = rechnungen.stream()</span>
+<span class="nc" id="L100">                    .map(this::toDTO)</span>
+<span class="nc" id="L101">                    .collect(Collectors.toList());</span>
+<span class="nc" id="L102">            return Response.ok(dtos).build();</span>
+<span class="nc" id="L103">        } catch (Exception e) {</span>
+<span class="nc" id="L104">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L105">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L106">                    .build();</span>
         }
     }
 
@@ -89,16 +111,16 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/erstellen/{bestellungId}&quot;)
     public Response erstelleRechnung(@PathParam(&quot;bestellungId&quot;) Long bestellungId) {
         try {
-<span class="nc" id="L92">            Rechnung rechnung = rechnungService.erstelleRechnung(bestellungId);</span>
-<span class="nc" id="L93">            return Response.status(Response.Status.CREATED).entity(rechnung).build();</span>
-<span class="nc" id="L94">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L95">            return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L96">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L97">                    .build();</span>
-<span class="nc" id="L98">        } catch (Exception e) {</span>
-<span class="nc" id="L99">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L100">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L101">                    .build();</span>
+<span class="nc" id="L114">            Rechnung rechnung = rechnungService.erstelleRechnung(bestellungId);</span>
+<span class="nc" id="L115">            return Response.status(Response.Status.CREATED).entity(toDTO(rechnung)).build();</span>
+<span class="nc" id="L116">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L117">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L118">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L119">                    .build();</span>
+<span class="nc" id="L120">        } catch (Exception e) {</span>
+<span class="nc" id="L121">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L122">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L123">                    .build();</span>
         }
     }
 
@@ -108,44 +130,50 @@ import jakarta.ws.rs.core.Response;
             @PathParam(&quot;id&quot;) Long id,
             Map&lt;String, String&gt; requestBody) {
         try {
-<span class="nc" id="L111">            String bearbeiter = requestBody.getOrDefault(&quot;bearbeiter&quot;, &quot;System&quot;);</span>
-<span class="nc" id="L112">            Rechnung rechnung = rechnungService.markiereAlsBezahlt(id, bearbeiter);</span>
-<span class="nc" id="L113">            return Response.ok(rechnung).build();</span>
-<span class="nc" id="L114">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L115">            return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L116">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L117">                    .build();</span>
-<span class="nc" id="L118">        } catch (IllegalStateException e) {</span>
-<span class="nc" id="L119">            return Response.status(Response.Status.BAD_REQUEST)</span>
-<span class="nc" id="L120">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L121">                    .build();</span>
-<span class="nc" id="L122">        } catch (Exception e) {</span>
-<span class="nc" id="L123">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L124">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L125">                    .build();</span>
+<span class="nc" id="L133">            String bearbeiter = requestBody.getOrDefault(&quot;bearbeiter&quot;, &quot;System&quot;);</span>
+<span class="nc" id="L134">            Rechnung rechnung = rechnungService.markiereAlsBezahlt(id, bearbeiter);</span>
+<span class="nc" id="L135">            return Response.ok(toDTO(rechnung)).build();</span>
+<span class="nc" id="L136">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L137">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L138">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L139">                    .build();</span>
+<span class="nc" id="L140">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L141">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L142">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L143">                    .build();</span>
+<span class="nc" id="L144">        } catch (Exception e) {</span>
+<span class="nc" id="L145">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L146">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L147">                    .build();</span>
         }
     }
 
     @GET
     @Path(&quot;/{id}/pdf&quot;)
-    @Produces(&quot;application/pdf&quot;)
     public Response downloadPdf(@PathParam(&quot;id&quot;) Long id) {
         try {
-<span class="nc" id="L134">            Rechnung rechnung = rechnungService.findeRechnungById(id);</span>
-<span class="nc" id="L135">            byte[] pdfBytes = pdfService.generiereRechnungsPdf(rechnung);</span>
+<span class="nc" id="L155">            Rechnung rechnung = rechnungService.findeRechnungById(id);</span>
+<span class="nc" id="L156">            byte[] pdfBytes = pdfService.generiereRechnungsPdf(rechnung);</span>
 
-<span class="nc" id="L137">            return Response.ok(pdfBytes)</span>
-<span class="nc" id="L138">                    .header(&quot;Content-Disposition&quot;,</span>
-<span class="nc" id="L139">                            &quot;attachment; filename=\&quot;&quot; + rechnung.getRechnungsnummer() + &quot;.pdf\&quot;&quot;)</span>
-<span class="nc" id="L140">                    .build();</span>
-<span class="nc" id="L141">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L142">            return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L143">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L144">                    .build();</span>
-<span class="nc" id="L145">        } catch (Exception e) {</span>
-<span class="nc" id="L146">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L147">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L148">                    .build();</span>
+<span class="nc" id="L158">            return Response.ok(pdfBytes)</span>
+<span class="nc" id="L159">                    .header(&quot;Content-Disposition&quot;,</span>
+<span class="nc" id="L160">                            &quot;attachment; filename=\&quot;&quot; + rechnung.getRechnungsnummer() + &quot;.pdf\&quot;&quot;)</span>
+<span class="nc" id="L161">                    .header(&quot;Content-Type&quot;, &quot;application/pdf&quot;)</span>
+<span class="nc" id="L162">                    .build();</span>
+<span class="nc" id="L163">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L164">            System.err.println(&quot;Rechnung nicht gefunden: &quot; + e.getMessage());</span>
+<span class="nc" id="L165">            e.printStackTrace();</span>
+<span class="nc" id="L166">            return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L167">                    .entity(&quot;Rechnung nicht gefunden&quot;)</span>
+<span class="nc" id="L168">                    .type(MediaType.TEXT_PLAIN)</span>
+<span class="nc" id="L169">                    .build();</span>
+<span class="nc" id="L170">        } catch (Exception e) {</span>
+<span class="nc" id="L171">            System.err.println(&quot;Fehler beim PDF-Generieren: &quot; + e.getMessage());</span>
+<span class="nc" id="L172">            e.printStackTrace();</span>
+<span class="nc" id="L173">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L174">                    .entity(&quot;Fehler beim Generieren des PDFs: &quot; + e.getMessage())</span>
+<span class="nc" id="L175">                    .type(MediaType.TEXT_PLAIN)</span>
+<span class="nc" id="L176">                    .build();</span>
         }
     }
 }

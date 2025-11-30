@@ -5,17 +5,45 @@ CYCLOMATIC COMPLEXITY REPORT
 
 Class: RechnungResource
 Package: com.example.rest
-Total Complexity: 19
+Total Complexity: 20
 Highest Method Complexity: 4
 --------------------------------------------------------------------------------
 Methods:
-  - markiereAlsBezahlt: 4 (line 107)
-  - getRechnungByBestellungId: 3 (line 59)
-  - erstelleRechnung: 3 (line 90)
-  - downloadPdf: 3 (line 132)
-  - getAlleRechnungen: 2 (line 33)
-  - getRechnungById: 2 (line 46)
-  - getOffeneRechnungen: 2 (line 77)
+  - markiereAlsBezahlt: 4 (line 129)
+  - getRechnungByBestellungId: 3 (line 78)
+  - erstelleRechnung: 3 (line 112)
+  - downloadPdf: 3 (line 153)
+  - getAlleRechnungen: 2 (line 48)
+  - getRechnungById: 2 (line 65)
+  - getOffeneRechnungen: 2 (line 96)
+  - toDTO: 1 (line 33)
+
+
+Class: RechnungDTO
+Package: com.example.rest
+Total Complexity: 19
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - RechnungDTO: 1 (line 18)
+  - getId: 1 (line 22)
+  - setId: 1 (line 26)
+  - getRechnungsnummer: 1 (line 30)
+  - setRechnungsnummer: 1 (line 34)
+  - getBestellungId: 1 (line 38)
+  - setBestellungId: 1 (line 42)
+  - getKundeName: 1 (line 46)
+  - setKundeName: 1 (line 50)
+  - getErstellungsdatum: 1 (line 54)
+  - setErstellungsdatum: 1 (line 58)
+  - getGesamtbetrag: 1 (line 62)
+  - setGesamtbetrag: 1 (line 66)
+  - getStatus: 1 (line 70)
+  - setStatus: 1 (line 74)
+  - getBezahltAm: 1 (line 78)
+  - setBezahltAm: 1 (line 82)
+  - getBezahltVon: 1 (line 86)
+  - setBezahltVon: 1 (line 90)
 
 
 Class: Rechnung
@@ -24,23 +52,23 @@ Total Complexity: 17
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - Rechnung: 1 (line 47)
-  - getId: 1 (line 52)
-  - setId: 1 (line 56)
-  - getRechnungsnummer: 1 (line 60)
-  - setRechnungsnummer: 1 (line 64)
-  - getBestellung: 1 (line 68)
-  - setBestellung: 1 (line 72)
-  - getErstellungsdatum: 1 (line 76)
-  - setErstellungsdatum: 1 (line 80)
-  - getGesamtbetrag: 1 (line 84)
-  - setGesamtbetrag: 1 (line 88)
-  - getStatus: 1 (line 92)
-  - setStatus: 1 (line 96)
-  - getBezahltAm: 1 (line 100)
-  - setBezahltAm: 1 (line 104)
-  - getBezahltVon: 1 (line 108)
-  - setBezahltVon: 1 (line 112)
+  - Rechnung: 1 (line 50)
+  - getId: 1 (line 55)
+  - setId: 1 (line 59)
+  - getRechnungsnummer: 1 (line 63)
+  - setRechnungsnummer: 1 (line 67)
+  - getBestellung: 1 (line 71)
+  - setBestellung: 1 (line 75)
+  - getErstellungsdatum: 1 (line 79)
+  - setErstellungsdatum: 1 (line 83)
+  - getGesamtbetrag: 1 (line 87)
+  - setGesamtbetrag: 1 (line 91)
+  - getStatus: 1 (line 95)
+  - setStatus: 1 (line 99)
+  - getBezahltAm: 1 (line 103)
+  - setBezahltAm: 1 (line 107)
+  - getBezahltVon: 1 (line 111)
+  - setBezahltVon: 1 (line 115)
 
 
 Class: BestellPosition
@@ -166,12 +194,12 @@ Total Complexity: 9
 Highest Method Complexity: 2
 --------------------------------------------------------------------------------
 Methods:
-  - save: 2 (line 20)
-  - findByBestellungId: 2 (line 41)
-  - delete: 2 (line 58)
-  - findById: 1 (line 29)
-  - findAll: 1 (line 34)
-  - findByStatus: 1 (line 50)
+  - save: 2 (line 22)
+  - findByBestellungId: 2 (line 43)
+  - delete: 2 (line 60)
+  - findById: 1 (line 31)
+  - findAll: 1 (line 36)
+  - findByStatus: 1 (line 52)
 
 
 Class: BestellungResource
