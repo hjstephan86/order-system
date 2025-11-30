@@ -48,7 +48,7 @@ public class BestellungTest {
         b.setKunde(k);
         LocalDateTime dt = LocalDateTime.of(2020, 1, 2, 3, 4);
         b.setBestelldatum(dt);
-        b.setStatus(BestellStatus.VERSANDT);
+        b.setStatus(BestellStatus.VERSENDET);
 
         Produkt p = new Produkt("P", null, new BigDecimal("2.00"), 1);
         BestellPosition pos = new BestellPosition(p, 5); // 10.00
@@ -60,7 +60,7 @@ public class BestellungTest {
         assertThat(b.getId()).isEqualTo(123L);
         assertThat(b.getKunde()).isSameAs(k);
         assertThat(b.getBestelldatum()).isEqualTo(dt);
-        assertThat(b.getStatus()).isEqualTo(BestellStatus.VERSANDT);
+        assertThat(b.getStatus()).isEqualTo(BestellStatus.VERSENDET);
         assertThat(b.getPositionen()).containsExactly(pos);
         // setPositionen does not set backrefs; getGesamtpreis should still sum position
         // prices

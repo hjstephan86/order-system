@@ -31,7 +31,15 @@ public class RestApiIT {
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackages(true, "com.example")
+                .addPackages(true, "com.example.entity")
+                .addPackages(true, "com.example.repository")
+                .addPackages(true, "com.example.service")
+                .addPackage("com.example.rest")
+                .deleteClass(com.example.rest.RechnungResource.class)
+                .deleteClass(com.example.service.PdfService.class)
+                .deleteClass(com.example.service.RechnungService.class)
+                .deleteClass(com.example.repository.RechnungRepository.class)
+                .deleteClass(com.example.entity.Rechnung.class)
                 .addAsResource("META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }

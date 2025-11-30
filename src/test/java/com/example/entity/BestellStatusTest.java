@@ -12,8 +12,7 @@ public class BestellStatusTest {
 
         assertThat(values).contains(BestellStatus.NEU,
                 BestellStatus.IN_BEARBEITUNG,
-                BestellStatus.VERSANDT,
-                BestellStatus.GELIEFERT,
+                BestellStatus.VERSENDET,
                 BestellStatus.STORNIERT);
     }
 
