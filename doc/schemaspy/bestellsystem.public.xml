@@ -5,11 +5,13 @@
       <sequence increment="1" name="bestellung_position_id_seq" startValue="1"/>
       <sequence increment="1" name="kunde_id_seq" startValue="1"/>
       <sequence increment="1" name="produkt_id_seq" startValue="1"/>
+      <sequence increment="1" name="rechnung_id_seq" startValue="1"/>
    </sequences>
    <tables>
       <table catalog="bestellsystem" name="bestellung" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('bestellung_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5">
             <child catalog="bestellsystem" column="bestellung_id" foreignKey="fk56wbk32nqd9m8oatn6gm10squ" implied="false" onDeleteCascade="false" schema="public" table="bestellung_position"/>
+            <child catalog="bestellsystem" column="bestellung_id" foreignKey="fk6397ma8dlr4wd8fafixl0nxb0" implied="false" onDeleteCascade="false" schema="public" table="rechnung"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="bestelldatum" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="status" nullable="false" remarks="" size="255" type="varchar" typeCode="12"/>
@@ -20,7 +22,7 @@
          <index name="bestellung_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <checkConstraint constraint="(((status)::text = ANY ((ARRAY['NEU'::character varying, 'IN_BEARBEITUNG'::character varying, 'VERSANDT'::character varying, 'GELIEFERT'::character varying, 'STORNIERT'::character varying])::text[])))" name="bestellung_status_check"/>
+         <checkConstraint constraint="(((status)::text = ANY ((ARRAY['NEU'::character varying, 'IN_BEARBEITUNG'::character varying, 'VERSENDET'::character varying, 'ABGESCHLOSSEN'::character varying, 'STORNIERT'::character varying])::text[])))" name="bestellung_status_check"/>
       </table>
       <table catalog="bestellsystem" name="bestellung_position" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('bestellung_position_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
@@ -64,6 +66,29 @@
          <index name="produkt_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+      </table>
+      <table catalog="bestellsystem" name="rechnung" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('rechnung_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="bezahltam" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="bezahltvon" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="erstellungsdatum" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="2" id="4" name="gesamtbetrag" nullable="false" remarks="" size="38" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="rechnungsnummer" nullable="false" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="status" nullable="false" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="bestellung_id" nullable="false" remarks="" size="19" type="int8" typeCode="-5">
+            <parent catalog="bestellsystem" column="id" foreignKey="fk6397ma8dlr4wd8fafixl0nxb0" implied="false" onDeleteCascade="false" schema="public" table="bestellung"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="rechnung_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="uk_1uo3480eqbia9xnsonnbl93ag" unique="true">
+            <column ascending="true" name="rechnungsnummer"/>
+         </index>
+         <index name="uk_eg64o9br54q65m1obn19dmsj6" unique="true">
+            <column ascending="true" name="bestellung_id"/>
+         </index>
+         <checkConstraint constraint="(((status)::text = ANY ((ARRAY['OFFEN'::character varying, 'BEZAHLT'::character varying, 'STORNIERT'::character varying])::text[])))" name="rechnung_status_check"/>
       </table>
    </tables>
 </database>

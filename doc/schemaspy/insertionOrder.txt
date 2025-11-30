@@ -1,4 +1,5 @@
 kunde
 produkt
 bestellung
+rechnung
 bestellung_position

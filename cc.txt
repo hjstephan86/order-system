@@ -3,6 +3,46 @@ CYCLOMATIC COMPLEXITY REPORT
 ================================================================================
 
 
+Class: RechnungResource
+Package: com.example.rest
+Total Complexity: 19
+Highest Method Complexity: 4
+--------------------------------------------------------------------------------
+Methods:
+  - markiereAlsBezahlt: 4 (line 107)
+  - getRechnungByBestellungId: 3 (line 59)
+  - erstelleRechnung: 3 (line 90)
+  - downloadPdf: 3 (line 132)
+  - getAlleRechnungen: 2 (line 33)
+  - getRechnungById: 2 (line 46)
+  - getOffeneRechnungen: 2 (line 77)
+
+
+Class: Rechnung
+Package: com.example.entity
+Total Complexity: 17
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - Rechnung: 1 (line 47)
+  - getId: 1 (line 52)
+  - setId: 1 (line 56)
+  - getRechnungsnummer: 1 (line 60)
+  - setRechnungsnummer: 1 (line 64)
+  - getBestellung: 1 (line 68)
+  - setBestellung: 1 (line 72)
+  - getErstellungsdatum: 1 (line 76)
+  - setErstellungsdatum: 1 (line 80)
+  - getGesamtbetrag: 1 (line 84)
+  - setGesamtbetrag: 1 (line 88)
+  - getStatus: 1 (line 92)
+  - setStatus: 1 (line 96)
+  - getBezahltAm: 1 (line 100)
+  - setBezahltAm: 1 (line 104)
+  - getBezahltVon: 1 (line 108)
+  - setBezahltVon: 1 (line 112)
+
+
 Class: BestellPosition
 Package: com.example.entity
 Total Complexity: 13
@@ -84,6 +124,54 @@ Methods:
   - setPreis: 1 (line 72)
   - getLagerbestand: 1 (line 76)
   - setLagerbestand: 1 (line 80)
+
+
+Class: PdfService
+Package: com.example.service
+Total Complexity: 11
+Highest Method Complexity: 2
+--------------------------------------------------------------------------------
+Methods:
+  - addPositionenTabelle: 2 (line 113)
+  - generiereRechnungsPdf: 1 (line 30)
+  - addHeader: 1 (line 68)
+  - addKundenInfo: 1 (line 80)
+  - addRechnungsDetails: 1 (line 93)
+  - addGesamtsumme: 1 (line 141)
+  - addFooter: 1 (line 150)
+  - createCell: 1 (line 160)
+  - createHeaderCell: 1 (line 167)
+  - formatPrice: 1 (line 174)
+
+
+Class: RechnungService
+Package: com.example.service
+Total Complexity: 11
+Highest Method Complexity: 3
+--------------------------------------------------------------------------------
+Methods:
+  - markiereAlsBezahlt: 3 (line 49)
+  - erstelleRechnung: 2 (line 29)
+  - findeAlleRechnungen: 1 (line 69)
+  - findeRechnungById: 1 (line 73)
+  - findeRechnungByBestellungId: 1 (line 78)
+  - findeOffeneRechnungen: 1 (line 82)
+  - generiereRechnungsnummer: 1 (line 86)
+  - berechneGesamtbetrag: 1 (line 92)
+
+
+Class: RechnungRepository
+Package: com.example.repository
+Total Complexity: 9
+Highest Method Complexity: 2
+--------------------------------------------------------------------------------
+Methods:
+  - save: 2 (line 20)
+  - findByBestellungId: 2 (line 41)
+  - delete: 2 (line 58)
+  - findById: 1 (line 29)
+  - findAll: 1 (line 34)
+  - findByStatus: 1 (line 50)
 
 
 Class: BestellungResource

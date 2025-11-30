@@ -1,4 +1,4 @@
-date=2025-11-28 07:19:01+0100
+date=2025-11-30 11:10:06+0100
 os=Linux 6.8.0-88-generic
 schemaspy-version=7.0.2
 schemaspy-revision=v7.0.2
