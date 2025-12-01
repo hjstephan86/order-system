@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
         }
+
         body {
             display: flex;
             flex-direction: column;
         }
+
         .main-content {
             flex: 1 0 auto;
         }
+
         footer {
             flex-shrink: 0;
         }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .notification {
             position: fixed;
             top: 20px;
@@ -30,187 +42,262 @@
             min-width: 300px;
             animation: slideIn 0.3s ease-out;
         }
+
         @keyframes slideIn {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body class="bg-gray-100">
     <div id="notification-container"></div>
-    
+
     <div class="main-content">
-    <!-- Navigation -->
-    <nav class="bg-slate-800 text-white shadow-lg">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between h-16">
-                <h1 class="text-2xl font-bold">Order System</h1>
-                <div class="flex space-x-4">
-                    <button onclick="showTab('dashboard')" class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Dashboard</button>
-                    <button onclick="showTab('kunden')" class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Kunden</button>
-                    <button onclick="showTab('produkte')" class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Produkte</button>
-                    <button onclick="showTab('bestellungen')" class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Bestellungen</button>
+        <!-- Navigation -->
+        <nav class="bg-slate-800 text-white shadow-lg">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <h1 class="text-2xl font-bold">Order System</h1>
+                    <div class="flex space-x-4">
+                        <button onclick="showTab('dashboard')"
+                            class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Dashboard</button>
+                        <button onclick="showTab('kunden')"
+                            class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Kunden</button>
+                        <button onclick="showTab('produkte')"
+                            class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Produkte</button>
+                        <button onclick="showTab('bestellungen')"
+                            class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Bestellungen</button>
+                        <button onclick="showTab('rechnungen')"
+                            class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Rechnungen</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
-            <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="container mx-auto px-4 py-8">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <h2 class="text-3xl font-bold mb-6">Dashboard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="text-gray-500 text-sm">Kunden</div>
+                        <div id="stats-kunden" class="text-3xl font-bold text-blue-600">-</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="text-gray-500 text-sm">Produkte</div>
+                        <div id="stats-produkte" class="text-3xl font-bold text-green-600">-</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="text-gray-500 text-sm">Bestellungen</div>
+                        <div id="stats-bestellungen" class="text-3xl font-bold text-purple-600">-</div>
+                    </div>
+                </div>
                 <div class="bg-white p-6 rounded-lg shadow">
-                    <div class="text-gray-500 text-sm">Kunden</div>
-                    <div id="stats-kunden" class="text-3xl font-bold text-blue-600">-</div>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <div class="text-gray-500 text-sm">Produkte</div>
-                    <div id="stats-produkte" class="text-3xl font-bold text-green-600">-</div>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <div class="text-gray-500 text-sm">Bestellungen</div>
-                    <div id="stats-bestellungen" class="text-3xl font-bold text-purple-600">-</div>
+                    <h3 class="text-xl font-bold mb-4">Letzte Bestellungen</h3>
+                    <div id="recent-orders"></div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow">
-                <h3 class="text-xl font-bold mb-4">Letzte Bestellungen</h3>
-                <div id="recent-orders"></div>
+
+            <!-- Kunden Tab -->
+            <div id="kunden" class="tab-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold">Kunden</h2>
+                    <button onclick="showKundeForm()"
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Neuer Kunde</button>
+                </div>
+
+                <div id="kunde-form" class="hidden bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-xl font-bold mb-4">Kunde bearbeiten</h3>
+                    <form onsubmit="saveKunde(event)">
+                        <input type="hidden" id="kunde-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Name *</label>
+                                <input type="text" id="kunde-name" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Email *</label>
+                                <input type="email" id="kunde-email" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-2">Adresse</label>
+                            <input type="text" id="kunde-adresse"
+                                class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="flex space-x-2">
+                            <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Speichern</button>
+                            <button type="button" onclick="hideKundeForm()"
+                                class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Abbrechen</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Adresse</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="kunden-list" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Produkte Tab -->
+            <div id="produkte" class="tab-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold">Produkte</h2>
+                    <button onclick="showProduktForm()"
+                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Neues Produkt</button>
+                </div>
+
+                <div id="produkt-form" class="hidden bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-xl font-bold mb-4">Produkt bearbeiten</h3>
+                    <form onsubmit="saveProdukt(event)">
+                        <input type="hidden" id="produkt-id">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Name *</label>
+                                <input type="text" id="produkt-name" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Preis *</label>
+                                <input type="number" step="0.01" id="produkt-preis" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Lagerbestand *</label>
+                                <input type="number" id="produkt-lagerbestand" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Beschreibung</label>
+                                <input type="text" id="produkt-beschreibung"
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button type="submit"
+                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Speichern</button>
+                            <button type="button" onclick="hideProduktForm()"
+                                class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Abbrechen</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Beschreibung
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preis</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lagerbestand
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="produkte-list" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bestellungen Tab -->
+            <div id="bestellungen" class="tab-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold">Bestellungen</h2>
+                    <button onclick="showBestellungForm()"
+                        class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">+ Neue
+                        Bestellung</button>
+                </div>
+
+                <div id="bestellung-form" class="hidden bg-white p-6 rounded-lg shadow mb-6">
+                    <h3 class="text-xl font-bold mb-4">Neue Bestellung</h3>
+                    <form onsubmit="saveBestellung(event)">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-2">Kunde *</label>
+                            <select id="bestellung-kunde" required
+                                class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-purple-500"></select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-2">Produkte</label>
+                            <div id="bestellung-positionen"></div>
+                            <button type="button" onclick="addPosition()"
+                                class="mt-2 text-sm text-purple-600 hover:text-purple-700">+ Position
+                                hinzufügen</button>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button type="submit"
+                                class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Bestellung
+                                erstellen</button>
+                            <button type="button" onclick="hideBestellungForm()"
+                                class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Abbrechen</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="space-y-4" id="bestellungen-list"></div>
+            </div>
+
+            <!-- Rechnungen Tab -->
+            <div id="rechnungen" class="tab-content">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold">Rechnungen</h2>
+                    <div class="flex items-center space-x-2">
+                        <input id="create-rechnung-bestellung-id" type="number" placeholder="Bestellung ID"
+                            class="px-3 py-2 border rounded" />
+                        <button onclick="createRechnung()"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Rechnung
+                            erstellen</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nummer</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bestellung
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kunde</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Erstellt
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Betrag</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="rechnungen-list" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
-        <!-- Kunden Tab -->
-        <div id="kunden" class="tab-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold">Kunden</h2>
-                <button onclick="showKundeForm()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Neuer Kunde</button>
-            </div>
-            
-            <div id="kunde-form" class="hidden bg-white p-6 rounded-lg shadow mb-6">
-                <h3 class="text-xl font-bold mb-4">Kunde bearbeiten</h3>
-                <form onsubmit="saveKunde(event)">
-                    <input type="hidden" id="kunde-id">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Name *</label>
-                            <input type="text" id="kunde-name" required class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Email *</label>
-                            <input type="email" id="kunde-email" required class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Adresse</label>
-                        <input type="text" id="kunde-adresse" class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div class="flex space-x-2">
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Speichern</button>
-                        <button type="button" onclick="hideKundeForm()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Abbrechen</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Adresse</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen</th>
-                        </tr>
-                    </thead>
-                    <tbody id="kunden-list" class="divide-y divide-gray-200"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Produkte Tab -->
-        <div id="produkte" class="tab-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold">Produkte</h2>
-                <button onclick="showProduktForm()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Neues Produkt</button>
-            </div>
-            
-            <div id="produkt-form" class="hidden bg-white p-6 rounded-lg shadow mb-6">
-                <h3 class="text-xl font-bold mb-4">Produkt bearbeiten</h3>
-                <form onsubmit="saveProdukt(event)">
-                    <input type="hidden" id="produkt-id">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Name *</label>
-                            <input type="text" id="produkt-name" required class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Preis *</label>
-                            <input type="number" step="0.01" id="produkt-preis" required class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Lagerbestand *</label>
-                            <input type="number" id="produkt-lagerbestand" required class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-2">Beschreibung</label>
-                            <input type="text" id="produkt-beschreibung" class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500">
-                        </div>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Speichern</button>
-                        <button type="button" onclick="hideProduktForm()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Abbrechen</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="bg-white rounded-lg shadow overflow-hidden">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Beschreibung</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preis</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lagerbestand</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen</th>
-                        </tr>
-                    </thead>
-                    <tbody id="produkte-list" class="divide-y divide-gray-200"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Bestellungen Tab -->
-        <div id="bestellungen" class="tab-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold">Bestellungen</h2>
-                <button onclick="showBestellungForm()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">+ Neue Bestellung</button>
-            </div>
-            
-            <div id="bestellung-form" class="hidden bg-white p-6 rounded-lg shadow mb-6">
-                <h3 class="text-xl font-bold mb-4">Neue Bestellung</h3>
-                <form onsubmit="saveBestellung(event)">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Kunde *</label>
-                        <select id="bestellung-kunde" required class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-purple-500"></select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Produkte</label>
-                        <div id="bestellung-positionen"></div>
-                        <button type="button" onclick="addPosition()" class="mt-2 text-sm text-purple-600 hover:text-purple-700">+ Position hinzufügen</button>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Bestellung erstellen</button>
-                        <button type="button" onclick="hideBestellungForm()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Abbrechen</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="space-y-4" id="bestellungen-list"></div>
-        </div>
-    </div>
     </div>
 
     <!-- Footer -->
@@ -239,11 +326,12 @@
         function showTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-            
+
             if (tabName === 'dashboard') loadDashboard();
             if (tabName === 'kunden') loadKunden();
             if (tabName === 'produkte') loadProdukte();
             if (tabName === 'bestellungen') loadBestellungen();
+            if (tabName === 'rechnungen') loadRechnungen();
         }
 
         // Notifications
@@ -257,6 +345,44 @@
             setTimeout(() => notification.remove(), 3000);
         }
 
+        // Robust date formatter: accepts SQL timestamps like "YYYY-MM-DD HH:MM:SS(.ssssss)" and ISO strings
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const opts = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            // Handle array format from server: [year,month,day,hour,minute,second,frac]
+            if (Array.isArray(dateStr)) {
+                const [y, mo, da, hh, mm, ss, frac] = dateStr;
+                const ms = frac ? Math.floor(Number(frac) / 1e6) : 0; // convert nanoseconds to ms
+                try {
+                    const d = new Date(y, mo - 1, da, hh || 0, mm || 0, ss || 0, ms);
+                    if (!isNaN(d.getTime())) return d.toLocaleString('de-DE', opts).replace(',', '');
+                } catch (e) {
+                    // fall through to string parsing
+                }
+            }
+
+            // Try native parse first (string/ISO)
+            let d = new Date(dateStr);
+            if (!isNaN(d.getTime())) return d.toLocaleString('de-DE', opts).replace(',', '');
+
+            // Replace space between date and time with 'T' to make it ISO-like
+            let iso = String(dateStr).replace(' ', 'T');
+            d = new Date(iso);
+            if (!isNaN(d.getTime())) return d.toLocaleString('de-DE', opts).replace(',', '');
+
+            // Trim fractional seconds to milliseconds (max 3 digits)
+            iso = iso.replace(/\.(\d{3})\d+/, '.$1');
+            d = new Date(iso);
+            if (!isNaN(d.getTime())) return d.toLocaleString('de-DE', opts).replace(',', '');
+
+            // As a last resort, try replacing space and adding Z (UTC)
+            iso = String(dateStr).replace(' ', 'T') + 'Z';
+            d = new Date(iso);
+            if (!isNaN(d.getTime())) return d.toLocaleString('de-DE', opts).replace(',', '');
+
+            return 'Invalid date';
+        }
+
         // Dashboard
         async function loadDashboard() {
             try {
@@ -265,7 +391,7 @@
                     fetch(`${API_URL}/produkte`),
                     fetch(`${API_URL}/bestellungen`)
                 ]);
-                
+
                 kunden = await kundenRes.json();
                 produkte = await produkteRes.json();
                 bestellungen = await bestellungenRes.json();
@@ -275,7 +401,7 @@
                 document.getElementById('stats-bestellungen').textContent = bestellungen.length;
 
                 const recentOrders = bestellungen.slice(-5).reverse();
-                document.getElementById('recent-orders').innerHTML = recentOrders.length ? 
+                document.getElementById('recent-orders').innerHTML = recentOrders.length ?
                     recentOrders.map(b => `
                         <div class="flex justify-between py-2 border-b">
                             <span>Bestellung #${b.id}</span>
@@ -325,7 +451,7 @@
         async function editKunde(id) {
             const kunde = kunden.find(k => k.id === id);
             if (!kunde) return;
-            
+
             document.getElementById('kunde-form').classList.remove('hidden');
             document.getElementById('kunde-id').value = kunde.id;
             document.getElementById('kunde-name').value = kunde.name;
@@ -345,7 +471,7 @@
             try {
                 const url = id ? `${API_URL}/kunden/${id}` : `${API_URL}/kunden`;
                 const method = id ? 'PUT' : 'POST';
-                
+
                 const res = await fetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
@@ -366,7 +492,7 @@
 
         async function deleteKunde(id) {
             if (!confirm('Kunde wirklich löschen?')) return;
-            
+
             try {
                 const res = await fetch(`${API_URL}/kunden/${id}`, { method: 'DELETE' });
                 if (res.ok) {
@@ -419,7 +545,7 @@
         async function editProdukt(id) {
             const produkt = produkte.find(p => p.id === id);
             if (!produkt) return;
-            
+
             document.getElementById('produkt-form').classList.remove('hidden');
             document.getElementById('produkt-id').value = produkt.id;
             document.getElementById('produkt-name').value = produkt.name;
@@ -441,7 +567,7 @@
             try {
                 const url = id ? `${API_URL}/produkte/${id}` : `${API_URL}/produkte`;
                 const method = id ? 'PUT' : 'POST';
-                
+
                 const res = await fetch(url, {
                     method,
                     headers: { 'Content-Type': 'application/json' },
@@ -462,7 +588,7 @@
 
         async function deleteProdukt(id) {
             if (!confirm('Produkt wirklich löschen?')) return;
-            
+
             try {
                 const res = await fetch(`${API_URL}/produkte/${id}`, { method: 'DELETE' });
                 if (res.ok) {
@@ -481,7 +607,7 @@
             try {
                 const res = await fetch(`${API_URL}/bestellungen`);
                 bestellungen = await res.json();
-                
+
                 document.getElementById('bestellungen-list').innerHTML = bestellungen.map(b => `
                     <div class="bg-white p-6 rounded-lg shadow">
                         <div class="flex justify-between items-start mb-4">
@@ -510,23 +636,23 @@
 
         async function showBestellungForm() {
             document.getElementById('bestellung-form').classList.remove('hidden');
-            
+
             // Kunden laden
             if (kunden.length === 0) {
                 const res = await fetch(`${API_URL}/kunden`);
                 kunden = await res.json();
             }
-            
-            document.getElementById('bestellung-kunde').innerHTML = 
+
+            document.getElementById('bestellung-kunde').innerHTML =
                 '<option value="">Kunde wählen</option>' +
                 kunden.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
-            
+
             // Produkte laden
             if (produkte.length === 0) {
                 const res = await fetch(`${API_URL}/produkte`);
                 produkte = await res.json();
             }
-            
+
             document.getElementById('bestellung-positionen').innerHTML = '';
             addPosition();
         }
@@ -552,10 +678,10 @@
 
         async function saveBestellung(event) {
             event.preventDefault();
-            
+
             const kundeId = parseInt(document.getElementById('bestellung-kunde').value);
             const positionElements = document.querySelectorAll('#bestellung-positionen > div');
-            
+
             const positionen = Array.from(positionElements).map(el => ({
                 produktId: parseInt(el.querySelector('.position-produkt').value),
                 menge: parseInt(el.querySelector('.position-menge').value)
@@ -586,8 +712,99 @@
             }
         }
 
+        // Rechnungen
+        async function loadRechnungen() {
+            try {
+                const res = await fetch(`${API_URL}/rechnungen`);
+                if (!res.ok) {
+                    // Try to extract server error message
+                    const text = await res.text().catch(() => '');
+                    console.error('Failed to load rechnungen', res.status, res.statusText, text);
+                    showNotification(`Fehler beim Laden der Rechnungen: ${res.status} ${res.statusText}`, 'error');
+                    return;
+                }
+                // parse JSON safely
+                let rechnungen;
+                try {
+                    rechnungen = await res.json();
+                } catch (e) {
+                    const txt = await res.text().catch(() => '');
+                    console.error('Failed to parse rechnungen JSON', e, txt);
+                    showNotification('Fehler: Ungültige Antwort vom Server beim Laden der Rechnungen', 'error');
+                    return;
+                }
+
+                document.getElementById('rechnungen-list').innerHTML = rechnungen.map(r => {
+                    const created = r.erstellungsdatum ? formatDate(r.erstellungsdatum) : '-';
+                    return `
+                    <tr>
+                        <td class="px-6 py-4">${r.id}</td>
+                        <td class="px-6 py-4 font-medium">${r.rechnungsnummer}</td>
+                        <td class="px-6 py-4">${r.bestellungId}</td>
+                        <td class="px-6 py-4">${r.kundeName}</td>
+                        <td class="px-6 py-4">${created}</td>
+                        <td class="px-6 py-4">${Number(r.gesamtbetrag).toFixed(2)} €</td>
+                        <td class="px-6 py-4">${r.status}</td>
+                        <td class="px-6 py-4">
+                            <button onclick="downloadRechnungPdf(${r.id})" class="text-indigo-600 hover:text-indigo-800 mr-3">PDF</button>
+                            ${r.status === 'OFFEN' ? `<button onclick="markAsPaid(${r.id})" class="text-green-600 hover:text-green-800 mr-3">Bezahlt</button>` : ''}
+                        </td>
+                    </tr>
+                `}).join('');
+            } catch (error) {
+                console.error('Unexpected error loading rechnungen', error);
+                showNotification('Fehler beim Laden der Rechnungen', 'error');
+            }
+        }
+
+        async function createRechnung() {
+            const id = document.getElementById('create-rechnung-bestellung-id').value;
+            if (!id) { showNotification('Bitte Bestellungs-ID angeben', 'error'); return; }
+            try {
+                const res = await fetch(`${API_URL}/rechnungen/erstellen/${id}`, { method: 'POST' });
+                if (res.status === 201) {
+                    showNotification('Rechnung erstellt');
+                    loadRechnungen();
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    showNotification(err.error || 'Fehler beim Erstellen der Rechnung', 'error');
+                }
+            } catch (error) {
+                showNotification('Fehler beim Erstellen der Rechnung', 'error');
+            }
+        }
+
+        async function markAsPaid(id) {
+            try {
+                const res = await fetch(`${API_URL}/rechnungen/${id}/bezahlen`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bearbeiter: 'WebUI' })
+                });
+                if (res.ok) {
+                    showNotification('Rechnung als bezahlt markiert');
+                    loadRechnungen();
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    showNotification(err.error || 'Fehler beim Markieren', 'error');
+                }
+            } catch (error) {
+                console.error('Error marking invoice as paid', error);
+                showNotification('Fehler beim Markieren der Rechnung', 'error');
+            }
+        }
+
+        function downloadRechnungPdf(id) {
+            // open download in new tab
+            const url = `${API_URL}/rechnungen/${id}/pdf`;
+            window.open(url, '_blank');
+        }
+
+        // viewRechnung removed: details are shown in the Rechnungen overview
+
         // Init
         loadDashboard();
     </script>
 </body>
+
 </html>
