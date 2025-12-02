@@ -23,6 +23,9 @@ public class RechnungService {
     private RechnungRepository rechnungRepository;
 
     @Inject
+    private PdfService pdfService;
+
+    @Inject
     private BestellungRepository bestellungRepository;
 
     @Transactional
@@ -73,6 +76,23 @@ public class RechnungService {
     public Rechnung findeRechnungById(Long id) {
         return rechnungRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Rechnung nicht gefunden"));
+    }
+
+    @Transactional
+    public byte[] generiereRechnungsPdf(Long id) throws Exception {
+        Rechnung rechnung = rechnungRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Rechnung nicht gefunden"));
+
+        // Ensure lazy associations are initialized while the persistence context /
+        // transaction is active
+        if (rechnung.getBestellung() != null) {
+            // touch fields to initialize
+            rechnung.getBestellung().getKunde().getName();
+            rechnung.getBestellung().getPositionen().size();
+            rechnung.getBestellung().getPositionen().forEach(p -> p.getProdukt().getName());
+        }
+
+        return pdfService.generiereRechnungsPdf(rechnung);
     }
 
     public Rechnung findeRechnungByBestellungId(Long bestellungId) {

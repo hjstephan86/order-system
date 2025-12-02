@@ -12,7 +12,7 @@ Order System,com.example.rest,RechnungResource,294,0,2,0,93,0,10,0,9,0
 Order System,com.example.rest,ProduktResource,94,0,0,0,21,0,10,0,10,0
 Order System,com.example.rest,BestellungResource,95,0,0,0,25,0,8,0,8,0
 Order System,com.example.service,BestellService,135,0,6,0,26,0,10,0,7,0
-Order System,com.example.service,RechnungService,151,0,4,0,35,0,15,0,13,0
+Order System,com.example.service,RechnungService,192,0,6,0,42,0,19,0,16,0
 Order System,com.example.service,BestellPositionDTO,26,0,0,0,12,0,6,0,6,0
 Order System,com.example.service,PdfService,486,0,2,0,89,0,13,0,12,0
 Order System,com.example.entity,Produkt,0,53,0,0,0,23,0,12,0,12

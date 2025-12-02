@@ -164,7 +164,7 @@ curl -X POST http://localhost:8080/order-system/api/rechnungen/erstellen/1
 curl http://localhost:8080/order-system/api/rechnungen
 
 # Download bill with ID 1 as PDF
-curl http://localhost:8080/order-system/api/rechnungen/1/pdf -o rechnung.pdf
+curl -OJ http://localhost:8080/order-system/api/rechnungen/1/pdf
 
 # Mark bill with ID 1 as payed
 curl -X PUT http://localhost:8080/order-system/api/rechnungen/1/bezahlen \

@@ -23,77 +23,97 @@ import jakarta.transaction.Transactional;
     private RechnungRepository rechnungRepository;
 
     @Inject
+    private PdfService pdfService;
+
+    @Inject
     private BestellungRepository bestellungRepository;
 
     @Transactional
     public Rechnung erstelleRechnung(Long bestellungId) {
-<span class="nc" id="L30">        Bestellung bestellung = bestellungRepository.findById(bestellungId)</span>
-<span class="nc" id="L31">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Bestellung nicht gefunden&quot;));</span>
+<span class="nc" id="L33">        Bestellung bestellung = bestellungRepository.findById(bestellungId)</span>
+<span class="nc" id="L34">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Bestellung nicht gefunden&quot;));</span>
 
         // Check if bill already exists
-<span class="nc" id="L34">        Rechnung existingRechnung = rechnungRepository.findByBestellungId(bestellungId);</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (existingRechnung != null) {</span>
-<span class="nc" id="L36">            return existingRechnung;</span>
+<span class="nc" id="L37">        Rechnung existingRechnung = rechnungRepository.findByBestellungId(bestellungId);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (existingRechnung != null) {</span>
+<span class="nc" id="L39">            return existingRechnung;</span>
         }
 
-<span class="nc" id="L39">        Rechnung rechnung = new Rechnung();</span>
-<span class="nc" id="L40">        rechnung.setBestellung(bestellung);</span>
-<span class="nc" id="L41">        rechnung.setRechnungsnummer(generiereRechnungsnummer());</span>
-<span class="nc" id="L42">        rechnung.setGesamtbetrag(berechneGesamtbetrag(bestellung));</span>
-<span class="nc" id="L43">        rechnung.setStatus(RechnungsStatus.OFFEN);</span>
+<span class="nc" id="L42">        Rechnung rechnung = new Rechnung();</span>
+<span class="nc" id="L43">        rechnung.setBestellung(bestellung);</span>
+<span class="nc" id="L44">        rechnung.setRechnungsnummer(generiereRechnungsnummer());</span>
+<span class="nc" id="L45">        rechnung.setGesamtbetrag(berechneGesamtbetrag(bestellung));</span>
+<span class="nc" id="L46">        rechnung.setStatus(RechnungsStatus.OFFEN);</span>
 
-<span class="nc" id="L45">        return rechnungRepository.save(rechnung);</span>
+<span class="nc" id="L48">        return rechnungRepository.save(rechnung);</span>
     }
 
     @Transactional
     public Rechnung markiereAlsBezahlt(Long rechnungId, String bearbeiter) {
-<span class="nc" id="L50">        Rechnung rechnung = rechnungRepository.findById(rechnungId)</span>
-<span class="nc" id="L51">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Rechnung nicht gefunden&quot;));</span>
+<span class="nc" id="L53">        Rechnung rechnung = rechnungRepository.findById(rechnungId)</span>
+<span class="nc" id="L54">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Rechnung nicht gefunden&quot;));</span>
 
-<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (rechnung.getStatus() == RechnungsStatus.BEZAHLT) {</span>
-<span class="nc" id="L54">            throw new IllegalStateException(&quot;Rechnung ist bereits als bezahlt markiert&quot;);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (rechnung.getStatus() == RechnungsStatus.BEZAHLT) {</span>
+<span class="nc" id="L57">            throw new IllegalStateException(&quot;Rechnung ist bereits als bezahlt markiert&quot;);</span>
         }
 
-<span class="nc" id="L57">        rechnung.setStatus(RechnungsStatus.BEZAHLT);</span>
-<span class="nc" id="L58">        rechnung.setBezahltAm(LocalDateTime.now());</span>
-<span class="nc" id="L59">        rechnung.setBezahltVon(bearbeiter);</span>
+<span class="nc" id="L60">        rechnung.setStatus(RechnungsStatus.BEZAHLT);</span>
+<span class="nc" id="L61">        rechnung.setBezahltAm(LocalDateTime.now());</span>
+<span class="nc" id="L62">        rechnung.setBezahltVon(bearbeiter);</span>
 
         // Update order status to ABGESCHLOSSEN (completed)
-<span class="nc" id="L62">        Bestellung bestellung = rechnung.getBestellung();</span>
-<span class="nc" id="L63">        bestellung.setStatus(BestellStatus.ABGESCHLOSSEN);</span>
-<span class="nc" id="L64">        bestellungRepository.save(bestellung);</span>
+<span class="nc" id="L65">        Bestellung bestellung = rechnung.getBestellung();</span>
+<span class="nc" id="L66">        bestellung.setStatus(BestellStatus.ABGESCHLOSSEN);</span>
+<span class="nc" id="L67">        bestellungRepository.save(bestellung);</span>
 
-<span class="nc" id="L66">        return rechnungRepository.save(rechnung);</span>
+<span class="nc" id="L69">        return rechnungRepository.save(rechnung);</span>
     }
 
     public List&lt;Rechnung&gt; findeAlleRechnungen() {
-<span class="nc" id="L70">        return rechnungRepository.findAll();</span>
+<span class="nc" id="L73">        return rechnungRepository.findAll();</span>
     }
 
     public Rechnung findeRechnungById(Long id) {
-<span class="nc" id="L74">        return rechnungRepository.findById(id)</span>
-<span class="nc" id="L75">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Rechnung nicht gefunden&quot;));</span>
+<span class="nc" id="L77">        return rechnungRepository.findById(id)</span>
+<span class="nc" id="L78">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Rechnung nicht gefunden&quot;));</span>
+    }
+
+    @Transactional
+    public byte[] generiereRechnungsPdf(Long id) throws Exception {
+<span class="nc" id="L83">        Rechnung rechnung = rechnungRepository.findById(id)</span>
+<span class="nc" id="L84">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Rechnung nicht gefunden&quot;));</span>
+
+        // Ensure lazy associations are initialized while the persistence context /
+        // transaction is active
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (rechnung.getBestellung() != null) {</span>
+            // touch fields to initialize
+<span class="nc" id="L90">            rechnung.getBestellung().getKunde().getName();</span>
+<span class="nc" id="L91">            rechnung.getBestellung().getPositionen().size();</span>
+<span class="nc" id="L92">            rechnung.getBestellung().getPositionen().forEach(p -&gt; p.getProdukt().getName());</span>
+        }
+
+<span class="nc" id="L95">        return pdfService.generiereRechnungsPdf(rechnung);</span>
     }
 
     public Rechnung findeRechnungByBestellungId(Long bestellungId) {
-<span class="nc" id="L79">        return rechnungRepository.findByBestellungId(bestellungId);</span>
+<span class="nc" id="L99">        return rechnungRepository.findByBestellungId(bestellungId);</span>
     }
 
     public List&lt;Rechnung&gt; findeOffeneRechnungen() {
-<span class="nc" id="L83">        return rechnungRepository.findByStatus(RechnungsStatus.OFFEN);</span>
+<span class="nc" id="L103">        return rechnungRepository.findByStatus(RechnungsStatus.OFFEN);</span>
     }
 
     private String generiereRechnungsnummer() {
-<span class="nc" id="L87">        String timestamp = LocalDateTime.now()</span>
-<span class="nc" id="L88">                .format(DateTimeFormatter.ofPattern(&quot;yyyyMMddHHmmss&quot;));</span>
-<span class="nc" id="L89">        return &quot;RE-&quot; + timestamp;</span>
+<span class="nc" id="L107">        String timestamp = LocalDateTime.now()</span>
+<span class="nc" id="L108">                .format(DateTimeFormatter.ofPattern(&quot;yyyyMMddHHmmss&quot;));</span>
+<span class="nc" id="L109">        return &quot;RE-&quot; + timestamp;</span>
     }
 
     private BigDecimal berechneGesamtbetrag(Bestellung bestellung) {
-<span class="nc" id="L93">        return bestellung.getPositionen().stream()</span>
-<span class="nc" id="L94">                .map(pos -&gt; pos.getProdukt().getPreis()</span>
-<span class="nc" id="L95">                        .multiply(BigDecimal.valueOf(pos.getMenge())))</span>
-<span class="nc" id="L96">                .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
+<span class="nc" id="L113">        return bestellung.getPositionen().stream()</span>
+<span class="nc" id="L114">                .map(pos -&gt; pos.getProdukt().getPreis()</span>
+<span class="nc" id="L115">                        .multiply(BigDecimal.valueOf(pos.getMenge())))</span>
+<span class="nc" id="L116">                .reduce(BigDecimal.ZERO, BigDecimal::add);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

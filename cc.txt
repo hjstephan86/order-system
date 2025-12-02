@@ -9,14 +9,14 @@ Total Complexity: 20
 Highest Method Complexity: 4
 --------------------------------------------------------------------------------
 Methods:
-  - markiereAlsBezahlt: 4 (line 129)
-  - getRechnungByBestellungId: 3 (line 78)
-  - erstelleRechnung: 3 (line 112)
-  - downloadPdf: 3 (line 153)
-  - getAlleRechnungen: 2 (line 48)
-  - getRechnungById: 2 (line 65)
-  - getOffeneRechnungen: 2 (line 96)
-  - toDTO: 1 (line 33)
+  - markiereAlsBezahlt: 4 (line 125)
+  - getRechnungByBestellungId: 3 (line 74)
+  - erstelleRechnung: 3 (line 108)
+  - downloadPdf: 3 (line 149)
+  - getAlleRechnungen: 2 (line 44)
+  - getRechnungById: 2 (line 61)
+  - getOffeneRechnungen: 2 (line 92)
+  - toDTO: 1 (line 29)
 
 
 Class: RechnungDTO
@@ -134,6 +134,23 @@ Methods:
   - addBestellung: 1 (line 90)
 
 
+Class: RechnungService
+Package: com.example.service
+Total Complexity: 13
+Highest Method Complexity: 3
+--------------------------------------------------------------------------------
+Methods:
+  - markiereAlsBezahlt: 3 (line 52)
+  - erstelleRechnung: 2 (line 32)
+  - generiereRechnungsPdf: 2 (line 82)
+  - findeAlleRechnungen: 1 (line 72)
+  - findeRechnungById: 1 (line 76)
+  - findeRechnungByBestellungId: 1 (line 98)
+  - findeOffeneRechnungen: 1 (line 102)
+  - generiereRechnungsnummer: 1 (line 106)
+  - berechneGesamtbetrag: 1 (line 112)
+
+
 Class: Produkt
 Package: com.example.entity
 Total Complexity: 12
@@ -170,22 +187,6 @@ Methods:
   - createCell: 1 (line 160)
   - createHeaderCell: 1 (line 167)
   - formatPrice: 1 (line 174)
-
-
-Class: RechnungService
-Package: com.example.service
-Total Complexity: 11
-Highest Method Complexity: 3
---------------------------------------------------------------------------------
-Methods:
-  - markiereAlsBezahlt: 3 (line 49)
-  - erstelleRechnung: 2 (line 29)
-  - findeAlleRechnungen: 1 (line 69)
-  - findeRechnungById: 1 (line 73)
-  - findeRechnungByBestellungId: 1 (line 78)
-  - findeOffeneRechnungen: 1 (line 82)
-  - generiereRechnungsnummer: 1 (line 86)
-  - berechneGesamtbetrag: 1 (line 92)
 
 
 Class: RechnungRepository

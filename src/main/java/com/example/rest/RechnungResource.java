@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.example.entity.Rechnung;
-import com.example.service.PdfService;
 import com.example.service.RechnungService;
 
 import jakarta.inject.Inject;
@@ -26,9 +25,6 @@ public class RechnungResource {
 
     @Inject
     private RechnungService rechnungService;
-
-    @Inject
-    private PdfService pdfService;
 
     private RechnungDTO toDTO(Rechnung rechnung) {
         RechnungDTO dto = new RechnungDTO();
@@ -152,9 +148,9 @@ public class RechnungResource {
     @Path("/{id}/pdf")
     public Response downloadPdf(@PathParam("id") Long id) {
         try {
+            byte[] pdfBytes = rechnungService.generiereRechnungsPdf(id);
+            // We need the invoice number for filename — fetch lightweight DTO
             Rechnung rechnung = rechnungService.findeRechnungById(id);
-            byte[] pdfBytes = pdfService.generiereRechnungsPdf(rechnung);
-
             return Response.ok(pdfBytes)
                     .header("Content-Disposition",
                             "attachment; filename=\"" + rechnung.getRechnungsnummer() + ".pdf\"")

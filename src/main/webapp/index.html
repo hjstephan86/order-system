@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order System</title>
+    <title>Bestellsystem</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html,
@@ -65,7 +65,7 @@
         <nav class="bg-slate-800 text-white shadow-lg">
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between h-16">
-                    <h1 class="text-2xl font-bold">Order System</h1>
+                    <h1 class="text-2xl font-bold">Bestellsystem</h1>
                     <div class="flex space-x-4">
                         <button onclick="showTab('dashboard')"
                             class="tab-btn px-4 py-2 rounded hover:bg-slate-700">Dashboard</button>
@@ -305,7 +305,7 @@
         <div class="container mx-auto px-4 py-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
-                    <p class="text-sm">&copy; 2025 Order System. Alle Rechte vorbehalten.</p>
+                    <p class="text-sm">&copy; 2025 Bestellsystem. Alle Rechte vorbehalten.</p>
                 </div>
                 <div class="flex space-x-6">
                     <a href="#" class="text-sm hover:text-white transition-colors">Impressum</a>
@@ -761,10 +761,31 @@
             const id = document.getElementById('create-rechnung-bestellung-id').value;
             if (!id) { showNotification('Bitte Bestellungs-ID angeben', 'error'); return; }
             try {
+                // First check whether a Rechnung for this Bestellung already exists
+                const checkRes = await fetch(`${API_URL}/rechnungen/bestellung/${id}`);
+                if (checkRes.ok) {
+                    // There is already a Rechnung for this Bestellung -> inform user
+                    const existing = await checkRes.json().catch(() => ({}));
+                    const num = existing.rechnungsnummer ? ` (${existing.rechnungsnummer})` : '';
+                    showNotification(`Rechnung für Bestellung ${id} existiert bereits${num}`, 'error');
+                    return;
+                } else if (checkRes.status !== 404) {
+                    // unexpected error while checking
+                    const txt = await checkRes.text().catch(() => '');
+                    console.error('Fehler beim Prüfen vorhandener Rechnung', checkRes.status, txt);
+                    showNotification('Fehler beim Prüfen vorhandener Rechnung', 'error');
+                    return;
+                }
+
+                // No existing Rechnung -> create one
                 const res = await fetch(`${API_URL}/rechnungen/erstellen/${id}`, { method: 'POST' });
                 if (res.status === 201) {
                     showNotification('Rechnung erstellt');
                     loadRechnungen();
+                } else if (res.status === 409) {
+                    // Conflict: invoice already exists (race or server-side prevention)
+                    const err = await res.json().catch(() => ({}));
+                    showNotification(err.error || `Rechnung für Bestellung ${id} existiert bereits`, 'error');
                 } else {
                     const err = await res.json().catch(() => ({}));
                     showNotification(err.error || 'Fehler beim Erstellen der Rechnung', 'error');
