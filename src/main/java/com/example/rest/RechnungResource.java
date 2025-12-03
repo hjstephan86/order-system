@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.example.entity.Bestellung;
 import com.example.entity.Rechnung;
 import com.example.service.RechnungService;
 
@@ -169,6 +170,26 @@ public class RechnungResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Fehler beim Generieren des PDFs: " + e.getMessage())
                     .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
+
+    @POST
+    @Path("/rechnungslauf")
+    public Response rechnungslauf() {
+        try {
+            List<Bestellung> neueBestellungen = rechnungService.rechnungslauf();
+            if (neueBestellungen.size() > 0) {
+                return Response.ok(Map.of("message",
+                        "Rechnungslauf erfolgreich durchgeführt, " + neueBestellungen.size() + " Rechnungen erstellt"))
+                        .build();
+            } else {
+                return Response.ok(Map.of("message", "Keine neuen Bestellungen für den Rechnungslauf gefunden"))
+                        .build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Map.of("error", e.getMessage()))
                     .build();
         }
     }

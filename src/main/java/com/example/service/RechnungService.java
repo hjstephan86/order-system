@@ -3,8 +3,11 @@ package com.example.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
+import com.example.entity.BestellPosition;
 import com.example.entity.BestellStatus;
 import com.example.entity.Bestellung;
 import com.example.entity.Rechnung;
@@ -103,16 +106,65 @@ public class RechnungService {
         return rechnungRepository.findByStatus(RechnungsStatus.OFFEN);
     }
 
+    public List<Bestellung> rechnungslauf() {
+        List<Bestellung> neueBestellungen = bestellungRepository.findByStatus(BestellStatus.NEU);
+        List<Bestellung> neueBestellungenMitRechnung = new ArrayList<Bestellung>();
+        for (Bestellung bestellung : neueBestellungen) {
+            Long bestellungId = bestellung.getId();
+            Rechnung existingRechnung = rechnungRepository.findByBestellungId(bestellungId);
+            if (existingRechnung == null) {
+                Rechnung rechnung = new Rechnung();
+                rechnung.setBestellung(bestellung);
+                rechnung.setRechnungsnummer(generiereRechnungsnummer());
+                rechnung.setGesamtbetrag(berechneGesamtbetrag(bestellung));
+                rechnung.setStatus(RechnungsStatus.OFFEN);
+                rechnungRepository.save(rechnung);
+                neueBestellungenMitRechnung.add(bestellung);
+            }
+        }
+        return neueBestellungenMitRechnung;
+    }
+
     private String generiereRechnungsnummer() {
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        return "RE-" + timestamp;
+        int randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        return "RE-" + timestamp + "-" + randomNumber;
     }
 
+    @Transactional
     private BigDecimal berechneGesamtbetrag(Bestellung bestellung) {
-        return bestellung.getPositionen().stream()
-                .map(pos -> pos.getProdukt().getPreis()
-                        .multiply(BigDecimal.valueOf(pos.getMenge())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (bestellung == null) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal gesamtbetrag = BigDecimal.ZERO;
+
+        List<BestellPosition> positionen = bestellung.getPositionen();
+
+        if (positionen == null || positionen.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        for (BestellPosition pos : positionen) {
+            if (pos == null) {
+                continue;
+            }
+
+            BigDecimal einzelpreis = pos.getEinzelpreis();
+            if (einzelpreis == null) {
+                continue;
+            }
+
+            Integer menge = pos.getMenge();
+            if (menge == null) {
+                continue;
+            }
+
+            BigDecimal positionsBetrag = einzelpreis.multiply(BigDecimal.valueOf(menge));
+            gesamtbetrag = gesamtbetrag.add(positionsBetrag);
+        }
+
+        return gesamtbetrag;
     }
 }

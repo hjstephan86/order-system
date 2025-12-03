@@ -40,7 +40,7 @@ public class Bestellung {
     @Column(nullable = false)
     private BestellStatus status;
 
-    @OneToMany(mappedBy = "bestellung", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "bestellung", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<BestellPosition> positionen = new ArrayList<>();
 

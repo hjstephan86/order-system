@@ -5,18 +5,37 @@ CYCLOMATIC COMPLEXITY REPORT
 
 Class: RechnungResource
 Package: com.example.rest
-Total Complexity: 20
+Total Complexity: 23
 Highest Method Complexity: 4
 --------------------------------------------------------------------------------
 Methods:
-  - markiereAlsBezahlt: 4 (line 125)
-  - getRechnungByBestellungId: 3 (line 74)
-  - erstelleRechnung: 3 (line 108)
-  - downloadPdf: 3 (line 149)
-  - getAlleRechnungen: 2 (line 44)
-  - getRechnungById: 2 (line 61)
-  - getOffeneRechnungen: 2 (line 92)
-  - toDTO: 1 (line 29)
+  - markiereAlsBezahlt: 4 (line 126)
+  - getRechnungByBestellungId: 3 (line 75)
+  - erstelleRechnung: 3 (line 109)
+  - downloadPdf: 3 (line 150)
+  - rechnungslauf: 3 (line 179)
+  - getAlleRechnungen: 2 (line 45)
+  - getRechnungById: 2 (line 62)
+  - getOffeneRechnungen: 2 (line 93)
+  - toDTO: 1 (line 30)
+
+
+Class: RechnungService
+Package: com.example.service
+Total Complexity: 23
+Highest Method Complexity: 8
+--------------------------------------------------------------------------------
+Methods:
+  - berechneGesamtbetrag: 8 (line 136)
+  - markiereAlsBezahlt: 3 (line 55)
+  - rechnungslauf: 3 (line 109)
+  - erstelleRechnung: 2 (line 35)
+  - generiereRechnungsPdf: 2 (line 85)
+  - findeAlleRechnungen: 1 (line 75)
+  - findeRechnungById: 1 (line 79)
+  - findeRechnungByBestellungId: 1 (line 101)
+  - findeOffeneRechnungen: 1 (line 105)
+  - generiereRechnungsnummer: 1 (line 128)
 
 
 Class: RechnungDTO
@@ -132,23 +151,6 @@ Methods:
   - getBestellungen: 1 (line 81)
   - setBestellungen: 1 (line 85)
   - addBestellung: 1 (line 90)
-
-
-Class: RechnungService
-Package: com.example.service
-Total Complexity: 13
-Highest Method Complexity: 3
---------------------------------------------------------------------------------
-Methods:
-  - markiereAlsBezahlt: 3 (line 52)
-  - erstelleRechnung: 2 (line 32)
-  - generiereRechnungsPdf: 2 (line 82)
-  - findeAlleRechnungen: 1 (line 72)
-  - findeRechnungById: 1 (line 76)
-  - findeRechnungByBestellungId: 1 (line 98)
-  - findeOffeneRechnungen: 1 (line 102)
-  - generiereRechnungsnummer: 1 (line 106)
-  - berechneGesamtbetrag: 1 (line 112)
 
 
 Class: Produkt

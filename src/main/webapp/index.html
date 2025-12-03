@@ -268,11 +268,15 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-3xl font-bold">Rechnungen</h2>
                     <div class="flex items-center space-x-2">
-                        <input id="create-rechnung-bestellung-id" type="number" placeholder="Bestellung ID"
-                            class="px-3 py-2 border rounded" />
-                        <button onclick="createRechnung()"
-                            class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Rechnung
-                            erstellen</button>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input id="create-rechnung-bestellung-id" type="number" placeholder="Bestellung ID"
+                                class="px-3 py-2 border rounded" />
+                            <button onclick="createRechnung()"
+                                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 whitespace-nowrap">Rechnung
+                                erstellen</button>
+                            <button onclick="rechnungslauf()"
+                                class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 whitespace-nowrap">Rechnungslauf</button>
+                        </div>
                     </div>
                 </div>
 
@@ -792,6 +796,27 @@
                 }
             } catch (error) {
                 showNotification('Fehler beim Erstellen der Rechnung', 'error');
+            }
+        }
+
+        async function rechnungslauf(params) {
+            try {
+                const res = await fetch(`${API_URL}/rechnungen/rechnungslauf`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params || {})
+                });
+                if (res.ok) {
+                    const result = await res.json().catch(() => ({}));
+                    showNotification(result.message);
+                    loadRechnungen();
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    showNotification(err.error || 'Fehler beim Rechnungslauf', 'error');
+                }
+            } catch (error) {
+                console.error('Error during rechnungslauf', error);
+                showNotification('Fehler beim Rechnungslauf', 'error');
             }
         }
 
