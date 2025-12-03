@@ -124,10 +124,11 @@ public class RechnungResource {
     @PUT
     @Path("/{id}/bezahlen")
     public Response markiereAlsBezahlt(
-            @PathParam("id") Long id,
-            Map<String, String> requestBody) {
+            @PathParam("id") Long id) {
         try {
-            String bearbeiter = requestBody.getOrDefault("bearbeiter", "System");
+            // Get the operating system user name
+            String bearbeiter = System.getProperty("user.name", "System");
+
             Rechnung rechnung = rechnungService.markiereAlsBezahlt(id, bearbeiter);
             return Response.ok(toDTO(rechnung)).build();
         } catch (IllegalArgumentException e) {
