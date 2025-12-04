@@ -63,7 +63,7 @@ public class BestellServiceIT {
         // Verwende eindeutige E-Mail für jeden Test
         testCounter++;
         testKunde = kundeRepository.save(
-                new Kunde("Test Kunde", "test" + testCounter + "@example.com", "Test Adresse"));
+                new Kunde("Test", "Kunde", "test" + testCounter + "@example.com"));
 
         testProdukt1 = produktRepository.save(
                 new Produkt("Produkt 1", "Beschreibung 1", new BigDecimal("100"), 10));

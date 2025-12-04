@@ -36,23 +36,27 @@ public class KundeRepositoryIT {
 
     @Test
     public void testSaveAndFindKunde() {
-        Kunde kunde = new Kunde("Max Mustermann", "max@test.com", "Teststraße 1");
+        Kunde kunde = new Kunde("Mustermann", "Max", "max@test.com");
+        kunde.setEmail("max@test.com");
         Kunde saved = kundeRepository.save(kunde);
 
         assertNotNull(saved.getId());
-        assertEquals("Max Mustermann", saved.getName());
+        assertEquals("Mustermann", saved.getName());
+        assertEquals("Max", saved.getVorname());
         assertEquals("max@test.com", saved.getEmail());
     }
 
     @Test
     public void testFindByEmail() {
-        Kunde kunde = new Kunde("Anna Schmidt", "anna@test.com", "Beispielweg 2");
+        Kunde kunde = new Kunde("Schmidt", "Anna", "anna@test.com");
         kundeRepository.save(kunde);
 
         Optional<Kunde> found = kundeRepository.findByEmail("anna@test.com");
 
         assertTrue(found.isPresent());
-        assertEquals("Anna Schmidt", found.get().getName());
+        assertEquals("Anna", found.get().getVorname());
+        assertEquals("Schmidt", found.get().getName());
+        assertEquals("anna@test.com", found.get().getEmail());
     }
 
     @Test

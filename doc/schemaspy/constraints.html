@@ -214,6 +214,11 @@
                                         <td>rechnung_status_check</td>
                                         <td>(((status)::text &#61; ANY ((ARRAY[&#39;OFFEN&#39;::character varying, &#39;BEZAHLT&#39;::character varying, &#39;STORNIERT&#39;::character varying])::text[])))</td>
                                     </tr>
+                                    <tr>
+                                        <td><a href='tables/kunde.html'>kunde</a></td>
+                                        <td>kunde_geschlecht_check</td>
+                                        <td>(((geschlecht)::text &#61; ANY ((ARRAY[&#39;MAENNLICH&#39;::character varying, &#39;WEIBLICH&#39;::character varying, &#39;DIVERS&#39;::character varying])::text[])))</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

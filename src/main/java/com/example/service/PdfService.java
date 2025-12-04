@@ -83,8 +83,26 @@ public class PdfService {
 
         Paragraph kundenInfo = new Paragraph();
         kundenInfo.add(new Chunk("Kunde:\n", boldFont));
+        if (rechnung.getBestellung().getKunde().getGeschlecht() != null) {
+            switch (rechnung.getBestellung().getKunde().getGeschlecht()) {
+                case MAENNLICH:
+                    kundenInfo.add(new Chunk("Herrn\n", normalFont));
+                    break;
+                case WEIBLICH:
+                    kundenInfo.add(new Chunk("Frau\n", normalFont));
+                    break;
+                case DIVERS:
+                    kundenInfo.add(new Chunk("Divers\n", normalFont));
+                    break;
+            }
+        }
+        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getVorname() + " ", normalFont));
         kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getName() + "\n", normalFont));
-        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getAdresse() + "\n", normalFont));
+        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getStrasse() + " ", normalFont));
+        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getHausnummer() + "\n", normalFont));
+        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getPostleitzahl() + " ", normalFont));
+        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getOrt() + "\n", normalFont));
+        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getLand() + "\n", normalFont));
         kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getEmail(), normalFont));
 
         document.add(kundenInfo);

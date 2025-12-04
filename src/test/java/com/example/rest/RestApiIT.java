@@ -55,7 +55,7 @@ public class RestApiIT {
                 {
                     "name": "REST Test Kunde",
                     "email": "rest@test.com",
-                    "adresse": "REST Straße 1"
+                    "strasse": "REST Straße 1"
                 }
                 """;
 

@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,74 +24,170 @@ public class Kunde {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100)
+    private String vorname;
+
     @Column(nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(length = 200)
-    private String adresse;
+    @Column(length = 100)
+    private String strasse;
 
-<span class="fc" id="L34">    @JsonIgnore</span>
+    @Column(length = 20)
+    private String hausnummer;
+
+    @Column(length = 10)
+    private String postleitzahl;
+
+    @Column(length = 100)
+    private String ort;
+
+    @Column(length = 100)
+    private String land;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private Geschlecht geschlecht;
+
+    @Column(length = 20)
+    private String telefonnummer;
+
+    @Column(length = 20)
+    private String mobilnummer;
+
+<span class="fc" id="L61">    @JsonIgnore</span>
     @OneToMany(mappedBy = &quot;kunde&quot;, cascade = CascadeType.ALL, orphanRemoval = true)
     private List&lt;Bestellung&gt; bestellungen = new ArrayList&lt;&gt;();
 
-    // Konstruktoren
-<span class="fc" id="L39">    public Kunde() {</span>
-<span class="fc" id="L40">    }</span>
+    // Enum für Geschlecht
+<span class="fc" id="L66">    public enum Geschlecht {</span>
+<span class="fc" id="L67">        MAENNLICH,</span>
+<span class="fc" id="L68">        WEIBLICH,</span>
+<span class="fc" id="L69">        DIVERS</span>
+    }
 
-<span class="fc" id="L42">    public Kunde(String name, String email, String adresse) {</span>
-<span class="fc" id="L43">        this.name = name;</span>
-<span class="fc" id="L44">        this.email = email;</span>
-<span class="fc" id="L45">        this.adresse = adresse;</span>
-<span class="fc" id="L46">    }</span>
+    // Konstruktoren
+<span class="fc" id="L73">    public Kunde() {</span>
+<span class="fc" id="L74">    }</span>
+
+<span class="fc" id="L76">    public Kunde(String name, String vorname, String email) {</span>
+<span class="fc" id="L77">        this.name = name;</span>
+<span class="fc" id="L78">        this.vorname = vorname;</span>
+<span class="fc" id="L79">        this.email = email;</span>
+<span class="fc" id="L80">    }</span>
 
     // Getter und Setter
     public Long getId() {
-<span class="fc" id="L50">        return id;</span>
+<span class="fc" id="L84">        return id;</span>
     }
 
     public void setId(Long id) {
-<span class="fc" id="L54">        this.id = id;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L88">        this.id = id;</span>
+<span class="fc" id="L89">    }</span>
 
     public String getName() {
-<span class="fc" id="L58">        return name;</span>
+<span class="fc" id="L92">        return name;</span>
     }
 
     public void setName(String name) {
-<span class="fc" id="L62">        this.name = name;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L96">        this.name = name;</span>
+<span class="fc" id="L97">    }</span>
+
+    public String getVorname() {
+<span class="fc" id="L100">        return vorname;</span>
+    }
+
+    public void setVorname(String vorname) {
+<span class="fc" id="L104">        this.vorname = vorname;</span>
+<span class="fc" id="L105">    }</span>
 
     public String getEmail() {
-<span class="fc" id="L66">        return email;</span>
+<span class="fc" id="L108">        return email;</span>
     }
 
     public void setEmail(String email) {
-<span class="fc" id="L70">        this.email = email;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L112">        this.email = email;</span>
+<span class="fc" id="L113">    }</span>
 
-    public String getAdresse() {
-<span class="fc" id="L74">        return adresse;</span>
+    public String getStrasse() {
+<span class="fc" id="L116">        return strasse;</span>
     }
 
-    public void setAdresse(String adresse) {
-<span class="fc" id="L78">        this.adresse = adresse;</span>
-<span class="fc" id="L79">    }</span>
+    public void setStrasse(String strasse) {
+<span class="fc" id="L120">        this.strasse = strasse;</span>
+<span class="fc" id="L121">    }</span>
+
+    public String getHausnummer() {
+<span class="fc" id="L124">        return hausnummer;</span>
+    }
+
+    public void setHausnummer(String hausnummer) {
+<span class="fc" id="L128">        this.hausnummer = hausnummer;</span>
+<span class="fc" id="L129">    }</span>
+
+    public String getPostleitzahl() {
+<span class="fc" id="L132">        return postleitzahl;</span>
+    }
+
+    public void setPostleitzahl(String postleitzahl) {
+<span class="fc" id="L136">        this.postleitzahl = postleitzahl;</span>
+<span class="fc" id="L137">    }</span>
+
+    public String getOrt() {
+<span class="fc" id="L140">        return ort;</span>
+    }
+
+    public void setOrt(String ort) {
+<span class="fc" id="L144">        this.ort = ort;</span>
+<span class="fc" id="L145">    }</span>
+
+    public String getLand() {
+<span class="fc" id="L148">        return land;</span>
+    }
+
+    public void setLand(String land) {
+<span class="fc" id="L152">        this.land = land;</span>
+<span class="fc" id="L153">    }</span>
+
+    public Geschlecht getGeschlecht() {
+<span class="fc" id="L156">        return geschlecht;</span>
+    }
+
+    public void setGeschlecht(Geschlecht geschlecht) {
+<span class="fc" id="L160">        this.geschlecht = geschlecht;</span>
+<span class="fc" id="L161">    }</span>
+
+    public String getTelefonnummer() {
+<span class="fc" id="L164">        return telefonnummer;</span>
+    }
+
+    public void setTelefonnummer(String telefonnummer) {
+<span class="fc" id="L168">        this.telefonnummer = telefonnummer;</span>
+<span class="fc" id="L169">    }</span>
+
+    public String getMobilnummer() {
+<span class="fc" id="L172">        return mobilnummer;</span>
+    }
+
+    public void setMobilnummer(String mobilnummer) {
+<span class="fc" id="L176">        this.mobilnummer = mobilnummer;</span>
+<span class="fc" id="L177">    }</span>
 
     public List&lt;Bestellung&gt; getBestellungen() {
-<span class="fc" id="L82">        return bestellungen;</span>
+<span class="fc" id="L180">        return bestellungen;</span>
     }
 
     public void setBestellungen(List&lt;Bestellung&gt; bestellungen) {
-<span class="fc" id="L86">        this.bestellungen = bestellungen;</span>
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L184">        this.bestellungen = bestellungen;</span>
+<span class="fc" id="L185">    }</span>
 
     // Hilfsmethode
     public void addBestellung(Bestellung bestellung) {
-<span class="fc" id="L91">        bestellungen.add(bestellung);</span>
-<span class="fc" id="L92">        bestellung.setKunde(this);</span>
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L189">        bestellungen.add(bestellung);</span>
+<span class="fc" id="L190">        bestellung.setKunde(this);</span>
+<span class="fc" id="L191">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

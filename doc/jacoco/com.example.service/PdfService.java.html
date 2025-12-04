@@ -83,96 +83,114 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 <span class="nc" id="L84">        Paragraph kundenInfo = new Paragraph();</span>
 <span class="nc" id="L85">        kundenInfo.add(new Chunk(&quot;Kunde:\n&quot;, boldFont));</span>
-<span class="nc" id="L86">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getName() + &quot;\n&quot;, normalFont));</span>
-<span class="nc" id="L87">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getAdresse() + &quot;\n&quot;, normalFont));</span>
-<span class="nc" id="L88">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getEmail(), normalFont));</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        if (rechnung.getBestellung().getKunde().getGeschlecht() != null) {</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">            switch (rechnung.getBestellung().getKunde().getGeschlecht()) {</span>
+                case MAENNLICH:
+<span class="nc" id="L89">                    kundenInfo.add(new Chunk(&quot;Herrn\n&quot;, normalFont));</span>
+<span class="nc" id="L90">                    break;</span>
+                case WEIBLICH:
+<span class="nc" id="L92">                    kundenInfo.add(new Chunk(&quot;Frau\n&quot;, normalFont));</span>
+<span class="nc" id="L93">                    break;</span>
+                case DIVERS:
+<span class="nc" id="L95">                    kundenInfo.add(new Chunk(&quot;Divers\n&quot;, normalFont));</span>
+                    break;
+            }
+        }
+<span class="nc" id="L99">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getVorname() + &quot; &quot;, normalFont));</span>
+<span class="nc" id="L100">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getName() + &quot;\n&quot;, normalFont));</span>
+<span class="nc" id="L101">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getStrasse() + &quot; &quot;, normalFont));</span>
+<span class="nc" id="L102">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getHausnummer() + &quot;\n&quot;, normalFont));</span>
+<span class="nc" id="L103">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getPostleitzahl() + &quot; &quot;, normalFont));</span>
+<span class="nc" id="L104">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getOrt() + &quot;\n&quot;, normalFont));</span>
+<span class="nc" id="L105">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getLand() + &quot;\n&quot;, normalFont));</span>
+<span class="nc" id="L106">        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getEmail(), normalFont));</span>
 
-<span class="nc" id="L90">        document.add(kundenInfo);</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L108">        document.add(kundenInfo);</span>
+<span class="nc" id="L109">    }</span>
 
     private void addRechnungsDetails(Document document, Rechnung rechnung) throws DocumentException {
-<span class="nc" id="L94">        Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);</span>
-<span class="nc" id="L95">        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);</span>
+<span class="nc" id="L112">        Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);</span>
+<span class="nc" id="L113">        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);</span>
 
-<span class="nc" id="L97">        PdfPTable table = new PdfPTable(2);</span>
-<span class="nc" id="L98">        table.setWidthPercentage(50);</span>
-<span class="nc" id="L99">        table.setHorizontalAlignment(Element.ALIGN_RIGHT);</span>
+<span class="nc" id="L115">        PdfPTable table = new PdfPTable(2);</span>
+<span class="nc" id="L116">        table.setWidthPercentage(50);</span>
+<span class="nc" id="L117">        table.setHorizontalAlignment(Element.ALIGN_RIGHT);</span>
 
-<span class="nc" id="L101">        table.addCell(createCell(&quot;Rechnungsnummer:&quot;, boldFont));</span>
-<span class="nc" id="L102">        table.addCell(createCell(rechnung.getRechnungsnummer(), normalFont));</span>
+<span class="nc" id="L119">        table.addCell(createCell(&quot;Rechnungsnummer:&quot;, boldFont));</span>
+<span class="nc" id="L120">        table.addCell(createCell(rechnung.getRechnungsnummer(), normalFont));</span>
 
-<span class="nc" id="L104">        table.addCell(createCell(&quot;Rechnungsdatum:&quot;, boldFont));</span>
-<span class="nc" id="L105">        table.addCell(createCell(rechnung.getErstellungsdatum().format(DATE_FORMATTER), normalFont));</span>
+<span class="nc" id="L122">        table.addCell(createCell(&quot;Rechnungsdatum:&quot;, boldFont));</span>
+<span class="nc" id="L123">        table.addCell(createCell(rechnung.getErstellungsdatum().format(DATE_FORMATTER), normalFont));</span>
 
-<span class="nc" id="L107">        table.addCell(createCell(&quot;Bestellnummer:&quot;, boldFont));</span>
-<span class="nc" id="L108">        table.addCell(createCell(String.valueOf(rechnung.getBestellung().getId()), normalFont));</span>
+<span class="nc" id="L125">        table.addCell(createCell(&quot;Bestellnummer:&quot;, boldFont));</span>
+<span class="nc" id="L126">        table.addCell(createCell(String.valueOf(rechnung.getBestellung().getId()), normalFont));</span>
 
-<span class="nc" id="L110">        document.add(table);</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L128">        document.add(table);</span>
+<span class="nc" id="L129">    }</span>
 
     private void addPositionenTabelle(Document document, Rechnung rechnung) throws DocumentException {
-<span class="nc" id="L114">        Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);</span>
-<span class="nc" id="L115">        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);</span>
+<span class="nc" id="L132">        Font boldFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);</span>
+<span class="nc" id="L133">        Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);</span>
 
-<span class="nc" id="L117">        PdfPTable table = new PdfPTable(4);</span>
-<span class="nc" id="L118">        table.setWidthPercentage(100);</span>
-<span class="nc" id="L119">        table.setWidths(new float[] { 3, 1, 2, 2 });</span>
+<span class="nc" id="L135">        PdfPTable table = new PdfPTable(4);</span>
+<span class="nc" id="L136">        table.setWidthPercentage(100);</span>
+<span class="nc" id="L137">        table.setWidths(new float[] { 3, 1, 2, 2 });</span>
 
         // Header
-<span class="nc" id="L122">        table.addCell(createHeaderCell(&quot;Produkt&quot;, boldFont));</span>
-<span class="nc" id="L123">        table.addCell(createHeaderCell(&quot;Menge&quot;, boldFont));</span>
-<span class="nc" id="L124">        table.addCell(createHeaderCell(&quot;Einzelpreis&quot;, boldFont));</span>
-<span class="nc" id="L125">        table.addCell(createHeaderCell(&quot;Gesamtpreis&quot;, boldFont));</span>
+<span class="nc" id="L140">        table.addCell(createHeaderCell(&quot;Produkt&quot;, boldFont));</span>
+<span class="nc" id="L141">        table.addCell(createHeaderCell(&quot;Menge&quot;, boldFont));</span>
+<span class="nc" id="L142">        table.addCell(createHeaderCell(&quot;Einzelpreis&quot;, boldFont));</span>
+<span class="nc" id="L143">        table.addCell(createHeaderCell(&quot;Gesamtpreis&quot;, boldFont));</span>
 
         // Items
-<span class="nc bnc" id="L128" title="All 2 branches missed.">        for (BestellPosition position : rechnung.getBestellung().getPositionen()) {</span>
-<span class="nc" id="L129">            table.addCell(createCell(position.getProdukt().getName(), normalFont));</span>
-<span class="nc" id="L130">            table.addCell(createCell(String.valueOf(position.getMenge()), normalFont));</span>
-<span class="nc" id="L131">            table.addCell(createCell(formatPrice(position.getProdukt().getPreis()), normalFont));</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        for (BestellPosition position : rechnung.getBestellung().getPositionen()) {</span>
+<span class="nc" id="L147">            table.addCell(createCell(position.getProdukt().getName(), normalFont));</span>
+<span class="nc" id="L148">            table.addCell(createCell(String.valueOf(position.getMenge()), normalFont));</span>
+<span class="nc" id="L149">            table.addCell(createCell(formatPrice(position.getProdukt().getPreis()), normalFont));</span>
 
-<span class="nc" id="L133">            BigDecimal gesamtpreis = position.getProdukt().getPreis()</span>
-<span class="nc" id="L134">                    .multiply(BigDecimal.valueOf(position.getMenge()));</span>
-<span class="nc" id="L135">            table.addCell(createCell(formatPrice(gesamtpreis), normalFont));</span>
-<span class="nc" id="L136">        }</span>
+<span class="nc" id="L151">            BigDecimal gesamtpreis = position.getProdukt().getPreis()</span>
+<span class="nc" id="L152">                    .multiply(BigDecimal.valueOf(position.getMenge()));</span>
+<span class="nc" id="L153">            table.addCell(createCell(formatPrice(gesamtpreis), normalFont));</span>
+<span class="nc" id="L154">        }</span>
 
-<span class="nc" id="L138">        document.add(table);</span>
-<span class="nc" id="L139">    }</span>
+<span class="nc" id="L156">        document.add(table);</span>
+<span class="nc" id="L157">    }</span>
 
     private void addGesamtsumme(Document document, Rechnung rechnung) throws DocumentException {
-<span class="nc" id="L142">        Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);</span>
+<span class="nc" id="L160">        Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);</span>
 
-<span class="nc" id="L144">        Paragraph total = new Paragraph();</span>
-<span class="nc" id="L145">        total.setAlignment(Element.ALIGN_RIGHT);</span>
-<span class="nc" id="L146">        total.add(new Chunk(&quot;Gesamtbetrag: &quot; + formatPrice(rechnung.getGesamtbetrag()), boldFont));</span>
-<span class="nc" id="L147">        document.add(total);</span>
-<span class="nc" id="L148">    }</span>
+<span class="nc" id="L162">        Paragraph total = new Paragraph();</span>
+<span class="nc" id="L163">        total.setAlignment(Element.ALIGN_RIGHT);</span>
+<span class="nc" id="L164">        total.add(new Chunk(&quot;Gesamtbetrag: &quot; + formatPrice(rechnung.getGesamtbetrag()), boldFont));</span>
+<span class="nc" id="L165">        document.add(total);</span>
+<span class="nc" id="L166">    }</span>
 
     private void addFooter(Document document) throws DocumentException {
-<span class="nc" id="L151">        Font smallFont = new Font(Font.FontFamily.HELVETICA, 8);</span>
-<span class="nc" id="L152">        Paragraph footer = new Paragraph(</span>
+<span class="nc" id="L169">        Font smallFont = new Font(Font.FontFamily.HELVETICA, 8);</span>
+<span class="nc" id="L170">        Paragraph footer = new Paragraph(</span>
                 &quot;Zahlbar innerhalb von 14 Tagen ohne Abzug.\n&quot; +
                         &quot;Bankverbindung: IBAN DE12 3456 7890 1234 5678 90 | BIC: ABCDEFGH&quot;,
                 smallFont);
-<span class="nc" id="L156">        footer.setAlignment(Element.ALIGN_CENTER);</span>
-<span class="nc" id="L157">        document.add(footer);</span>
-<span class="nc" id="L158">    }</span>
+<span class="nc" id="L174">        footer.setAlignment(Element.ALIGN_CENTER);</span>
+<span class="nc" id="L175">        document.add(footer);</span>
+<span class="nc" id="L176">    }</span>
 
     private PdfPCell createCell(String text, Font font) {
-<span class="nc" id="L161">        PdfPCell cell = new PdfPCell(new Phrase(text, font));</span>
-<span class="nc" id="L162">        cell.setBorder(Rectangle.NO_BORDER);</span>
-<span class="nc" id="L163">        cell.setPadding(5);</span>
-<span class="nc" id="L164">        return cell;</span>
+<span class="nc" id="L179">        PdfPCell cell = new PdfPCell(new Phrase(text, font));</span>
+<span class="nc" id="L180">        cell.setBorder(Rectangle.NO_BORDER);</span>
+<span class="nc" id="L181">        cell.setPadding(5);</span>
+<span class="nc" id="L182">        return cell;</span>
     }
 
     private PdfPCell createHeaderCell(String text, Font font) {
-<span class="nc" id="L168">        PdfPCell cell = new PdfPCell(new Phrase(text, font));</span>
-<span class="nc" id="L169">        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);</span>
-<span class="nc" id="L170">        cell.setPadding(5);</span>
-<span class="nc" id="L171">        return cell;</span>
+<span class="nc" id="L186">        PdfPCell cell = new PdfPCell(new Phrase(text, font));</span>
+<span class="nc" id="L187">        cell.setBackgroundColor(BaseColor.LIGHT_GRAY);</span>
+<span class="nc" id="L188">        cell.setPadding(5);</span>
+<span class="nc" id="L189">        return cell;</span>
     }
 
     private String formatPrice(BigDecimal price) {
-<span class="nc" id="L175">        return String.format(&quot;%.2f €&quot;, price);</span>
+<span class="nc" id="L193">        return String.format(&quot;%.2f €&quot;, price);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

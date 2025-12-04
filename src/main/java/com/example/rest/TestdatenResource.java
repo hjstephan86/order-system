@@ -29,8 +29,22 @@ public class TestdatenResource {
     @Path("/erstellen")
     public Response erstelleTestdaten() {
         // Kunden erstellen
-        Kunde kunde1 = new Kunde("Max Mustermann", "max@example.com", "Musterstraße 1, 12345 Berlin");
-        Kunde kunde2 = new Kunde("Anna Schmidt", "anna@example.com", "Beispielweg 2, 54321 Hamburg");
+        Kunde kunde1 = new Kunde("Mustermann", "Max", "max@example.com");
+        kunde1.setStrasse("Musterstraße");
+        kunde1.setHausnummer("1");
+        kunde1.setPostleitzahl("12345");
+        kunde1.setOrt("Berlin");
+        kunde1.setLand("Deutschland");
+        kunde1.setTelefonnummer("0301234567");
+
+        Kunde kunde2 = new Kunde("Schmidt", "Anna", "anna@example.com");
+        kunde2.setStrasse("Beispielweg");
+        kunde2.setHausnummer("2");
+        kunde2.setPostleitzahl("54321");
+        kunde2.setOrt("Hamburg");
+        kunde2.setLand("Deutschland");
+        kunde2.setMobilnummer("01761234567");
+
         kundeRepository.save(kunde1);
         kundeRepository.save(kunde2);
 

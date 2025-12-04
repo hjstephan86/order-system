@@ -29,38 +29,52 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/erstellen&quot;)
     public Response erstelleTestdaten() {
         // Kunden erstellen
-<span class="nc" id="L32">        Kunde kunde1 = new Kunde(&quot;Max Mustermann&quot;, &quot;max@example.com&quot;, &quot;Musterstraße 1, 12345 Berlin&quot;);</span>
-<span class="nc" id="L33">        Kunde kunde2 = new Kunde(&quot;Anna Schmidt&quot;, &quot;anna@example.com&quot;, &quot;Beispielweg 2, 54321 Hamburg&quot;);</span>
-<span class="nc" id="L34">        kundeRepository.save(kunde1);</span>
-<span class="nc" id="L35">        kundeRepository.save(kunde2);</span>
+<span class="nc" id="L32">        Kunde kunde1 = new Kunde(&quot;Mustermann&quot;, &quot;Max&quot;, &quot;max@example.com&quot;);</span>
+<span class="nc" id="L33">        kunde1.setStrasse(&quot;Musterstraße&quot;);</span>
+<span class="nc" id="L34">        kunde1.setHausnummer(&quot;1&quot;);</span>
+<span class="nc" id="L35">        kunde1.setPostleitzahl(&quot;12345&quot;);</span>
+<span class="nc" id="L36">        kunde1.setOrt(&quot;Berlin&quot;);</span>
+<span class="nc" id="L37">        kunde1.setLand(&quot;Deutschland&quot;);</span>
+<span class="nc" id="L38">        kunde1.setTelefonnummer(&quot;0301234567&quot;);</span>
+
+<span class="nc" id="L40">        Kunde kunde2 = new Kunde(&quot;Schmidt&quot;, &quot;Anna&quot;, &quot;anna@example.com&quot;);</span>
+<span class="nc" id="L41">        kunde2.setStrasse(&quot;Beispielweg&quot;);</span>
+<span class="nc" id="L42">        kunde2.setHausnummer(&quot;2&quot;);</span>
+<span class="nc" id="L43">        kunde2.setPostleitzahl(&quot;54321&quot;);</span>
+<span class="nc" id="L44">        kunde2.setOrt(&quot;Hamburg&quot;);</span>
+<span class="nc" id="L45">        kunde2.setLand(&quot;Deutschland&quot;);</span>
+<span class="nc" id="L46">        kunde2.setMobilnummer(&quot;01761234567&quot;);</span>
+
+<span class="nc" id="L48">        kundeRepository.save(kunde1);</span>
+<span class="nc" id="L49">        kundeRepository.save(kunde2);</span>
 
         // Produkte erstellen
-<span class="nc" id="L38">        Produkt laptop = new Produkt(&quot;Laptop&quot;, &quot;Business Laptop mit 16GB RAM&quot;, new BigDecimal(&quot;899.99&quot;), 10);</span>
-<span class="nc" id="L39">        Produkt maus = new Produkt(&quot;Maus&quot;, &quot;Kabellose Gaming-Maus&quot;, new BigDecimal(&quot;49.99&quot;), 50);</span>
-<span class="nc" id="L40">        Produkt tastatur = new Produkt(&quot;Tastatur&quot;, &quot;Mechanische RGB-Tastatur&quot;, new BigDecimal(&quot;129.99&quot;), 25);</span>
-<span class="nc" id="L41">        produktRepository.save(laptop);</span>
-<span class="nc" id="L42">        produktRepository.save(maus);</span>
-<span class="nc" id="L43">        produktRepository.save(tastatur);</span>
+<span class="nc" id="L52">        Produkt laptop = new Produkt(&quot;Laptop&quot;, &quot;Business Laptop mit 16GB RAM&quot;, new BigDecimal(&quot;899.99&quot;), 10);</span>
+<span class="nc" id="L53">        Produkt maus = new Produkt(&quot;Maus&quot;, &quot;Kabellose Gaming-Maus&quot;, new BigDecimal(&quot;49.99&quot;), 50);</span>
+<span class="nc" id="L54">        Produkt tastatur = new Produkt(&quot;Tastatur&quot;, &quot;Mechanische RGB-Tastatur&quot;, new BigDecimal(&quot;129.99&quot;), 25);</span>
+<span class="nc" id="L55">        produktRepository.save(laptop);</span>
+<span class="nc" id="L56">        produktRepository.save(maus);</span>
+<span class="nc" id="L57">        produktRepository.save(tastatur);</span>
 
-<span class="nc" id="L45">        return Response.ok()</span>
-<span class="nc" id="L46">                .entity(new TestdatenResponse(&quot;Testdaten erfolgreich erstellt: 2 Kunden, 3 Produkte&quot;))</span>
-<span class="nc" id="L47">                .build();</span>
+<span class="nc" id="L59">        return Response.ok()</span>
+<span class="nc" id="L60">                .entity(new TestdatenResponse(&quot;Testdaten erfolgreich erstellt: 2 Kunden, 3 Produkte&quot;))</span>
+<span class="nc" id="L61">                .build();</span>
     }
 
     public static class TestdatenResponse {
         private String message;
 
-<span class="nc" id="L53">        public TestdatenResponse(String message) {</span>
-<span class="nc" id="L54">            this.message = message;</span>
-<span class="nc" id="L55">        }</span>
+<span class="nc" id="L67">        public TestdatenResponse(String message) {</span>
+<span class="nc" id="L68">            this.message = message;</span>
+<span class="nc" id="L69">        }</span>
 
         public String getMessage() {
-<span class="nc" id="L58">            return message;</span>
+<span class="nc" id="L72">            return message;</span>
         }
 
         public void setMessage(String message) {
-<span class="nc" id="L62">            this.message = message;</span>
-<span class="nc" id="L63">        }</span>
+<span class="nc" id="L76">            this.message = message;</span>
+<span class="nc" id="L77">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

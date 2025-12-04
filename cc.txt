@@ -3,6 +3,43 @@ CYCLOMATIC COMPLEXITY REPORT
 ================================================================================
 
 
+Class: Kunde
+Package: com.example.entity
+Total Complexity: 29
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - Kunde: 1 (line 73)
+  - Kunde: 1 (line 76)
+  - getId: 1 (line 83)
+  - setId: 1 (line 87)
+  - getName: 1 (line 91)
+  - setName: 1 (line 95)
+  - getVorname: 1 (line 99)
+  - setVorname: 1 (line 103)
+  - getEmail: 1 (line 107)
+  - setEmail: 1 (line 111)
+  - getStrasse: 1 (line 115)
+  - setStrasse: 1 (line 119)
+  - getHausnummer: 1 (line 123)
+  - setHausnummer: 1 (line 127)
+  - getPostleitzahl: 1 (line 131)
+  - setPostleitzahl: 1 (line 135)
+  - getOrt: 1 (line 139)
+  - setOrt: 1 (line 143)
+  - getLand: 1 (line 147)
+  - setLand: 1 (line 151)
+  - getGeschlecht: 1 (line 155)
+  - setGeschlecht: 1 (line 159)
+  - getTelefonnummer: 1 (line 163)
+  - setTelefonnummer: 1 (line 167)
+  - getMobilnummer: 1 (line 171)
+  - setMobilnummer: 1 (line 175)
+  - getBestellungen: 1 (line 179)
+  - setBestellungen: 1 (line 183)
+  - addBestellung: 1 (line 188)
+
+
 Class: RechnungResource
 Package: com.example.rest
 Total Complexity: 23
@@ -90,6 +127,24 @@ Methods:
   - setBezahltVon: 1 (line 115)
 
 
+Class: PdfService
+Package: com.example.service
+Total Complexity: 15
+Highest Method Complexity: 5
+--------------------------------------------------------------------------------
+Methods:
+  - addKundenInfo: 5 (line 80)
+  - addPositionenTabelle: 2 (line 131)
+  - generiereRechnungsPdf: 1 (line 30)
+  - addHeader: 1 (line 68)
+  - addRechnungsDetails: 1 (line 111)
+  - addGesamtsumme: 1 (line 159)
+  - addFooter: 1 (line 168)
+  - createCell: 1 (line 178)
+  - createHeaderCell: 1 (line 185)
+  - formatPrice: 1 (line 192)
+
+
 Class: BestellPosition
 Package: com.example.entity
 Total Complexity: 13
@@ -132,27 +187,6 @@ Methods:
   - getGesamtpreis: 1 (line 100)
 
 
-Class: Kunde
-Package: com.example.entity
-Total Complexity: 13
-Highest Method Complexity: 1
---------------------------------------------------------------------------------
-Methods:
-  - Kunde: 1 (line 39)
-  - Kunde: 1 (line 42)
-  - getId: 1 (line 49)
-  - setId: 1 (line 53)
-  - getName: 1 (line 57)
-  - setName: 1 (line 61)
-  - getEmail: 1 (line 65)
-  - setEmail: 1 (line 69)
-  - getAdresse: 1 (line 73)
-  - setAdresse: 1 (line 77)
-  - getBestellungen: 1 (line 81)
-  - setBestellungen: 1 (line 85)
-  - addBestellung: 1 (line 90)
-
-
 Class: Produkt
 Package: com.example.entity
 Total Complexity: 12
@@ -171,24 +205,6 @@ Methods:
   - setPreis: 1 (line 72)
   - getLagerbestand: 1 (line 76)
   - setLagerbestand: 1 (line 80)
-
-
-Class: PdfService
-Package: com.example.service
-Total Complexity: 11
-Highest Method Complexity: 2
---------------------------------------------------------------------------------
-Methods:
-  - addPositionenTabelle: 2 (line 113)
-  - generiereRechnungsPdf: 1 (line 30)
-  - addHeader: 1 (line 68)
-  - addKundenInfo: 1 (line 80)
-  - addRechnungsDetails: 1 (line 93)
-  - addGesamtsumme: 1 (line 141)
-  - addFooter: 1 (line 150)
-  - createCell: 1 (line 160)
-  - createHeaderCell: 1 (line 167)
-  - formatPrice: 1 (line 174)
 
 
 Class: RechnungRepository
@@ -340,9 +356,9 @@ Total Complexity: 3
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - TestdatenResponse: 1 (line 53)
-  - getMessage: 1 (line 57)
-  - setMessage: 1 (line 61)
+  - TestdatenResponse: 1 (line 67)
+  - getMessage: 1 (line 71)
+  - setMessage: 1 (line 75)
 
 
 Class: StatusUpdateRequest
