@@ -5,7 +5,7 @@ Order System,com.example.rest,RestApplication,3,0,0,0,1,0,1,0,1,0
 Order System,com.example.rest,JacksonConfig,18,0,0,0,5,0,2,0,2,0
 Order System,com.example.rest,BestellungResource.ErrorResponse,13,0,0,0,6,0,3,0,3,0
 Order System,com.example.rest,TestdatenResource.TestdatenResponse,13,0,0,0,6,0,3,0,3,0
-Order System,com.example.rest,TestdatenResource,122,0,0,0,26,0,2,0,2,0
+Order System,com.example.rest,TestdatenResource,134,0,0,0,28,0,2,0,2,0
 Order System,com.example.rest,KundeResource,101,0,0,0,22,0,11,0,11,0
 Order System,com.example.rest,BestellungResource.BestellungCreateRequest,17,0,0,0,7,0,5,0,5,0
 Order System,com.example.rest,RechnungResource,323,0,4,0,104,0,12,0,10,0
@@ -20,7 +20,7 @@ Order System,com.example.entity,Kunde.Geschlecht,0,21,0,0,0,4,0,1,0,1
 Order System,com.example.entity,Bestellung,0,68,0,0,0,26,0,13,0,13
 Order System,com.example.entity,BestellPosition,0,61,0,0,0,23,0,13,0,13
 Order System,com.example.entity,BestellStatus,0,33,0,0,0,6,0,1,0,1
-Order System,com.example.entity,Kunde,0,125,0,0,0,50,0,29,0,29
+Order System,com.example.entity,Kunde,0,132,0,0,0,53,0,31,0,31
 Order System,com.example.entity,Rechnung,0,65,0,0,0,28,0,17,0,17
 Order System,com.example.entity,RechnungsStatus,0,21,0,0,0,4,0,1,0,1
 Order System,com.example.repository,KundeRepository,8,56,2,2,1,11,2,6,0,6

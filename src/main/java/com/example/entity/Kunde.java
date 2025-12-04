@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class Kunde {
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
+
+    @Column
+    private LocalDate geburtstag;
 
     @Column(length = 100)
     private String strasse;
@@ -102,6 +106,14 @@ public class Kunde {
 
     public void setVorname(String vorname) {
         this.vorname = vorname;
+    }
+
+    public LocalDate getGeburtstag() {
+        return geburtstag;
+    }
+
+    public void setGeburtstag(LocalDate geburtstag) {
+        this.geburtstag = geburtstag;
     }
 
     public String getEmail() {

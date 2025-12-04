@@ -118,7 +118,12 @@
                     <h3 class="text-xl font-bold mb-4">Kunde bearbeiten</h3>
                     <form onsubmit="saveKunde(event)">
                         <input type="hidden" id="kunde-id">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Vorname *</label>
+                                <input type="text" id="kunde-vorname" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
                             <div>
                                 <label class="block text-sm font-medium mb-2">Name *</label>
                                 <input type="text" id="kunde-name" required
@@ -129,11 +134,34 @@
                                 <input type="email" id="kunde-email" required
                                     class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
                             </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Geburtstag *</label>
+                                <input type="text" id="kunde-geburtstag" required pattern="\d{4}-\d{2}-\d{2}"
+                                    placeholder="yyyy-mm-dd"
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
                         </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-2">Adresse</label>
-                            <input type="text" id="kunde-adresse"
-                                class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Strasse *</label>
+                                <input type="text" id="kunde-strasse" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Hausnummer *</label>
+                                <input type="text" id="kunde-hausnummer" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Postleitzahl *</label>
+                                <input type="text" id="kunde-postleitzahl" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Ort *</label>
+                                <input type="text" id="kunde-ort" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
                         </div>
                         <div class="flex space-x-2">
                             <button type="submit"
@@ -149,9 +177,17 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vorname</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Strasse</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Hausnummer
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Postleitzahl
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ort</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Geburtsdatum
+                                </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Adresse</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen
                                 </th>
                             </tr>
@@ -418,6 +454,27 @@
             }
         }
 
+        function formatDateShort(dateStr) {
+            if (!dateStr) return '-';
+
+            const d = new Date(dateStr);
+
+            // Prüfen, ob das Datum gültig ist
+            if (isNaN(d.getTime())) {
+                return '-';
+            }
+
+            // Komponenten extrahieren und formatieren
+            const year = d.getFullYear();
+            // Monat (0-11, daher +1), mit führender Null (z.B. '05')
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            // Tag, mit führender Null (z.B. '04')
+            const day = String(d.getDate()).padStart(2, '0');
+
+            // Zusammenführen im Format yyyy-mm-dd
+            return `${year}-${month}-${day}`;
+        }
+
         // Kunden
         async function loadKunden() {
             try {
@@ -426,9 +483,14 @@
                 document.getElementById('kunden-list').innerHTML = kunden.map(k => `
                     <tr>
                         <td class="px-6 py-4">${k.id}</td>
+                        <td class="px-6 py-4 font-medium">${k.vorname}</td>
                         <td class="px-6 py-4 font-medium">${k.name}</td>
+                        <td class="px-6 py-4">${k.strasse || '-'}</td>
+                        <td class="px-6 py-4">${k.hausnummer || '-'}</td>
+                        <td class="px-6 py-4">${k.postleitzahl || '-'}</td>
+                        <td class="px-6 py-4">${k.ort || '-'}</td>
+                        <td class="px-6 py-4">${formatDateShort(k.geburtstag) || '-'}</td>
                         <td class="px-6 py-4">${k.email}</td>
-                        <td class="px-6 py-4">${k.adresse || '-'}</td>
                         <td class="px-6 py-4">
                             <button onclick="editKunde(${k.id})" class="text-blue-600 hover:text-blue-800 mr-3">Bearbeiten</button>
                             <button onclick="deleteKunde(${k.id})" class="text-red-600 hover:text-red-800">Löschen</button>
@@ -443,9 +505,14 @@
         function showKundeForm() {
             document.getElementById('kunde-form').classList.remove('hidden');
             document.getElementById('kunde-id').value = '';
+            document.getElementById('kunde-vorname').value = '';
             document.getElementById('kunde-name').value = '';
             document.getElementById('kunde-email').value = '';
-            document.getElementById('kunde-adresse').value = '';
+            document.getElementById('kunde-geburtstag').value = '';
+            document.getElementById('kunde-strasse').value = '';
+            document.getElementById('kunde-hausnummer').value = '';
+            document.getElementById('kunde-postleitzahl').value = '';
+            document.getElementById('kunde-ort').value = '';
         }
 
         function hideKundeForm() {
@@ -459,8 +526,13 @@
             document.getElementById('kunde-form').classList.remove('hidden');
             document.getElementById('kunde-id').value = kunde.id;
             document.getElementById('kunde-name').value = kunde.name;
+            document.getElementById('kunde-vorname').value = kunde.vorname;
             document.getElementById('kunde-email').value = kunde.email;
-            document.getElementById('kunde-adresse').value = kunde.adresse || '';
+            document.getElementById('kunde-geburtstag').value = formatDateShort(kunde.geburtstag) || '';
+            document.getElementById('kunde-strasse').value = kunde.strasse || '';
+            document.getElementById('kunde-hausnummer').value = kunde.hausnummer || '';
+            document.getElementById('kunde-postleitzahl').value = kunde.postleitzahl || '';
+            document.getElementById('kunde-ort').value = kunde.ort || '';
         }
 
         async function saveKunde(event) {
@@ -468,8 +540,13 @@
             const id = document.getElementById('kunde-id').value;
             const kunde = {
                 name: document.getElementById('kunde-name').value,
+                vorname: document.getElementById('kunde-vorname').value,
                 email: document.getElementById('kunde-email').value,
-                adresse: document.getElementById('kunde-adresse').value
+                geburtstag: document.getElementById('kunde-geburtstag').value,
+                strasse: document.getElementById('kunde-strasse').value,
+                hausnummer: document.getElementById('kunde-hausnummer').value,
+                postleitzahl: document.getElementById('kunde-postleitzahl').value,
+                ort: document.getElementById('kunde-ort').value,
             };
 
             try {
@@ -649,7 +726,7 @@
 
             document.getElementById('bestellung-kunde').innerHTML =
                 '<option value="">Kunde wählen</option>' +
-                kunden.map(k => `<option value="${k.id}">${k.name}</option>`).join('');
+                kunden.map(k => `<option value="${k.id}">${k.vorname} ${k.name}</option>`).join('');
 
             // Produkte laden
             if (produkte.length === 0) {

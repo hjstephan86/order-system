@@ -2,6 +2,7 @@ package com.example.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +69,23 @@ public class KundeTest {
         k.setVorname(null);
 
         assertThat(k.getVorname()).isNull();
+    }
+
+    @Test
+    public void geburtstagSetterAndGetterWork() {
+        Kunde k = new Kunde();
+        LocalDate date = LocalDate.of(1990, 5, 15);
+        k.setGeburtstag(date);
+
+        assertThat(k.getGeburtstag()).isEqualTo(date);
+    }
+
+    @Test
+    public void geburtstagCanBeNull() {
+        Kunde k = new Kunde();
+        k.setGeburtstag(null);
+
+        assertThat(k.getGeburtstag()).isNull();
     }
 
     @Test

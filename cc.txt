@@ -5,39 +5,41 @@ CYCLOMATIC COMPLEXITY REPORT
 
 Class: Kunde
 Package: com.example.entity
-Total Complexity: 29
+Total Complexity: 31
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - Kunde: 1 (line 73)
-  - Kunde: 1 (line 76)
-  - getId: 1 (line 83)
-  - setId: 1 (line 87)
-  - getName: 1 (line 91)
-  - setName: 1 (line 95)
-  - getVorname: 1 (line 99)
-  - setVorname: 1 (line 103)
-  - getEmail: 1 (line 107)
-  - setEmail: 1 (line 111)
-  - getStrasse: 1 (line 115)
-  - setStrasse: 1 (line 119)
-  - getHausnummer: 1 (line 123)
-  - setHausnummer: 1 (line 127)
-  - getPostleitzahl: 1 (line 131)
-  - setPostleitzahl: 1 (line 135)
-  - getOrt: 1 (line 139)
-  - setOrt: 1 (line 143)
-  - getLand: 1 (line 147)
-  - setLand: 1 (line 151)
-  - getGeschlecht: 1 (line 155)
-  - setGeschlecht: 1 (line 159)
-  - getTelefonnummer: 1 (line 163)
-  - setTelefonnummer: 1 (line 167)
-  - getMobilnummer: 1 (line 171)
-  - setMobilnummer: 1 (line 175)
-  - getBestellungen: 1 (line 179)
-  - setBestellungen: 1 (line 183)
-  - addBestellung: 1 (line 188)
+  - Kunde: 1 (line 77)
+  - Kunde: 1 (line 80)
+  - getId: 1 (line 87)
+  - setId: 1 (line 91)
+  - getName: 1 (line 95)
+  - setName: 1 (line 99)
+  - getVorname: 1 (line 103)
+  - setVorname: 1 (line 107)
+  - getGeburtstag: 1 (line 111)
+  - setGeburtstag: 1 (line 115)
+  - getEmail: 1 (line 119)
+  - setEmail: 1 (line 123)
+  - getStrasse: 1 (line 127)
+  - setStrasse: 1 (line 131)
+  - getHausnummer: 1 (line 135)
+  - setHausnummer: 1 (line 139)
+  - getPostleitzahl: 1 (line 143)
+  - setPostleitzahl: 1 (line 147)
+  - getOrt: 1 (line 151)
+  - setOrt: 1 (line 155)
+  - getLand: 1 (line 159)
+  - setLand: 1 (line 163)
+  - getGeschlecht: 1 (line 167)
+  - setGeschlecht: 1 (line 171)
+  - getTelefonnummer: 1 (line 175)
+  - setTelefonnummer: 1 (line 179)
+  - getMobilnummer: 1 (line 183)
+  - setMobilnummer: 1 (line 187)
+  - getBestellungen: 1 (line 191)
+  - setBestellungen: 1 (line 195)
+  - addBestellung: 1 (line 200)
 
 
 Class: RechnungResource
@@ -356,9 +358,9 @@ Total Complexity: 3
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - TestdatenResponse: 1 (line 67)
-  - getMessage: 1 (line 71)
-  - setMessage: 1 (line 75)
+  - TestdatenResponse: 1 (line 70)
+  - getMessage: 1 (line 74)
+  - setMessage: 1 (line 78)
 
 
 Class: StatusUpdateRequest
@@ -387,7 +389,7 @@ Total Complexity: 1
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - erstelleTestdaten: 1 (line 30)
+  - erstelleTestdaten: 1 (line 31)
 
 ================================================================================
 END OF REPORT

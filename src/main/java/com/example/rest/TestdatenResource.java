@@ -1,6 +1,7 @@
 package com.example.rest;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import com.example.entity.Kunde;
 import com.example.entity.Produkt;
@@ -30,6 +31,7 @@ public class TestdatenResource {
     public Response erstelleTestdaten() {
         // Kunden erstellen
         Kunde kunde1 = new Kunde("Mustermann", "Max", "max@example.com");
+        kunde1.setGeburtstag(LocalDate.of(1975, 8, 17));
         kunde1.setStrasse("Musterstraße");
         kunde1.setHausnummer("1");
         kunde1.setPostleitzahl("12345");
@@ -38,6 +40,7 @@ public class TestdatenResource {
         kunde1.setTelefonnummer("0301234567");
 
         Kunde kunde2 = new Kunde("Schmidt", "Anna", "anna@example.com");
+        kunde2.setGeburtstag(LocalDate.of(1980, 3, 22));
         kunde2.setStrasse("Beispielweg");
         kunde2.setHausnummer("2");
         kunde2.setPostleitzahl("54321");

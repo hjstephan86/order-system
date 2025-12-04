@@ -144,9 +144,10 @@ curl http://localhost:8080/order-system/api/produkte
 curl -X POST http://localhost:8080/order-system/api/kunden \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Meier",
-    "vorname": "Hanna",
-    "email": "meier@example.com",
+    "name": "Müller",
+    "vorname": "Anna",
+    "email": "mueller@example.com",
+    "geburtstag": "1978-08-08",
     "strasse": "Am Anger",
     "hausnummer": 33,
     "postleitzahl": 33332,
