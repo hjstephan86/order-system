@@ -32,7 +32,8 @@ public class RechnungResource {
         dto.setId(rechnung.getId());
         dto.setRechnungsnummer(rechnung.getRechnungsnummer());
         dto.setBestellungId(rechnung.getBestellung().getId());
-        dto.setKundeName(rechnung.getBestellung().getKunde().getName());
+        dto.setKundeName(
+                rechnung.getBestellung().getKunde().getVorname() + " " + rechnung.getBestellung().getKunde().getName());
         dto.setErstellungsdatum(rechnung.getErstellungsdatum());
         dto.setGesamtbetrag(rechnung.getGesamtbetrag());
         dto.setStatus(rechnung.getStatus().toString());

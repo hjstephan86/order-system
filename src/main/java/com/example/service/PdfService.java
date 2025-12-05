@@ -82,17 +82,17 @@ public class PdfService {
         Font normalFont = new Font(Font.FontFamily.HELVETICA, 10);
 
         Paragraph kundenInfo = new Paragraph();
-        kundenInfo.add(new Chunk("Kunde:\n", boldFont));
+        kundenInfo.add(new Chunk("An:\n", boldFont));
         if (rechnung.getBestellung().getKunde().getGeschlecht() != null) {
             switch (rechnung.getBestellung().getKunde().getGeschlecht()) {
                 case MAENNLICH:
-                    kundenInfo.add(new Chunk("Herrn\n", normalFont));
+                    kundenInfo.add(new Chunk("Herrn ", normalFont));
                     break;
                 case WEIBLICH:
-                    kundenInfo.add(new Chunk("Frau\n", normalFont));
+                    kundenInfo.add(new Chunk("Frau ", normalFont));
                     break;
                 case DIVERS:
-                    kundenInfo.add(new Chunk("Divers\n", normalFont));
+                    kundenInfo.add(new Chunk("", normalFont));
                     break;
             }
         }
@@ -102,8 +102,6 @@ public class PdfService {
         kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getHausnummer() + "\n", normalFont));
         kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getPostleitzahl() + " ", normalFont));
         kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getOrt() + "\n", normalFont));
-        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getLand() + "\n", normalFont));
-        kundenInfo.add(new Chunk(rechnung.getBestellung().getKunde().getEmail(), normalFont));
 
         document.add(kundenInfo);
     }

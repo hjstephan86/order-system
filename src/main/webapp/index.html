@@ -163,6 +163,33 @@
                                     class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
                             </div>
                         </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Land *</label>
+                                <input type="text" id="kunde-land" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Telefonnummer </label>
+                                <input type="text" id="kunde-telefonnummer"
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Mobilnummer</label>
+                                <input type="text" id="kunde-mobilnummer"
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Geschlecht *</label>
+                                <select id="kunde-geschlecht" required
+                                    class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Bitte wählen...</option>
+                                    <option value="MAENNLICH">Männlich</option>
+                                    <option value="WEIBLICH">Weiblich</option>
+                                    <option value="DIVERS">Divers</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="flex space-x-2">
                             <button type="submit"
                                 class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Speichern</button>
@@ -513,6 +540,10 @@
             document.getElementById('kunde-hausnummer').value = '';
             document.getElementById('kunde-postleitzahl').value = '';
             document.getElementById('kunde-ort').value = '';
+            document.getElementById('kunde-land').value = '';
+            document.getElementById('kunde-telefonnummer').value = '';
+            document.getElementById('kunde-mobilnummer').value = '';
+            document.getElementById('kunde-geschlecht').value = '';
         }
 
         function hideKundeForm() {
@@ -533,6 +564,10 @@
             document.getElementById('kunde-hausnummer').value = kunde.hausnummer || '';
             document.getElementById('kunde-postleitzahl').value = kunde.postleitzahl || '';
             document.getElementById('kunde-ort').value = kunde.ort || '';
+            document.getElementById('kunde-land').value = kunde.land || '';
+            document.getElementById('kunde-telefonnummer').value = kunde.telefonnummer || '';
+            document.getElementById('kunde-mobilnummer').value = kunde.mobilnummer || '';
+            document.getElementById('kunde-geschlecht').value = kunde.geschlecht || '';
         }
 
         async function saveKunde(event) {
@@ -547,6 +582,10 @@
                 hausnummer: document.getElementById('kunde-hausnummer').value,
                 postleitzahl: document.getElementById('kunde-postleitzahl').value,
                 ort: document.getElementById('kunde-ort').value,
+                land: document.getElementById('kunde-land').value,
+                telefonnummer: document.getElementById('kunde-telefonnummer').value,
+                mobilnummer: document.getElementById('kunde-mobilnummer').value,
+                geschlecht: document.getElementById('kunde-geschlecht').value,
             };
 
             try {

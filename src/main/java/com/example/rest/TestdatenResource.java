@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.example.entity.Kunde;
+import com.example.entity.Kunde.Geschlecht;
 import com.example.entity.Produkt;
 import com.example.repository.KundeRepository;
 import com.example.repository.ProduktRepository;
@@ -38,6 +39,7 @@ public class TestdatenResource {
         kunde1.setOrt("Berlin");
         kunde1.setLand("Deutschland");
         kunde1.setTelefonnummer("0301234567");
+        kunde1.setGeschlecht(Geschlecht.MAENNLICH);
 
         Kunde kunde2 = new Kunde("Schmidt", "Anna", "anna@example.com");
         kunde2.setGeburtstag(LocalDate.of(1980, 3, 22));
@@ -47,6 +49,7 @@ public class TestdatenResource {
         kunde2.setOrt("Hamburg");
         kunde2.setLand("Deutschland");
         kunde2.setMobilnummer("01761234567");
+        kunde2.setGeschlecht(Geschlecht.WEIBLICH);
 
         kundeRepository.save(kunde1);
         kundeRepository.save(kunde2);

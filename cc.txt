@@ -48,14 +48,14 @@ Total Complexity: 23
 Highest Method Complexity: 4
 --------------------------------------------------------------------------------
 Methods:
-  - markiereAlsBezahlt: 4 (line 126)
-  - getRechnungByBestellungId: 3 (line 75)
-  - erstelleRechnung: 3 (line 109)
-  - downloadPdf: 3 (line 151)
-  - rechnungslauf: 3 (line 180)
-  - getAlleRechnungen: 2 (line 45)
-  - getRechnungById: 2 (line 62)
-  - getOffeneRechnungen: 2 (line 93)
+  - markiereAlsBezahlt: 4 (line 127)
+  - getRechnungByBestellungId: 3 (line 76)
+  - erstelleRechnung: 3 (line 110)
+  - downloadPdf: 3 (line 152)
+  - rechnungslauf: 3 (line 181)
+  - getAlleRechnungen: 2 (line 46)
+  - getRechnungById: 2 (line 63)
+  - getOffeneRechnungen: 2 (line 94)
   - toDTO: 1 (line 30)
 
 
@@ -136,15 +136,15 @@ Highest Method Complexity: 5
 --------------------------------------------------------------------------------
 Methods:
   - addKundenInfo: 5 (line 80)
-  - addPositionenTabelle: 2 (line 131)
+  - addPositionenTabelle: 2 (line 129)
   - generiereRechnungsPdf: 1 (line 30)
   - addHeader: 1 (line 68)
-  - addRechnungsDetails: 1 (line 111)
-  - addGesamtsumme: 1 (line 159)
-  - addFooter: 1 (line 168)
-  - createCell: 1 (line 178)
-  - createHeaderCell: 1 (line 185)
-  - formatPrice: 1 (line 192)
+  - addRechnungsDetails: 1 (line 109)
+  - addGesamtsumme: 1 (line 157)
+  - addFooter: 1 (line 166)
+  - createCell: 1 (line 176)
+  - createHeaderCell: 1 (line 183)
+  - formatPrice: 1 (line 190)
 
 
 Class: BestellPosition
@@ -358,9 +358,9 @@ Total Complexity: 3
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - TestdatenResponse: 1 (line 70)
-  - getMessage: 1 (line 74)
-  - setMessage: 1 (line 78)
+  - TestdatenResponse: 1 (line 73)
+  - getMessage: 1 (line 77)
+  - setMessage: 1 (line 81)
 
 
 Class: StatusUpdateRequest
@@ -389,7 +389,7 @@ Total Complexity: 1
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - erstelleTestdaten: 1 (line 31)
+  - erstelleTestdaten: 1 (line 32)
 
 ================================================================================
 END OF REPORT
