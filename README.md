@@ -226,6 +226,15 @@ mvn pmd:pmd
 python3 cc.py
 ```
 
+## Read Database Dump
+```bash
+# Create database
+createdb -U dbuser -h localhost bestellsystem
+
+# Read database dump
+psql -U dbuser -d bestellsystem -h localhost -p 5432 < doc/SQL/bestellsystem_db_export.sql
+```
+
 ## Database Schema Overview
 ```bash
 # Download schemaspy JAR from GitHub
