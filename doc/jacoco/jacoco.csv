@@ -1,19 +1,41 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Order System,com.example.rest,BestellungResource.StatusUpdateRequest,10,0,0,0,4,0,3,0,3,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
 Order System,com.example.rest,RechnungDTO,66,0,0,0,29,0,19,0,19,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},17,0,0,0,2,0,1,0,1,0
 Order System,com.example.rest,RestApplication,3,0,0,0,1,0,1,0,1,0
 Order System,com.example.rest,JacksonConfig,18,0,0,0,5,0,2,0,2,0
-Order System,com.example.rest,BestellungResource.ErrorResponse,13,0,0,0,6,0,3,0,3,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},16,0,0,0,3,0,1,0,1,0
 Order System,com.example.rest,TestdatenResource.TestdatenResponse,13,0,0,0,6,0,3,0,3,0
-Order System,com.example.rest,TestdatenResource,140,0,0,0,30,0,2,0,2,0
-Order System,com.example.rest,KundeResource,101,0,0,0,22,0,11,0,11,0
+Order System,com.example.rest,KundeResource,312,0,38,0,76,0,30,0,11,0
 Order System,com.example.rest,BestellungResource.BestellungCreateRequest,17,0,0,0,7,0,5,0,5,0
 Order System,com.example.rest,RechnungResource,328,0,4,0,105,0,12,0,10,0
-Order System,com.example.rest,ProduktResource,94,0,0,0,21,0,10,0,10,0
 Order System,com.example.rest,BestellungResource,95,0,0,0,25,0,8,0,8,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},16,0,0,0,3,0,1,0,1,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},16,0,0,0,3,0,1,0,1,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,BestellungResource.StatusUpdateRequest,10,0,0,0,4,0,3,0,3,0
+Order System,com.example.rest,ProduktResource.new HashMap() {...},17,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},16,0,0,0,3,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},17,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,BestellungResource.ErrorResponse,13,0,0,0,6,0,3,0,3,0
+Order System,com.example.rest,TestdatenResource,140,0,0,0,30,0,2,0,2,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},17,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},16,0,0,0,3,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,KundeResource.new HashMap() {...},11,0,0,0,2,0,1,0,1,0
+Order System,com.example.rest,ProduktResource,267,0,28,0,67,0,24,0,10,0
 Order System,com.example.service,BestellService,135,0,6,0,26,0,10,0,7,0
-Order System,com.example.service,RechnungService,293,0,24,0,73,0,28,0,16,0
 Order System,com.example.service,BestellPositionDTO,26,0,0,0,12,0,6,0,6,0
+Order System,com.example.service,RechnungService,293,0,24,0,73,0,28,0,16,0
 Order System,com.example.service,PdfService,562,0,8,0,99,0,17,0,12,0
 Order System,com.example.entity,Produkt,0,53,0,0,0,23,0,12,0,12
 Order System,com.example.entity,Kunde.Geschlecht,0,21,0,0,0,4,0,1,0,1
@@ -23,7 +45,7 @@ Order System,com.example.entity,BestellStatus,0,33,0,0,0,6,0,1,0,1
 Order System,com.example.entity,Kunde,0,132,0,0,0,53,0,31,0,31
 Order System,com.example.entity,Rechnung,0,65,0,0,0,28,0,17,0,17
 Order System,com.example.entity,RechnungsStatus,0,21,0,0,0,4,0,1,0,1
-Order System,com.example.repository,KundeRepository,8,56,2,2,1,11,2,6,0,6
-Order System,com.example.repository,BestellungRepository,0,61,0,2,0,13,0,7,0,6
 Order System,com.example.repository,ProduktRepository,4,55,1,3,0,12,1,7,0,6
 Order System,com.example.repository,RechnungRepository,9,84,2,4,1,19,2,8,0,7
+Order System,com.example.repository,KundeRepository,8,56,2,2,1,11,2,6,0,6
+Order System,com.example.repository,BestellungRepository,0,61,0,2,0,13,0,7,0,6

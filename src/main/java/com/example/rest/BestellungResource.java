@@ -33,7 +33,8 @@ public class BestellungResource {
     // GET /api/bestellungen - Alle Bestellungen abrufen
     @GET
     public Response getAllBestellungen() {
-        // FIX: Nutzen Sie den Service, um Bestellungen abzurufen und die lazy-Kollektionen zu initialisieren
+        // FIX: Nutzen Sie den Service, um Bestellungen abzurufen und die
+        // lazy-Kollektionen zu initialisieren
         List<Bestellung> bestellungen = bestellService.findAllAndInitializePositions();
         return Response.ok(bestellungen).build();
     }
@@ -42,7 +43,8 @@ public class BestellungResource {
     @GET
     @Path("/{id}")
     public Response getBestellung(@PathParam("id") Long id) {
-        // FIX: Rufen Sie die Methode im Service auf, die die Initialisierung durchführt.
+        // FIX: Rufen Sie die Methode im Service auf, die die Initialisierung
+        // durchführt.
         List<Bestellung> bestellungen = bestellService.findAllAndInitializePositions();
         return Response.ok(bestellungen).build();
     }

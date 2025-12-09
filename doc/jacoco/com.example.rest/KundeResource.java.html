@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KundeResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Order System</a> &gt; <a href="index.source.html" class="el_package">com.example.rest</a> &gt; <span class="el_source">KundeResource.java</span></div><h1>KundeResource.java</h1><pre class="source lang-java linenums">package com.example.rest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.entity.Kunde;
 import com.example.repository.KundeRepository;
@@ -20,7 +22,7 @@ import jakarta.ws.rs.core.Response;
 @Path(&quot;/kunden&quot;)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-<span class="nc" id="L23">public class KundeResource {</span>
+<span class="nc" id="L25">public class KundeResource {</span>
 
     @Inject
     private KundeRepository kundeRepository;
@@ -28,58 +30,183 @@ import jakarta.ws.rs.core.Response;
     // GET /api/kunden - Alle Kunden abrufen
     @GET
     public Response getAllKunden() {
-<span class="nc" id="L31">        List&lt;Kunde&gt; kunden = kundeRepository.findAll();</span>
-<span class="nc" id="L32">        return Response.ok(kunden).build();</span>
+<span class="nc" id="L33">        List&lt;Kunde&gt; kunden = kundeRepository.findAll();</span>
+<span class="nc" id="L34">        return Response.ok(kunden).build();</span>
     }
 
     // GET /api/kunden/{id} - Einzelnen Kunden abrufen
     @GET
     @Path(&quot;/{id}&quot;)
     public Response getKunde(@PathParam(&quot;id&quot;) Long id) {
-<span class="nc" id="L39">        return kundeRepository.findById(id)</span>
-<span class="nc" id="L40">                .map(kunde -&gt; Response.ok(kunde).build())</span>
-<span class="nc" id="L41">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+<span class="nc" id="L41">        return kundeRepository.findById(id)</span>
+<span class="nc" id="L42">                .map(kunde -&gt; Response.ok(kunde).build())</span>
+<span class="nc" id="L43">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
     }
 
     // POST /api/kunden - Neuen Kunden anlegen
     @POST
     public Response createKunde(Kunde kunde) {
-<span class="nc" id="L47">        Kunde saved = kundeRepository.save(kunde);</span>
-<span class="nc" id="L48">        return Response.status(Response.Status.CREATED).entity(saved).build();</span>
+<span class="nc" id="L49">        Kunde saved = kundeRepository.save(kunde);</span>
+<span class="nc" id="L50">        return Response.status(Response.Status.CREATED).entity(saved).build();</span>
     }
 
     // PUT /api/kunden/{id} - Kunden aktualisieren
     @PUT
     @Path(&quot;/{id}&quot;)
     public Response updateKunde(@PathParam(&quot;id&quot;) Long id, Kunde kunde) {
-<span class="nc" id="L55">        return kundeRepository.findById(id)</span>
-<span class="nc" id="L56">                .map(existing -&gt; {</span>
-<span class="nc" id="L57">                    kunde.setId(id);</span>
-<span class="nc" id="L58">                    Kunde updated = kundeRepository.save(kunde);</span>
-<span class="nc" id="L59">                    return Response.ok(updated).build();</span>
-                })
-<span class="nc" id="L61">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+        try {
+<span class="nc" id="L58">            return kundeRepository.findById(id)</span>
+<span class="nc" id="L59">                    .map(existing -&gt; {</span>
+<span class="nc" id="L60">                        kunde.setId(id);</span>
+<span class="nc" id="L61">                        Kunde updated = kundeRepository.save(kunde);</span>
+<span class="nc" id="L62">                        return Response.ok(updated).build();</span>
+                    })
+<span class="nc" id="L64">                    .orElse(Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L65">                            .entity(new HashMap&lt;String, String&gt;() {</span>
+                                {
+<span class="nc" id="L67">                                    put(&quot;message&quot;, &quot;Kunde nicht gefunden&quot;);</span>
+                                }
+                            })
+<span class="nc" id="L70">                            .build());</span>
+<span class="nc" id="L71">        } catch (Exception e) {</span>
+<span class="nc" id="L72">            String errorMsg = getFullErrorMessage(e);</span>
+
+            // Spezifische Fehlerunterscheidung
+<span class="nc bnc" id="L75" title="All 6 branches missed.">            if (errorMsg.contains(&quot;email&quot;) &amp;&amp; (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;))) {</span>
+<span class="nc" id="L76">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L77">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L79">                                put(&quot;message&quot;, &quot;Die E-Mail-Adresse wird bereits von einem anderen Kunden verwendet&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L82">                        .build();</span>
+<span class="nc bnc" id="L83" title="All 6 branches missed.">            } else if (errorMsg.contains(&quot;name&quot;) &amp;&amp; (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;))) {</span>
+<span class="nc" id="L84">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L85">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L87">                                put(&quot;message&quot;, &quot;Ein Kunde mit diesem Namen existiert bereits&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L90">                        .build();</span>
+<span class="nc bnc" id="L91" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;)) {</span>
+<span class="nc" id="L92">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L93">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L95">                                put(&quot;message&quot;, &quot;Ein Kunde mit diesen Daten existiert bereits&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L98">                        .build();</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            } else if (errorMsg.contains(&quot;constraint&quot;)) {</span>
+<span class="nc" id="L100">                return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L101">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L103">                                put(&quot;message&quot;, &quot;Die Kundendaten verletzen eine Datenbankregel&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L106">                        .build();</span>
+            } else {
+<span class="nc" id="L108">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L109">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L111">                                put(&quot;message&quot;, &quot;Fehler beim Aktualisieren des Kunden: &quot; + e.getMessage());</span>
+                            }
+                        })
+<span class="nc" id="L114">                        .build();</span>
+            }
+        }
     }
 
-    // DELETE /api/kunden/{id} - Kunden löschen
+    // DELETE /api/kunden/{id} - Kunde löschen
     @DELETE
     @Path(&quot;/{id}&quot;)
     public Response deleteKunde(@PathParam(&quot;id&quot;) Long id) {
-<span class="nc" id="L68">        return kundeRepository.findById(id)</span>
-<span class="nc" id="L69">                .map(kunde -&gt; {</span>
-<span class="nc" id="L70">                    kundeRepository.delete(kunde);</span>
-<span class="nc" id="L71">                    return Response.noContent().build();</span>
-                })
-<span class="nc" id="L73">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+        try {
+<span class="nc" id="L124">            Optional&lt;Kunde&gt; kunde = kundeRepository.findById(id);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (kunde.isEmpty()) {</span>
+<span class="nc" id="L126">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L127">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L129">                                put(&quot;message&quot;, &quot;Kunde nicht gefunden&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L132">                        .build();</span>
+            }
+
+<span class="nc" id="L135">            kundeRepository.delete(kunde.get());</span>
+<span class="nc" id="L136">            return Response.noContent().build();</span>
+
+<span class="nc" id="L138">        } catch (Exception e) {</span>
+<span class="nc" id="L139">            String errorMsg = getFullErrorMessage(e);</span>
+
+            // Spezifische Fehlerunterscheidung
+<span class="nc bnc" id="L142" title="All 4 branches missed.">            if (errorMsg.contains(&quot;bestellung&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
+<span class="nc" id="L143">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L144">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L146">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden, da noch Bestellungen existieren&quot;);</span>
+<span class="nc" id="L147">                                put(&quot;details&quot;, &quot;Bitte löschen Sie zuerst alle Bestellungen dieses Kunden&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L150">                        .build();</span>
+<span class="nc bnc" id="L151" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;rechnung&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
+<span class="nc" id="L152">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L153">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L155">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden, da noch Rechnungen existieren&quot;);</span>
+<span class="nc" id="L156">                                put(&quot;details&quot;, &quot;Bitte löschen Sie zuerst alle Rechnungen dieses Kunden&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L159">                        .build();</span>
+<span class="nc bnc" id="L160" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;foreign key&quot;) || errorMsg.contains(&quot;violates&quot;)) {</span>
+<span class="nc" id="L161">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L162">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L164">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden, da noch Abhängigkeiten bestehen&quot;);</span>
+<span class="nc" id="L165">                                put(&quot;details&quot;, &quot;Der Kunde wird noch von anderen Datensätzen referenziert&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L168">                        .build();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            } else if (errorMsg.contains(&quot;constraintviolationexception&quot;)) {</span>
+<span class="nc" id="L170">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L171">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L173">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden (Datenbankregel verletzt)&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L176">                        .build();</span>
+            } else {
+<span class="nc" id="L178">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L179">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L181">                                put(&quot;message&quot;, &quot;Fehler beim Löschen des Kunden: &quot; + e.getMessage());</span>
+                            }
+                        })
+<span class="nc" id="L184">                        .build();</span>
+            }
+        }
     }
 
     // GET /api/kunden/email/{email} - Kunde per Email suchen
     @GET
     @Path(&quot;/email/{email}&quot;)
     public Response getKundeByEmail(@PathParam(&quot;email&quot;) String email) {
-<span class="nc" id="L80">        return kundeRepository.findByEmail(email)</span>
-<span class="nc" id="L81">                .map(kunde -&gt; Response.ok(kunde).build())</span>
-<span class="nc" id="L82">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+<span class="nc" id="L193">        return kundeRepository.findByEmail(email)</span>
+<span class="nc" id="L194">                .map(kunde -&gt; Response.ok(kunde).build())</span>
+<span class="nc" id="L195">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+    }
+
+    // Hilfsmethode um die komplette Exception-Kette zu durchsuchen
+    private String getFullErrorMessage(Throwable e) {
+<span class="nc" id="L200">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L201">        Throwable current = e;</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        while (current != null) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (current.getMessage() != null) {</span>
+<span class="nc" id="L204">                sb.append(current.getMessage()).append(&quot; &quot;);</span>
+            }
+<span class="nc" id="L206">            sb.append(current.getClass().getName()).append(&quot; &quot;);</span>
+<span class="nc" id="L207">            current = current.getCause();</span>
+        }
+<span class="nc" id="L209">        return sb.toString().toLowerCase();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

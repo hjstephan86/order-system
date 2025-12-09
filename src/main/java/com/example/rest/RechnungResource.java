@@ -183,7 +183,8 @@ public class RechnungResource {
             List<Bestellung> neueBestellungen = rechnungService.rechnungslauf();
             if (neueBestellungen.size() > 0) {
                 return Response.ok(Map.of("message",
-                        "Rechnungslauf erfolgreich durchgeführt, " + neueBestellungen.size() + " Rechnungen erstellt"))
+                        "Rechnungslauf erfolgreich durchgeführt, " + neueBestellungen.size()
+                                + " Rechnung(en) erstellt"))
                         .build();
             } else {
                 return Response.ok(Map.of("message", "Keine neuen Bestellungen für den Rechnungslauf gefunden"))

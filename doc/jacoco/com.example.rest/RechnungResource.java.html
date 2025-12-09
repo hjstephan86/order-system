@@ -183,16 +183,17 @@ import jakarta.ws.rs.core.Response;
 <span class="nc" id="L183">            List&lt;Bestellung&gt; neueBestellungen = rechnungService.rechnungslauf();</span>
 <span class="nc bnc" id="L184" title="All 2 branches missed.">            if (neueBestellungen.size() &gt; 0) {</span>
 <span class="nc" id="L185">                return Response.ok(Map.of(&quot;message&quot;,</span>
-<span class="nc" id="L186">                        &quot;Rechnungslauf erfolgreich durchgeführt, &quot; + neueBestellungen.size() + &quot; Rechnungen erstellt&quot;))</span>
-<span class="nc" id="L187">                        .build();</span>
+<span class="nc" id="L186">                        &quot;Rechnungslauf erfolgreich durchgeführt, &quot; + neueBestellungen.size()</span>
+                                + &quot; Rechnung(en) erstellt&quot;))
+<span class="nc" id="L188">                        .build();</span>
             } else {
-<span class="nc" id="L189">                return Response.ok(Map.of(&quot;message&quot;, &quot;Keine neuen Bestellungen für den Rechnungslauf gefunden&quot;))</span>
-<span class="nc" id="L190">                        .build();</span>
+<span class="nc" id="L190">                return Response.ok(Map.of(&quot;message&quot;, &quot;Keine neuen Bestellungen für den Rechnungslauf gefunden&quot;))</span>
+<span class="nc" id="L191">                        .build();</span>
             }
-<span class="nc" id="L192">        } catch (Exception e) {</span>
-<span class="nc" id="L193">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L194">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
-<span class="nc" id="L195">                    .build();</span>
+<span class="nc" id="L193">        } catch (Exception e) {</span>
+<span class="nc" id="L194">            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L195">                    .entity(Map.of(&quot;error&quot;, e.getMessage()))</span>
+<span class="nc" id="L196">                    .build();</span>
         }
     }
 }

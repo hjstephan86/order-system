@@ -33,32 +33,34 @@ import jakarta.ws.rs.core.Response;
     // GET /api/bestellungen - Alle Bestellungen abrufen
     @GET
     public Response getAllBestellungen() {
-        // FIX: Nutzen Sie den Service, um Bestellungen abzurufen und die lazy-Kollektionen zu initialisieren
-<span class="nc" id="L37">        List&lt;Bestellung&gt; bestellungen = bestellService.findAllAndInitializePositions();</span>
-<span class="nc" id="L38">        return Response.ok(bestellungen).build();</span>
+        // FIX: Nutzen Sie den Service, um Bestellungen abzurufen und die
+        // lazy-Kollektionen zu initialisieren
+<span class="nc" id="L38">        List&lt;Bestellung&gt; bestellungen = bestellService.findAllAndInitializePositions();</span>
+<span class="nc" id="L39">        return Response.ok(bestellungen).build();</span>
     }
 
     // GET /api/bestellungen/{id} - Einzelne Bestellung abrufen
     @GET
     @Path(&quot;/{id}&quot;)
     public Response getBestellung(@PathParam(&quot;id&quot;) Long id) {
-        // FIX: Rufen Sie die Methode im Service auf, die die Initialisierung durchführt.
-<span class="nc" id="L46">        List&lt;Bestellung&gt; bestellungen = bestellService.findAllAndInitializePositions();</span>
-<span class="nc" id="L47">        return Response.ok(bestellungen).build();</span>
+        // FIX: Rufen Sie die Methode im Service auf, die die Initialisierung
+        // durchführt.
+<span class="nc" id="L48">        List&lt;Bestellung&gt; bestellungen = bestellService.findAllAndInitializePositions();</span>
+<span class="nc" id="L49">        return Response.ok(bestellungen).build();</span>
     }
 
     // POST /api/bestellungen - Neue Bestellung erstellen
     @POST
     public Response createBestellung(BestellungCreateRequest request) {
         try {
-<span class="nc" id="L54">            Bestellung bestellung = bestellService.erstelleBestellung(</span>
-<span class="nc" id="L55">                    request.getKundeId(),</span>
-<span class="nc" id="L56">                    request.getPositionen());</span>
-<span class="nc" id="L57">            return Response.status(Response.Status.CREATED).entity(bestellung).build();</span>
-<span class="nc" id="L58">        } catch (RuntimeException e) {</span>
-<span class="nc" id="L59">            return Response.status(Response.Status.BAD_REQUEST)</span>
-<span class="nc" id="L60">                    .entity(new ErrorResponse(e.getMessage()))</span>
-<span class="nc" id="L61">                    .build();</span>
+<span class="nc" id="L56">            Bestellung bestellung = bestellService.erstelleBestellung(</span>
+<span class="nc" id="L57">                    request.getKundeId(),</span>
+<span class="nc" id="L58">                    request.getPositionen());</span>
+<span class="nc" id="L59">            return Response.status(Response.Status.CREATED).entity(bestellung).build();</span>
+<span class="nc" id="L60">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L61">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L62">                    .entity(new ErrorResponse(e.getMessage()))</span>
+<span class="nc" id="L63">                    .build();</span>
         }
     }
 
@@ -67,14 +69,14 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/{id}/status&quot;)
     public Response updateStatus(@PathParam(&quot;id&quot;) Long id, StatusUpdateRequest request) {
         try {
-<span class="nc" id="L70">            bestellService.aktualisiereStatus(id, request.getStatus());</span>
-<span class="nc" id="L71">            return bestellungRepository.findById(id)</span>
-<span class="nc" id="L72">                    .map(bestellung -&gt; Response.ok(bestellung).build())</span>
-<span class="nc" id="L73">                    .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
-<span class="nc" id="L74">        } catch (RuntimeException e) {</span>
-<span class="nc" id="L75">            return Response.status(Response.Status.BAD_REQUEST)</span>
-<span class="nc" id="L76">                    .entity(new ErrorResponse(e.getMessage()))</span>
-<span class="nc" id="L77">                    .build();</span>
+<span class="nc" id="L72">            bestellService.aktualisiereStatus(id, request.getStatus());</span>
+<span class="nc" id="L73">            return bestellungRepository.findById(id)</span>
+<span class="nc" id="L74">                    .map(bestellung -&gt; Response.ok(bestellung).build())</span>
+<span class="nc" id="L75">                    .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+<span class="nc" id="L76">        } catch (RuntimeException e) {</span>
+<span class="nc" id="L77">            return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L78">                    .entity(new ErrorResponse(e.getMessage()))</span>
+<span class="nc" id="L79">                    .build();</span>
         }
     }
 
@@ -82,68 +84,68 @@ import jakarta.ws.rs.core.Response;
     @GET
     @Path(&quot;/kunde/{kundeId}&quot;)
     public Response getBestellungenByKunde(@PathParam(&quot;kundeId&quot;) Long kundeId) {
-<span class="nc" id="L85">        List&lt;Bestellung&gt; bestellungen = bestellungRepository.findByKundeId(kundeId);</span>
-<span class="nc" id="L86">        return Response.ok(bestellungen).build();</span>
+<span class="nc" id="L87">        List&lt;Bestellung&gt; bestellungen = bestellungRepository.findByKundeId(kundeId);</span>
+<span class="nc" id="L88">        return Response.ok(bestellungen).build();</span>
     }
 
     // GET /api/bestellungen/status/{status} - Bestellungen nach Status
     @GET
     @Path(&quot;/status/{status}&quot;)
     public Response getBestellungenByStatus(@PathParam(&quot;status&quot;) BestellStatus status) {
-<span class="nc" id="L93">        List&lt;Bestellung&gt; bestellungen = bestellungRepository.findByStatus(status);</span>
-<span class="nc" id="L94">        return Response.ok(bestellungen).build();</span>
+<span class="nc" id="L95">        List&lt;Bestellung&gt; bestellungen = bestellungRepository.findByStatus(status);</span>
+<span class="nc" id="L96">        return Response.ok(bestellungen).build();</span>
     }
 
     // DTO für Bestellung erstellen
-<span class="nc" id="L98">    public static class BestellungCreateRequest {</span>
+<span class="nc" id="L100">    public static class BestellungCreateRequest {</span>
         private Long kundeId;
         private List&lt;BestellPositionDTO&gt; positionen;
 
         public Long getKundeId() {
-<span class="nc" id="L103">            return kundeId;</span>
+<span class="nc" id="L105">            return kundeId;</span>
         }
 
         public void setKundeId(Long kundeId) {
-<span class="nc" id="L107">            this.kundeId = kundeId;</span>
-<span class="nc" id="L108">        }</span>
+<span class="nc" id="L109">            this.kundeId = kundeId;</span>
+<span class="nc" id="L110">        }</span>
 
         public List&lt;BestellPositionDTO&gt; getPositionen() {
-<span class="nc" id="L111">            return positionen;</span>
+<span class="nc" id="L113">            return positionen;</span>
         }
 
         public void setPositionen(List&lt;BestellPositionDTO&gt; positionen) {
-<span class="nc" id="L115">            this.positionen = positionen;</span>
-<span class="nc" id="L116">        }</span>
+<span class="nc" id="L117">            this.positionen = positionen;</span>
+<span class="nc" id="L118">        }</span>
     }
 
     // DTO für Status-Update
-<span class="nc" id="L120">    public static class StatusUpdateRequest {</span>
+<span class="nc" id="L122">    public static class StatusUpdateRequest {</span>
         private BestellStatus status;
 
         public BestellStatus getStatus() {
-<span class="nc" id="L124">            return status;</span>
+<span class="nc" id="L126">            return status;</span>
         }
 
         public void setStatus(BestellStatus status) {
-<span class="nc" id="L128">            this.status = status;</span>
-<span class="nc" id="L129">        }</span>
+<span class="nc" id="L130">            this.status = status;</span>
+<span class="nc" id="L131">        }</span>
     }
 
     // Error Response DTO
     public static class ErrorResponse {
         private String message;
 
-<span class="nc" id="L136">        public ErrorResponse(String message) {</span>
-<span class="nc" id="L137">            this.message = message;</span>
-<span class="nc" id="L138">        }</span>
+<span class="nc" id="L138">        public ErrorResponse(String message) {</span>
+<span class="nc" id="L139">            this.message = message;</span>
+<span class="nc" id="L140">        }</span>
 
         public String getMessage() {
-<span class="nc" id="L141">            return message;</span>
+<span class="nc" id="L143">            return message;</span>
         }
 
         public void setMessage(String message) {
-<span class="nc" id="L145">            this.message = message;</span>
-<span class="nc" id="L146">        }</span>
+<span class="nc" id="L147">            this.message = message;</span>
+<span class="nc" id="L148">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

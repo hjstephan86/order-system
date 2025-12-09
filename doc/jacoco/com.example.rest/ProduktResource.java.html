@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProduktResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Order System</a> &gt; <a href="index.source.html" class="el_package">com.example.rest</a> &gt; <span class="el_source">ProduktResource.java</span></div><h1>ProduktResource.java</h1><pre class="source lang-java linenums">package com.example.rest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.entity.Produkt;
 import com.example.repository.ProduktRepository;
@@ -21,7 +23,7 @@ import jakarta.ws.rs.core.Response;
 @Path(&quot;/produkte&quot;)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-<span class="nc" id="L24">public class ProduktResource {</span>
+<span class="nc" id="L26">public class ProduktResource {</span>
 
     @Inject
     private ProduktRepository produktRepository;
@@ -29,57 +31,164 @@ import jakarta.ws.rs.core.Response;
     // GET /api/produkte - Alle Produkte abrufen
     @GET
     public Response getAllProdukte() {
-<span class="nc" id="L32">        List&lt;Produkt&gt; produkte = produktRepository.findAll();</span>
-<span class="nc" id="L33">        return Response.ok(produkte).build();</span>
+<span class="nc" id="L34">        List&lt;Produkt&gt; produkte = produktRepository.findAll();</span>
+<span class="nc" id="L35">        return Response.ok(produkte).build();</span>
     }
 
     // GET /api/produkte/{id} - Einzelnes Produkt abrufen
     @GET
     @Path(&quot;/{id}&quot;)
     public Response getProdukt(@PathParam(&quot;id&quot;) Long id) {
-<span class="nc" id="L40">        return produktRepository.findById(id)</span>
-<span class="nc" id="L41">                .map(produkt -&gt; Response.ok(produkt).build())</span>
-<span class="nc" id="L42">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+<span class="nc" id="L42">        return produktRepository.findById(id)</span>
+<span class="nc" id="L43">                .map(produkt -&gt; Response.ok(produkt).build())</span>
+<span class="nc" id="L44">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
     }
 
     // POST /api/produkte - Neues Produkt anlegen
     @POST
     public Response createProdukt(Produkt produkt) {
-<span class="nc" id="L48">        Produkt saved = produktRepository.save(produkt);</span>
-<span class="nc" id="L49">        return Response.status(Response.Status.CREATED).entity(saved).build();</span>
+<span class="nc" id="L50">        Produkt saved = produktRepository.save(produkt);</span>
+<span class="nc" id="L51">        return Response.status(Response.Status.CREATED).entity(saved).build();</span>
     }
 
     // PUT /api/produkte/{id} - Produkt aktualisieren
     @PUT
     @Path(&quot;/{id}&quot;)
     public Response updateProdukt(@PathParam(&quot;id&quot;) Long id, Produkt produkt) {
-<span class="nc" id="L56">        return produktRepository.findById(id)</span>
-<span class="nc" id="L57">                .map(existing -&gt; {</span>
-<span class="nc" id="L58">                    produkt.setId(id);</span>
-<span class="nc" id="L59">                    Produkt updated = produktRepository.save(produkt);</span>
-<span class="nc" id="L60">                    return Response.ok(updated).build();</span>
-                })
-<span class="nc" id="L62">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+        try {
+<span class="nc" id="L59">            return produktRepository.findById(id)</span>
+<span class="nc" id="L60">                    .map(existing -&gt; {</span>
+<span class="nc" id="L61">                        produkt.setId(id);</span>
+<span class="nc" id="L62">                        Produkt updated = produktRepository.save(produkt);</span>
+<span class="nc" id="L63">                        return Response.ok(updated).build();</span>
+                    })
+<span class="nc" id="L65">                    .orElse(Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L66">                            .entity(new HashMap&lt;String, String&gt;() {</span>
+                                {
+<span class="nc" id="L68">                                    put(&quot;message&quot;, &quot;Produkt nicht gefunden&quot;);</span>
+                                }
+                            })
+<span class="nc" id="L71">                            .build());</span>
+<span class="nc" id="L72">        } catch (Exception e) {</span>
+<span class="nc" id="L73">            String errorMsg = getFullErrorMessage(e);</span>
+
+<span class="nc bnc" id="L75" title="All 6 branches missed.">            if (errorMsg.contains(&quot;name&quot;) &amp;&amp; (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;))) {</span>
+<span class="nc" id="L76">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L77">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L79">                                put(&quot;message&quot;, &quot;Ein Produkt mit diesem Namen existiert bereits&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L82">                        .build();</span>
+<span class="nc bnc" id="L83" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;)) {</span>
+<span class="nc" id="L84">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L85">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L87">                                put(&quot;message&quot;, &quot;Ein Produkt mit diesen Daten existiert bereits&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L90">                        .build();</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            } else if (errorMsg.contains(&quot;constraint&quot;)) {</span>
+<span class="nc" id="L92">                return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L93">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L95">                                put(&quot;message&quot;, &quot;Die Produktdaten verletzen eine Datenbankregel&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L98">                        .build();</span>
+            } else {
+<span class="nc" id="L100">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L101">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L103">                                put(&quot;message&quot;, &quot;Fehler beim Aktualisieren des Produkts: &quot; + e.getMessage());</span>
+                            }
+                        })
+<span class="nc" id="L106">                        .build();</span>
+            }
+        }
     }
 
     // DELETE /api/produkte/{id} - Produkt löschen
     @DELETE
     @Path(&quot;/{id}&quot;)
     public Response deleteProdukt(@PathParam(&quot;id&quot;) Long id) {
-<span class="nc" id="L69">        return produktRepository.findById(id)</span>
-<span class="nc" id="L70">                .map(produkt -&gt; {</span>
-<span class="nc" id="L71">                    produktRepository.delete(produkt);</span>
-<span class="nc" id="L72">                    return Response.noContent().build();</span>
-                })
-<span class="nc" id="L74">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+        try {
+<span class="nc" id="L116">            Optional&lt;Produkt&gt; produkt = produktRepository.findById(id);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            if (produkt.isEmpty()) {</span>
+<span class="nc" id="L118">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L119">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L121">                                put(&quot;message&quot;, &quot;Produkt nicht gefunden&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L124">                        .build();</span>
+            }
+
+<span class="nc" id="L127">            produktRepository.delete(produkt.get());</span>
+<span class="nc" id="L128">            return Response.noContent().build();</span>
+
+<span class="nc" id="L130">        } catch (Exception e) {</span>
+<span class="nc" id="L131">            String errorMsg = getFullErrorMessage(e);</span>
+
+<span class="nc bnc" id="L133" title="All 4 branches missed.">            if (errorMsg.contains(&quot;bestellposition&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
+<span class="nc" id="L134">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L135">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L137">                                put(&quot;message&quot;,</span>
+                                        &quot;Produkt kann nicht gelöscht werden, da es in Bestellungen verwendet wird&quot;);
+<span class="nc" id="L139">                                put(&quot;details&quot;, &quot;Bitte löschen Sie zuerst alle Bestellungen mit diesem Produkt&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L142">                        .build();</span>
+<span class="nc bnc" id="L143" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;foreign key&quot;) || errorMsg.contains(&quot;violates&quot;)) {</span>
+<span class="nc" id="L144">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L145">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L147">                                put(&quot;message&quot;, &quot;Produkt kann nicht gelöscht werden, da noch Abhängigkeiten bestehen&quot;);</span>
+<span class="nc" id="L148">                                put(&quot;details&quot;, &quot;Das Produkt wird noch von anderen Datensätzen referenziert&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L151">                        .build();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            } else if (errorMsg.contains(&quot;constraintviolationexception&quot;)) {</span>
+<span class="nc" id="L153">                return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L154">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L156">                                put(&quot;message&quot;, &quot;Produkt kann nicht gelöscht werden (Datenbankregel verletzt)&quot;);</span>
+                            }
+                        })
+<span class="nc" id="L159">                        .build();</span>
+            } else {
+<span class="nc" id="L161">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L162">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+                            {
+<span class="nc" id="L164">                                put(&quot;message&quot;, &quot;Fehler beim Löschen des Produkts: &quot; + e.getMessage());</span>
+                            }
+                        })
+<span class="nc" id="L167">                        .build();</span>
+            }
+        }
     }
 
     // GET /api/produkte/suche?name=laptop - Produkte nach Name suchen
     @GET
     @Path(&quot;/suche&quot;)
     public Response searchProdukte(@QueryParam(&quot;name&quot;) String name) {
-<span class="nc" id="L81">        List&lt;Produkt&gt; produkte = produktRepository.findByNameContaining(name);</span>
-<span class="nc" id="L82">        return Response.ok(produkte).build();</span>
+<span class="nc" id="L176">        List&lt;Produkt&gt; produkte = produktRepository.findByNameContaining(name);</span>
+<span class="nc" id="L177">        return Response.ok(produkte).build();</span>
+    }
+
+    // Hilfsmethode um die komplette Exception-Kette zu durchsuchen
+    private String getFullErrorMessage(Throwable e) {
+<span class="nc" id="L182">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L183">        Throwable current = e;</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">        while (current != null) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (current.getMessage() != null) {</span>
+<span class="nc" id="L186">                sb.append(current.getMessage()).append(&quot; &quot;);</span>
+            }
+<span class="nc" id="L188">            sb.append(current.getClass().getName()).append(&quot; &quot;);</span>
+<span class="nc" id="L189">            current = current.getCause();</span>
+        }
+<span class="nc" id="L191">        return sb.toString().toLowerCase();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

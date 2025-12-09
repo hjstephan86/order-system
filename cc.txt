@@ -42,6 +42,36 @@ Methods:
   - addBestellung: 1 (line 200)
 
 
+Class: KundeResource
+Package: com.example.rest
+Total Complexity: 28
+Highest Method Complexity: 11
+--------------------------------------------------------------------------------
+Methods:
+  - updateKunde: 11 (line 56)
+  - deleteKunde: 10 (line 122)
+  - getFullErrorMessage: 3 (line 199)
+  - getAllKunden: 1 (line 32)
+  - getKunde: 1 (line 40)
+  - createKunde: 1 (line 48)
+  - getKundeByEmail: 1 (line 192)
+
+
+Class: ProduktResource
+Package: com.example.rest
+Total Complexity: 23
+Highest Method Complexity: 8
+--------------------------------------------------------------------------------
+Methods:
+  - updateProdukt: 8 (line 57)
+  - deleteProdukt: 8 (line 114)
+  - getFullErrorMessage: 3 (line 181)
+  - getAllProdukte: 1 (line 33)
+  - getProdukt: 1 (line 41)
+  - createProdukt: 1 (line 49)
+  - searchProdukte: 1 (line 175)
+
+
 Class: RechnungResource
 Package: com.example.rest
 Total Complexity: 23
@@ -229,12 +259,12 @@ Total Complexity: 8
 Highest Method Complexity: 2
 --------------------------------------------------------------------------------
 Methods:
-  - createBestellung: 2 (line 52)
-  - updateStatus: 2 (line 68)
+  - createBestellung: 2 (line 54)
+  - updateStatus: 2 (line 70)
   - getAllBestellungen: 1 (line 35)
-  - getBestellung: 1 (line 44)
-  - getBestellungenByKunde: 1 (line 84)
-  - getBestellungenByStatus: 1 (line 92)
+  - getBestellung: 1 (line 45)
+  - getBestellungenByKunde: 1 (line 86)
+  - getBestellungenByStatus: 1 (line 94)
 
 
 Class: KundeRepository
@@ -287,34 +317,6 @@ Methods:
   - findAll: 1 (line 48)
 
 
-Class: KundeResource
-Package: com.example.rest
-Total Complexity: 6
-Highest Method Complexity: 1
---------------------------------------------------------------------------------
-Methods:
-  - getAllKunden: 1 (line 30)
-  - getKunde: 1 (line 38)
-  - createKunde: 1 (line 46)
-  - updateKunde: 1 (line 54)
-  - deleteKunde: 1 (line 67)
-  - getKundeByEmail: 1 (line 79)
-
-
-Class: ProduktResource
-Package: com.example.rest
-Total Complexity: 6
-Highest Method Complexity: 1
---------------------------------------------------------------------------------
-Methods:
-  - getAllProdukte: 1 (line 31)
-  - getProdukt: 1 (line 39)
-  - createProdukt: 1 (line 47)
-  - updateProdukt: 1 (line 55)
-  - deleteProdukt: 1 (line 68)
-  - searchProdukte: 1 (line 80)
-
-
 Class: BestellPositionDTO
 Package: com.example.service
 Total Complexity: 6
@@ -335,10 +337,10 @@ Total Complexity: 4
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - getKundeId: 1 (line 102)
-  - setKundeId: 1 (line 106)
-  - getPositionen: 1 (line 110)
-  - setPositionen: 1 (line 114)
+  - getKundeId: 1 (line 104)
+  - setKundeId: 1 (line 108)
+  - getPositionen: 1 (line 112)
+  - setPositionen: 1 (line 116)
 
 
 Class: ErrorResponse
@@ -347,9 +349,9 @@ Total Complexity: 3
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - ErrorResponse: 1 (line 136)
-  - getMessage: 1 (line 140)
-  - setMessage: 1 (line 144)
+  - ErrorResponse: 1 (line 138)
+  - getMessage: 1 (line 142)
+  - setMessage: 1 (line 146)
 
 
 Class: TestdatenResponse
@@ -369,8 +371,8 @@ Total Complexity: 2
 Highest Method Complexity: 1
 --------------------------------------------------------------------------------
 Methods:
-  - getStatus: 1 (line 123)
-  - setStatus: 1 (line 127)
+  - getStatus: 1 (line 125)
+  - setStatus: 1 (line 129)
 
 
 Class: JacksonConfig

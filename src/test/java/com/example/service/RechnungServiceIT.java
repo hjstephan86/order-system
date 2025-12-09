@@ -28,7 +28,6 @@ import com.example.entity.RechnungsStatus;
 import com.example.repository.BestellungRepository;
 import com.example.repository.KundeRepository;
 import com.example.repository.ProduktRepository;
-import com.example.repository.RechnungRepository;
 
 import jakarta.inject.Inject;
 
@@ -59,9 +58,6 @@ public class RechnungServiceIT {
 
         @Inject
         private BestellungRepository bestellungRepository;
-
-        @Inject
-        private RechnungRepository rechnungRepository;
 
         private Kunde testKunde;
         private Produkt testProdukt1;
