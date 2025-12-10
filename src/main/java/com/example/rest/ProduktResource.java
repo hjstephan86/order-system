@@ -183,9 +183,9 @@ public class ProduktResource {
         Throwable current = e;
         while (current != null) {
             if (current.getMessage() != null) {
-                sb.append(current.getMessage()).append(" ");
+                sb.append(current.getMessage()).append(' ');
             }
-            sb.append(current.getClass().getName()).append(" ");
+            sb.append(current.getClass().getName()).append(' ');
             current = current.getCause();
         }
         return sb.toString().toLowerCase();

@@ -69,50 +69,7 @@ public class KundeResource {
                             })
                             .build());
         } catch (Exception e) {
-            String errorMsg = getFullErrorMessage(e);
-
-            // Spezifische Fehlerunterscheidung
-            if (errorMsg.contains("email") && (errorMsg.contains("unique") || errorMsg.contains("duplicate"))) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Die E-Mail-Adresse wird bereits von einem anderen Kunden verwendet");
-                            }
-                        })
-                        .build();
-            } else if (errorMsg.contains("name") && (errorMsg.contains("unique") || errorMsg.contains("duplicate"))) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Ein Kunde mit diesem Namen existiert bereits");
-                            }
-                        })
-                        .build();
-            } else if (errorMsg.contains("unique") || errorMsg.contains("duplicate")) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Ein Kunde mit diesen Daten existiert bereits");
-                            }
-                        })
-                        .build();
-            } else if (errorMsg.contains("constraint")) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Die Kundendaten verletzen eine Datenbankregel");
-                            }
-                        })
-                        .build();
-            } else {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Fehler beim Aktualisieren des Kunden: " + e.getMessage());
-                            }
-                        })
-                        .build();
-            }
+            return handleUpdateKundeException(e);
         }
     }
 
@@ -136,53 +93,7 @@ public class KundeResource {
             return Response.noContent().build();
 
         } catch (Exception e) {
-            String errorMsg = getFullErrorMessage(e);
-
-            // Spezifische Fehlerunterscheidung
-            if (errorMsg.contains("bestellung") && errorMsg.contains("foreign key")) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Kunde kann nicht gelöscht werden, da noch Bestellungen existieren");
-                                put("details", "Bitte löschen Sie zuerst alle Bestellungen dieses Kunden");
-                            }
-                        })
-                        .build();
-            } else if (errorMsg.contains("rechnung") && errorMsg.contains("foreign key")) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Kunde kann nicht gelöscht werden, da noch Rechnungen existieren");
-                                put("details", "Bitte löschen Sie zuerst alle Rechnungen dieses Kunden");
-                            }
-                        })
-                        .build();
-            } else if (errorMsg.contains("foreign key") || errorMsg.contains("violates")) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Kunde kann nicht gelöscht werden, da noch Abhängigkeiten bestehen");
-                                put("details", "Der Kunde wird noch von anderen Datensätzen referenziert");
-                            }
-                        })
-                        .build();
-            } else if (errorMsg.contains("constraintviolationexception")) {
-                return Response.status(Response.Status.CONFLICT)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Kunde kann nicht gelöscht werden (Datenbankregel verletzt)");
-                            }
-                        })
-                        .build();
-            } else {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                        .entity(new HashMap<String, String>() {
-                            {
-                                put("message", "Fehler beim Löschen des Kunden: " + e.getMessage());
-                            }
-                        })
-                        .build();
-            }
+            return handleDeleteKundeException(e);
         }
     }
 
@@ -201,11 +112,97 @@ public class KundeResource {
         Throwable current = e;
         while (current != null) {
             if (current.getMessage() != null) {
-                sb.append(current.getMessage()).append(" ");
+                sb.append(current.getMessage()).append(' ');
             }
-            sb.append(current.getClass().getName()).append(" ");
+            sb.append(current.getClass().getName()).append(' ');
             current = current.getCause();
         }
         return sb.toString().toLowerCase();
+    }
+
+    private Response handleUpdateKundeException(Exception e) {
+        String errorMsg = getFullErrorMessage(e);
+
+        if (isUniqueConstraintViolation(errorMsg)) {
+            return handleUniqueViolation(errorMsg);
+        } else if (errorMsg.contains("constraint")) {
+            return createBadRequestResponse("Die Kundendaten verletzen eine Datenbankregel");
+        } else {
+            return createServerErrorResponse("Fehler beim Aktualisieren des Kunden: " + e.getMessage());
+        }
+    }
+
+    private Response handleUniqueViolation(String errorMsg) {
+        if (errorMsg.contains("email")) {
+            return createConflictResponse("Die E-Mail-Adresse wird bereits von einem anderen Kunden verwendet");
+        }
+        return createConflictResponse("Ein Kunde mit diesen Daten existiert bereits");
+    }
+
+    private boolean isUniqueConstraintViolation(String errorMsg) {
+        return errorMsg.contains("unique") || errorMsg.contains("duplicate");
+    }
+
+    private Response createConflictResponse(String message) {
+        return Response.status(Response.Status.CONFLICT)
+                .entity(new HashMap<String, String>() {
+                    {
+                        put("message", message);
+                    }
+                })
+                .build();
+    }
+
+    private Response createBadRequestResponse(String message) {
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(new HashMap<String, String>() {
+                    {
+                        put("message", message);
+                    }
+                })
+                .build();
+    }
+
+    private Response createServerErrorResponse(String message) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(new HashMap<String, String>() {
+                    {
+                        put("message", message);
+                    }
+                })
+                .build();
+    }
+
+    private Response handleDeleteKundeException(Exception e) {
+        String errorMsg = getFullErrorMessage(e);
+
+        if (errorMsg.contains("bestellung") && errorMsg.contains("foreign key")) {
+            return createConflictResponseWithDetails(
+                    "Kunde kann nicht gelöscht werden, da noch Bestellungen existieren",
+                    "Bitte löschen Sie zuerst alle Bestellungen dieses Kunden");
+        } else if (errorMsg.contains("rechnung") && errorMsg.contains("foreign key")) {
+            return createConflictResponseWithDetails(
+                    "Kunde kann nicht gelöscht werden, da noch Rechnungen existieren",
+                    "Bitte löschen Sie zuerst alle Rechnungen dieses Kunden");
+        } else if (errorMsg.contains("foreign key") || errorMsg.contains("violates")) {
+            return createConflictResponseWithDetails(
+                    "Kunde kann nicht gelöscht werden, da noch Abhängigkeiten bestehen",
+                    "Der Kunde wird noch von anderen Datensätzen referenziert");
+        } else if (errorMsg.contains("constraintviolationexception")) {
+            return createConflictResponse("Kunde kann nicht gelöscht werden (Datenbankregel verletzt)");
+        } else {
+            return createServerErrorResponse("Fehler beim Löschen des Kunden: " + e.getMessage());
+        }
+    }
+
+    private Response createConflictResponseWithDetails(String message, String details) {
+        return Response.status(Response.Status.CONFLICT)
+                .entity(new HashMap<String, String>() {
+                    {
+                        put("message", message);
+                        put("details", details);
+                    }
+                })
+                .build();
     }
 }

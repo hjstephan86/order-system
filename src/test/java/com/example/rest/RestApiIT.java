@@ -34,6 +34,7 @@ public class RestApiIT {
                 .addPackages(true, "com.example.entity")
                 .addPackages(true, "com.example.repository")
                 .addPackages(true, "com.example.service")
+                .addPackages(true, "com.example.exception")
                 .addPackage("com.example.rest")
                 .deleteClass(com.example.rest.RechnungResource.class)
                 .deleteClass(com.example.service.PdfService.class)

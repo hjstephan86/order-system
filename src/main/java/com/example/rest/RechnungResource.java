@@ -2,6 +2,8 @@ package com.example.rest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.example.entity.Bestellung;
@@ -27,6 +29,8 @@ public class RechnungResource {
     @Inject
     private RechnungService rechnungService;
 
+    private static final Logger LOGGER = Logger.getLogger(RechnungResource.class.getName());
+
     private RechnungDTO toDTO(Rechnung rechnung) {
         RechnungDTO dto = new RechnungDTO();
         dto.setId(rechnung.getId());
@@ -51,7 +55,7 @@ public class RechnungResource {
                     .collect(Collectors.toList());
             return Response.ok(dtos).build();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen aller Rechnungen", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Map.of("error", e.getMessage()))
                     .build();
@@ -154,21 +158,25 @@ public class RechnungResource {
             byte[] pdfBytes = rechnungService.generiereRechnungsPdf(id);
             // We need the invoice number for filename — fetch lightweight DTO
             Rechnung rechnung = rechnungService.findeRechnungById(id);
+
+            LOGGER.log(Level.INFO, "PDF erfolgreich generiert für Rechnung ID: {0}", id);
+
             return Response.ok(pdfBytes)
                     .header("Content-Disposition",
                             "attachment; filename=\"" + rechnung.getRechnungsnummer() + ".pdf\"")
                     .header("Content-Type", "application/pdf")
                     .build();
         } catch (IllegalArgumentException e) {
-            System.err.println("Rechnung nicht gefunden: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Rechnung nicht gefunden: ID={0}", id);
+            LOGGER.log(Level.FINE, "Exception Details", e);
+
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Rechnung nicht gefunden")
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         } catch (Exception e) {
-            System.err.println("Fehler beim PDF-Generieren: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Fehler beim PDF-Generieren für Rechnung ID: " + id, e);
+
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Fehler beim Generieren des PDFs: " + e.getMessage())
                     .type(MediaType.TEXT_PLAIN)
@@ -181,7 +189,7 @@ public class RechnungResource {
     public Response rechnungslauf() {
         try {
             List<Bestellung> neueBestellungen = rechnungService.rechnungslauf();
-            if (neueBestellungen.size() > 0) {
+            if (!neueBestellungen.isEmpty()) {
                 return Response.ok(Map.of("message",
                         "Rechnungslauf erfolgreich durchgeführt, " + neueBestellungen.size()
                                 + " Rechnung(en) erstellt"))

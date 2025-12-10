@@ -106,66 +106,67 @@ import jakarta.transaction.Transactional;
 <span class="nc" id="L106">        return rechnungRepository.findByStatus(RechnungsStatus.OFFEN);</span>
     }
 
+    @SuppressWarnings(&quot;PMD.AvoidInstantiatingObjectsInLoops&quot;)
     public List&lt;Bestellung&gt; rechnungslauf() {
-<span class="nc" id="L110">        List&lt;Bestellung&gt; neueBestellungen = bestellungRepository.findByStatus(BestellStatus.NEU);</span>
-<span class="nc" id="L111">        List&lt;Bestellung&gt; neueBestellungenMitRechnung = new ArrayList&lt;Bestellung&gt;();</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">        for (Bestellung bestellung : neueBestellungen) {</span>
-<span class="nc" id="L113">            Long bestellungId = bestellung.getId();</span>
-<span class="nc" id="L114">            Rechnung existingRechnung = rechnungRepository.findByBestellungId(bestellungId);</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (existingRechnung == null) {</span>
-<span class="nc" id="L116">                Rechnung rechnung = new Rechnung();</span>
-<span class="nc" id="L117">                rechnung.setBestellung(bestellung);</span>
-<span class="nc" id="L118">                rechnung.setRechnungsnummer(generiereRechnungsnummer());</span>
-<span class="nc" id="L119">                rechnung.setGesamtbetrag(berechneGesamtbetrag(bestellung));</span>
-<span class="nc" id="L120">                rechnung.setStatus(RechnungsStatus.OFFEN);</span>
-<span class="nc" id="L121">                rechnungRepository.save(rechnung);</span>
-<span class="nc" id="L122">                neueBestellungenMitRechnung.add(bestellung);</span>
+<span class="nc" id="L111">        List&lt;Bestellung&gt; neueBestellungen = bestellungRepository.findByStatus(BestellStatus.NEU);</span>
+<span class="nc" id="L112">        List&lt;Bestellung&gt; neueBestellungenMitRechnung = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        for (Bestellung bestellung : neueBestellungen) {</span>
+<span class="nc" id="L114">            Long bestellungId = bestellung.getId();</span>
+<span class="nc" id="L115">            Rechnung existingRechnung = rechnungRepository.findByBestellungId(bestellungId);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (existingRechnung == null) {</span>
+<span class="nc" id="L117">                Rechnung rechnung = new Rechnung();</span>
+<span class="nc" id="L118">                rechnung.setBestellung(bestellung);</span>
+<span class="nc" id="L119">                rechnung.setRechnungsnummer(generiereRechnungsnummer());</span>
+<span class="nc" id="L120">                rechnung.setGesamtbetrag(berechneGesamtbetrag(bestellung));</span>
+<span class="nc" id="L121">                rechnung.setStatus(RechnungsStatus.OFFEN);</span>
+<span class="nc" id="L122">                rechnungRepository.save(rechnung);</span>
+<span class="nc" id="L123">                neueBestellungenMitRechnung.add(bestellung);</span>
             }
-<span class="nc" id="L124">        }</span>
-<span class="nc" id="L125">        return neueBestellungenMitRechnung;</span>
+<span class="nc" id="L125">        }</span>
+<span class="nc" id="L126">        return neueBestellungenMitRechnung;</span>
     }
 
     private String generiereRechnungsnummer() {
-<span class="nc" id="L129">        String timestamp = LocalDateTime.now()</span>
-<span class="nc" id="L130">                .format(DateTimeFormatter.ofPattern(&quot;yyyyMMddHHmmss&quot;));</span>
-<span class="nc" id="L131">        int randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);</span>
-<span class="nc" id="L132">        return &quot;RE-&quot; + timestamp + &quot;-&quot; + randomNumber;</span>
+<span class="nc" id="L130">        String timestamp = LocalDateTime.now()</span>
+<span class="nc" id="L131">                .format(DateTimeFormatter.ofPattern(&quot;yyyyMMddHHmmss&quot;));</span>
+<span class="nc" id="L132">        int randomNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);</span>
+<span class="nc" id="L133">        return &quot;RE-&quot; + timestamp + &quot;-&quot; + randomNumber;</span>
     }
 
     @Transactional
     private BigDecimal berechneGesamtbetrag(Bestellung bestellung) {
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (bestellung == null) {</span>
-<span class="nc" id="L138">            return BigDecimal.ZERO;</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (bestellung == null) {</span>
+<span class="nc" id="L139">            return BigDecimal.ZERO;</span>
         }
 
-<span class="nc" id="L141">        BigDecimal gesamtbetrag = BigDecimal.ZERO;</span>
+<span class="nc" id="L142">        BigDecimal gesamtbetrag = BigDecimal.ZERO;</span>
 
-<span class="nc" id="L143">        List&lt;BestellPosition&gt; positionen = bestellung.getPositionen();</span>
+<span class="nc" id="L144">        List&lt;BestellPosition&gt; positionen = bestellung.getPositionen();</span>
 
-<span class="nc bnc" id="L145" title="All 4 branches missed.">        if (positionen == null || positionen.isEmpty()) {</span>
-<span class="nc" id="L146">            return BigDecimal.ZERO;</span>
+<span class="nc bnc" id="L146" title="All 4 branches missed.">        if (positionen == null || positionen.isEmpty()) {</span>
+<span class="nc" id="L147">            return BigDecimal.ZERO;</span>
         }
 
-<span class="nc bnc" id="L149" title="All 2 branches missed.">        for (BestellPosition pos : positionen) {</span>
-<span class="nc bnc" id="L150" title="All 2 branches missed.">            if (pos == null) {</span>
-<span class="nc" id="L151">                continue;</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        for (BestellPosition pos : positionen) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">            if (pos == null) {</span>
+<span class="nc" id="L152">                continue;</span>
             }
 
-<span class="nc" id="L154">            BigDecimal einzelpreis = pos.getEinzelpreis();</span>
-<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (einzelpreis == null) {</span>
-<span class="nc" id="L156">                continue;</span>
+<span class="nc" id="L155">            BigDecimal einzelpreis = pos.getEinzelpreis();</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if (einzelpreis == null) {</span>
+<span class="nc" id="L157">                continue;</span>
             }
 
-<span class="nc" id="L159">            Integer menge = pos.getMenge();</span>
-<span class="nc bnc" id="L160" title="All 2 branches missed.">            if (menge == null) {</span>
-<span class="nc" id="L161">                continue;</span>
+<span class="nc" id="L160">            Integer menge = pos.getMenge();</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            if (menge == null) {</span>
+<span class="nc" id="L162">                continue;</span>
             }
 
-<span class="nc" id="L164">            BigDecimal positionsBetrag = einzelpreis.multiply(BigDecimal.valueOf(menge));</span>
-<span class="nc" id="L165">            gesamtbetrag = gesamtbetrag.add(positionsBetrag);</span>
-<span class="nc" id="L166">        }</span>
+<span class="nc" id="L165">            BigDecimal positionsBetrag = einzelpreis.multiply(BigDecimal.valueOf(menge));</span>
+<span class="nc" id="L166">            gesamtbetrag = gesamtbetrag.add(positionsBetrag);</span>
+<span class="nc" id="L167">        }</span>
 
-<span class="nc" id="L168">        return gesamtbetrag;</span>
+<span class="nc" id="L169">        return gesamtbetrag;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

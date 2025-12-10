@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
+@SuppressWarnings("PMD.LooseCoupling")
 public class PdfService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -36,7 +37,7 @@ public class PdfService {
             document.open();
 
             // Header
-            addHeader(document, rechnung);
+            addHeader(document);
             document.add(Chunk.NEWLINE);
 
             // Customer info
@@ -65,7 +66,7 @@ public class PdfService {
         return baos.toByteArray();
     }
 
-    private void addHeader(Document document, Rechnung rechnung) throws DocumentException {
+    private void addHeader(Document document) throws DocumentException {
         Font titleFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD);
         Paragraph title = new Paragraph("RECHNUNG", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);

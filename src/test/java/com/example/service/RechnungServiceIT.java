@@ -40,6 +40,7 @@ public class RechnungServiceIT {
                                 .addPackages(true, "com.example.entity")
                                 .addPackages(true, "com.example.repository")
                                 .addPackages(true, "com.example.service")
+                                .addPackages(true, "com.example.exception")
                                 .addAsResource("META-INF/persistence.xml")
                                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         }

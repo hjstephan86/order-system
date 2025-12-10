@@ -44,17 +44,25 @@ Methods:
 
 Class: KundeResource
 Package: com.example.rest
-Total Complexity: 28
-Highest Method Complexity: 11
+Total Complexity: 30
+Highest Method Complexity: 8
 --------------------------------------------------------------------------------
 Methods:
-  - updateKunde: 11 (line 56)
-  - deleteKunde: 10 (line 122)
-  - getFullErrorMessage: 3 (line 199)
+  - handleDeleteKundeException: 8 (line 176)
+  - deleteKunde: 3 (line 79)
+  - getFullErrorMessage: 3 (line 110)
+  - handleUpdateKundeException: 3 (line 123)
+  - updateKunde: 2 (line 56)
+  - handleUniqueViolation: 2 (line 135)
   - getAllKunden: 1 (line 32)
   - getKunde: 1 (line 40)
   - createKunde: 1 (line 48)
-  - getKundeByEmail: 1 (line 192)
+  - getKundeByEmail: 1 (line 103)
+  - isUniqueConstraintViolation: 1 (line 142)
+  - createConflictResponse: 1 (line 146)
+  - createBadRequestResponse: 1 (line 156)
+  - createServerErrorResponse: 1 (line 166)
+  - createConflictResponseWithDetails: 1 (line 198)
 
 
 Class: ProduktResource
@@ -78,15 +86,15 @@ Total Complexity: 23
 Highest Method Complexity: 4
 --------------------------------------------------------------------------------
 Methods:
-  - markiereAlsBezahlt: 4 (line 127)
-  - getRechnungByBestellungId: 3 (line 76)
-  - erstelleRechnung: 3 (line 110)
-  - downloadPdf: 3 (line 152)
-  - rechnungslauf: 3 (line 181)
-  - getAlleRechnungen: 2 (line 46)
-  - getRechnungById: 2 (line 63)
-  - getOffeneRechnungen: 2 (line 94)
-  - toDTO: 1 (line 30)
+  - markiereAlsBezahlt: 4 (line 131)
+  - getRechnungByBestellungId: 3 (line 80)
+  - erstelleRechnung: 3 (line 114)
+  - downloadPdf: 3 (line 156)
+  - rechnungslauf: 3 (line 189)
+  - getAlleRechnungen: 2 (line 50)
+  - getRechnungById: 2 (line 67)
+  - getOffeneRechnungen: 2 (line 98)
+  - toDTO: 1 (line 34)
 
 
 Class: RechnungService
@@ -165,16 +173,16 @@ Total Complexity: 15
 Highest Method Complexity: 5
 --------------------------------------------------------------------------------
 Methods:
-  - addKundenInfo: 5 (line 80)
-  - addPositionenTabelle: 2 (line 129)
-  - generiereRechnungsPdf: 1 (line 30)
-  - addHeader: 1 (line 68)
-  - addRechnungsDetails: 1 (line 109)
-  - addGesamtsumme: 1 (line 157)
-  - addFooter: 1 (line 166)
-  - createCell: 1 (line 176)
-  - createHeaderCell: 1 (line 183)
-  - formatPrice: 1 (line 190)
+  - addKundenInfo: 5 (line 81)
+  - addPositionenTabelle: 2 (line 130)
+  - generiereRechnungsPdf: 1 (line 31)
+  - addHeader: 1 (line 69)
+  - addRechnungsDetails: 1 (line 110)
+  - addGesamtsumme: 1 (line 158)
+  - addFooter: 1 (line 167)
+  - createCell: 1 (line 177)
+  - createHeaderCell: 1 (line 184)
+  - formatPrice: 1 (line 191)
 
 
 Class: BestellPosition
@@ -299,9 +307,9 @@ Total Complexity: 7
 Highest Method Complexity: 4
 --------------------------------------------------------------------------------
 Methods:
-  - erstelleBestellung: 4 (line 47)
-  - findAllAndInitializePositions: 2 (line 35)
-  - aktualisiereStatus: 1 (line 73)
+  - erstelleBestellung: 4 (line 51)
+  - findAllAndInitializePositions: 2 (line 39)
+  - aktualisiereStatus: 1 (line 80)
 
 
 Class: BestellungRepository
@@ -329,6 +337,18 @@ Methods:
   - getMenge: 1 (line 22)
   - setProduktId: 1 (line 27)
   - setMenge: 1 (line 31)
+
+
+Class: InsufficientStockException
+Package: com.example.exception
+Total Complexity: 4
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - InsufficientStockException: 1 (line 11)
+  - getProduktName: 1 (line 19)
+  - getVerfuegbar: 1 (line 23)
+  - getAngefordert: 1 (line 27)
 
 
 Class: BestellungCreateRequest
@@ -363,6 +383,16 @@ Methods:
   - TestdatenResponse: 1 (line 73)
   - getMessage: 1 (line 77)
   - setMessage: 1 (line 81)
+
+
+Class: EntityNotFoundException
+Package: com.example.exception
+Total Complexity: 2
+Highest Method Complexity: 1
+--------------------------------------------------------------------------------
+Methods:
+  - EntityNotFoundException: 1 (line 7)
+  - EntityNotFoundException: 1 (line 11)
 
 
 Class: StatusUpdateRequest

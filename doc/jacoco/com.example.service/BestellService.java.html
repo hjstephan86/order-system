@@ -7,6 +7,8 @@ import com.example.entity.BestellStatus;
 import com.example.entity.Bestellung;
 import com.example.entity.Kunde;
 import com.example.entity.Produkt;
+import com.example.exception.EntityNotFoundException;
+import com.example.exception.InsufficientStockException;
 import com.example.repository.BestellungRepository;
 import com.example.repository.KundeRepository;
 import com.example.repository.ProduktRepository;
@@ -17,7 +19,7 @@ import jakarta.transaction.Transactional;
 
 @Stateless
 @Transactional
-<span class="nc" id="L20">public class BestellService {</span>
+<span class="nc" id="L22">public class BestellService {</span>
 
     @Inject
     private BestellungRepository bestellungRepo;
@@ -29,52 +31,58 @@ import jakarta.transaction.Transactional;
     private ProduktRepository produktRepo;
 
     /**
-     * Ruft alle Bestellungen ab und initialisiert die lazy-geladene 'positionen' Kollektion.
-     * Dadurch wird die LazyInitializationException während der JSON-Serialisierung vermieden.
+     * Ruft alle Bestellungen ab und initialisiert die lazy-geladene 'positionen'
+     * Kollektion.
+     * Dadurch wird die LazyInitializationException während der JSON-Serialisierung
+     * vermieden.
      */
     public List&lt;Bestellung&gt; findAllAndInitializePositions() {
-<span class="nc" id="L36">        List&lt;Bestellung&gt; bestellungen = bestellungRepo.findAll();</span>
+<span class="nc" id="L40">        List&lt;Bestellung&gt; bestellungen = bestellungRepo.findAll();</span>
 
         // Explizite Initialisierung der lazy-geladenen Kollektion
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        for (Bestellung bestellung : bestellungen) {</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        for (Bestellung bestellung : bestellungen) {</span>
             // Durch Aufruf einer Methode auf der Collection wird sie geladen
-<span class="nc" id="L41">            bestellung.getPositionen().size(); </span>
-<span class="nc" id="L42">        }</span>
-        
-<span class="nc" id="L44">        return bestellungen;</span>
+<span class="nc" id="L45">            bestellung.getPositionen().size();</span>
+<span class="nc" id="L46">        }</span>
+
+<span class="nc" id="L48">        return bestellungen;</span>
     }
-    
+
+    @SuppressWarnings(&quot;PMD.AvoidInstantiatingObjectsInLoops&quot;)
     public Bestellung erstelleBestellung(Long kundeId, List&lt;BestellPositionDTO&gt; positionen) {
-<span class="nc" id="L48">        Kunde kunde = kundeRepo.findById(kundeId)</span>
-<span class="nc" id="L49">                .orElseThrow(() -&gt; new RuntimeException(&quot;Kunde nicht gefunden&quot;));</span>
+<span class="nc" id="L53">        Kunde kunde = kundeRepo.findById(kundeId)</span>
+<span class="nc" id="L54">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Kunde&quot;, kundeId));</span>
 
-<span class="nc" id="L51">        Bestellung bestellung = new Bestellung();</span>
-<span class="nc" id="L52">        bestellung.setKunde(kunde);</span>
+<span class="nc" id="L56">        Bestellung bestellung = new Bestellung();</span>
+<span class="nc" id="L57">        bestellung.setKunde(kunde);</span>
 
-<span class="nc bnc" id="L54" title="All 2 branches missed.">        for (BestellPositionDTO dto : positionen) {</span>
-<span class="nc" id="L55">            Produkt produkt = produktRepo.findById(dto.getProduktId())</span>
-<span class="nc" id="L56">                    .orElseThrow(() -&gt; new RuntimeException(&quot;Produkt nicht gefunden&quot;));</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        for (BestellPositionDTO dto : positionen) {</span>
+<span class="nc" id="L60">            Produkt produkt = produktRepo.findById(dto.getProduktId())</span>
+<span class="nc" id="L61">                    .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Produkt&quot;, dto.getProduktId()));</span>
 
-<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (produkt.getLagerbestand() &lt; dto.getMenge()) {</span>
-<span class="nc" id="L59">                throw new RuntimeException(&quot;Nicht genug Lagerbestand für: &quot; + produkt.getName());</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">            if (produkt.getLagerbestand() &lt; dto.getMenge()) {</span>
+<span class="nc" id="L64">                throw new InsufficientStockException(</span>
+<span class="nc" id="L65">                        produkt.getName(),</span>
+<span class="nc" id="L66">                        produkt.getLagerbestand(),</span>
+<span class="nc" id="L67">                        dto.getMenge());</span>
             }
 
-<span class="nc" id="L62">            BestellPosition position = new BestellPosition(produkt, dto.getMenge());</span>
-<span class="nc" id="L63">            bestellung.addPosition(position);</span>
+<span class="nc" id="L70">            BestellPosition position = new BestellPosition(produkt, dto.getMenge());</span>
+<span class="nc" id="L71">            bestellung.addPosition(position);</span>
 
             // Lagerbestand reduzieren
-<span class="nc" id="L66">            produkt.setLagerbestand(produkt.getLagerbestand() - dto.getMenge());</span>
-<span class="nc" id="L67">            produktRepo.save(produkt);</span>
-<span class="nc" id="L68">        }</span>
+<span class="nc" id="L74">            produkt.setLagerbestand(produkt.getLagerbestand() - dto.getMenge());</span>
+<span class="nc" id="L75">            produktRepo.save(produkt);</span>
+<span class="nc" id="L76">        }</span>
 
-<span class="nc" id="L70">        return bestellungRepo.save(bestellung);</span>
+<span class="nc" id="L78">        return bestellungRepo.save(bestellung);</span>
     }
 
     public void aktualisiereStatus(Long bestellungId, BestellStatus neuerStatus) {
-<span class="nc" id="L74">        Bestellung bestellung = bestellungRepo.findById(bestellungId)</span>
-<span class="nc" id="L75">                .orElseThrow(() -&gt; new RuntimeException(&quot;Bestellung nicht gefunden&quot;));</span>
-<span class="nc" id="L76">        bestellung.setStatus(neuerStatus);</span>
-<span class="nc" id="L77">        bestellungRepo.save(bestellung);</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L82">        Bestellung bestellung = bestellungRepo.findById(bestellungId)</span>
+<span class="nc" id="L83">                .orElseThrow(() -&gt; new RuntimeException(&quot;Bestellung nicht gefunden&quot;));</span>
+<span class="nc" id="L84">        bestellung.setStatus(neuerStatus);</span>
+<span class="nc" id="L85">        bestellungRepo.save(bestellung);</span>
+<span class="nc" id="L86">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

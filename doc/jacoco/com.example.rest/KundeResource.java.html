@@ -69,50 +69,7 @@ import jakarta.ws.rs.core.Response;
                             })
 <span class="nc" id="L70">                            .build());</span>
 <span class="nc" id="L71">        } catch (Exception e) {</span>
-<span class="nc" id="L72">            String errorMsg = getFullErrorMessage(e);</span>
-
-            // Spezifische Fehlerunterscheidung
-<span class="nc bnc" id="L75" title="All 6 branches missed.">            if (errorMsg.contains(&quot;email&quot;) &amp;&amp; (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;))) {</span>
-<span class="nc" id="L76">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L77">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L79">                                put(&quot;message&quot;, &quot;Die E-Mail-Adresse wird bereits von einem anderen Kunden verwendet&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L82">                        .build();</span>
-<span class="nc bnc" id="L83" title="All 6 branches missed.">            } else if (errorMsg.contains(&quot;name&quot;) &amp;&amp; (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;))) {</span>
-<span class="nc" id="L84">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L85">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L87">                                put(&quot;message&quot;, &quot;Ein Kunde mit diesem Namen existiert bereits&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L90">                        .build();</span>
-<span class="nc bnc" id="L91" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;)) {</span>
-<span class="nc" id="L92">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L93">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L95">                                put(&quot;message&quot;, &quot;Ein Kunde mit diesen Daten existiert bereits&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L98">                        .build();</span>
-<span class="nc bnc" id="L99" title="All 2 branches missed.">            } else if (errorMsg.contains(&quot;constraint&quot;)) {</span>
-<span class="nc" id="L100">                return Response.status(Response.Status.BAD_REQUEST)</span>
-<span class="nc" id="L101">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L103">                                put(&quot;message&quot;, &quot;Die Kundendaten verletzen eine Datenbankregel&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L106">                        .build();</span>
-            } else {
-<span class="nc" id="L108">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L109">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L111">                                put(&quot;message&quot;, &quot;Fehler beim Aktualisieren des Kunden: &quot; + e.getMessage());</span>
-                            }
-                        })
-<span class="nc" id="L114">                        .build();</span>
-            }
+<span class="nc" id="L72">            return handleUpdateKundeException(e);</span>
         }
     }
 
@@ -121,68 +78,22 @@ import jakarta.ws.rs.core.Response;
     @Path(&quot;/{id}&quot;)
     public Response deleteKunde(@PathParam(&quot;id&quot;) Long id) {
         try {
-<span class="nc" id="L124">            Optional&lt;Kunde&gt; kunde = kundeRepository.findById(id);</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (kunde.isEmpty()) {</span>
-<span class="nc" id="L126">                return Response.status(Response.Status.NOT_FOUND)</span>
-<span class="nc" id="L127">                        .entity(new HashMap&lt;String, String&gt;() {</span>
+<span class="nc" id="L81">            Optional&lt;Kunde&gt; kunde = kundeRepository.findById(id);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (kunde.isEmpty()) {</span>
+<span class="nc" id="L83">                return Response.status(Response.Status.NOT_FOUND)</span>
+<span class="nc" id="L84">                        .entity(new HashMap&lt;String, String&gt;() {</span>
                             {
-<span class="nc" id="L129">                                put(&quot;message&quot;, &quot;Kunde nicht gefunden&quot;);</span>
+<span class="nc" id="L86">                                put(&quot;message&quot;, &quot;Kunde nicht gefunden&quot;);</span>
                             }
                         })
-<span class="nc" id="L132">                        .build();</span>
+<span class="nc" id="L89">                        .build();</span>
             }
 
-<span class="nc" id="L135">            kundeRepository.delete(kunde.get());</span>
-<span class="nc" id="L136">            return Response.noContent().build();</span>
+<span class="nc" id="L92">            kundeRepository.delete(kunde.get());</span>
+<span class="nc" id="L93">            return Response.noContent().build();</span>
 
-<span class="nc" id="L138">        } catch (Exception e) {</span>
-<span class="nc" id="L139">            String errorMsg = getFullErrorMessage(e);</span>
-
-            // Spezifische Fehlerunterscheidung
-<span class="nc bnc" id="L142" title="All 4 branches missed.">            if (errorMsg.contains(&quot;bestellung&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
-<span class="nc" id="L143">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L144">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L146">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden, da noch Bestellungen existieren&quot;);</span>
-<span class="nc" id="L147">                                put(&quot;details&quot;, &quot;Bitte löschen Sie zuerst alle Bestellungen dieses Kunden&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L150">                        .build();</span>
-<span class="nc bnc" id="L151" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;rechnung&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
-<span class="nc" id="L152">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L153">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L155">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden, da noch Rechnungen existieren&quot;);</span>
-<span class="nc" id="L156">                                put(&quot;details&quot;, &quot;Bitte löschen Sie zuerst alle Rechnungen dieses Kunden&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L159">                        .build();</span>
-<span class="nc bnc" id="L160" title="All 4 branches missed.">            } else if (errorMsg.contains(&quot;foreign key&quot;) || errorMsg.contains(&quot;violates&quot;)) {</span>
-<span class="nc" id="L161">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L162">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L164">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden, da noch Abhängigkeiten bestehen&quot;);</span>
-<span class="nc" id="L165">                                put(&quot;details&quot;, &quot;Der Kunde wird noch von anderen Datensätzen referenziert&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L168">                        .build();</span>
-<span class="nc bnc" id="L169" title="All 2 branches missed.">            } else if (errorMsg.contains(&quot;constraintviolationexception&quot;)) {</span>
-<span class="nc" id="L170">                return Response.status(Response.Status.CONFLICT)</span>
-<span class="nc" id="L171">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L173">                                put(&quot;message&quot;, &quot;Kunde kann nicht gelöscht werden (Datenbankregel verletzt)&quot;);</span>
-                            }
-                        })
-<span class="nc" id="L176">                        .build();</span>
-            } else {
-<span class="nc" id="L178">                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
-<span class="nc" id="L179">                        .entity(new HashMap&lt;String, String&gt;() {</span>
-                            {
-<span class="nc" id="L181">                                put(&quot;message&quot;, &quot;Fehler beim Löschen des Kunden: &quot; + e.getMessage());</span>
-                            }
-                        })
-<span class="nc" id="L184">                        .build();</span>
-            }
+<span class="nc" id="L95">        } catch (Exception e) {</span>
+<span class="nc" id="L96">            return handleDeleteKundeException(e);</span>
         }
     }
 
@@ -190,23 +101,109 @@ import jakarta.ws.rs.core.Response;
     @GET
     @Path(&quot;/email/{email}&quot;)
     public Response getKundeByEmail(@PathParam(&quot;email&quot;) String email) {
-<span class="nc" id="L193">        return kundeRepository.findByEmail(email)</span>
-<span class="nc" id="L194">                .map(kunde -&gt; Response.ok(kunde).build())</span>
-<span class="nc" id="L195">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
+<span class="nc" id="L104">        return kundeRepository.findByEmail(email)</span>
+<span class="nc" id="L105">                .map(kunde -&gt; Response.ok(kunde).build())</span>
+<span class="nc" id="L106">                .orElse(Response.status(Response.Status.NOT_FOUND).build());</span>
     }
 
     // Hilfsmethode um die komplette Exception-Kette zu durchsuchen
     private String getFullErrorMessage(Throwable e) {
-<span class="nc" id="L200">        StringBuilder sb = new StringBuilder();</span>
-<span class="nc" id="L201">        Throwable current = e;</span>
-<span class="nc bnc" id="L202" title="All 2 branches missed.">        while (current != null) {</span>
-<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (current.getMessage() != null) {</span>
-<span class="nc" id="L204">                sb.append(current.getMessage()).append(&quot; &quot;);</span>
+<span class="nc" id="L111">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L112">        Throwable current = e;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        while (current != null) {</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">            if (current.getMessage() != null) {</span>
+<span class="nc" id="L115">                sb.append(current.getMessage()).append(' ');</span>
             }
-<span class="nc" id="L206">            sb.append(current.getClass().getName()).append(&quot; &quot;);</span>
-<span class="nc" id="L207">            current = current.getCause();</span>
+<span class="nc" id="L117">            sb.append(current.getClass().getName()).append(' ');</span>
+<span class="nc" id="L118">            current = current.getCause();</span>
         }
-<span class="nc" id="L209">        return sb.toString().toLowerCase();</span>
+<span class="nc" id="L120">        return sb.toString().toLowerCase();</span>
+    }
+
+    private Response handleUpdateKundeException(Exception e) {
+<span class="nc" id="L124">        String errorMsg = getFullErrorMessage(e);</span>
+
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        if (isUniqueConstraintViolation(errorMsg)) {</span>
+<span class="nc" id="L127">            return handleUniqueViolation(errorMsg);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        } else if (errorMsg.contains(&quot;constraint&quot;)) {</span>
+<span class="nc" id="L129">            return createBadRequestResponse(&quot;Die Kundendaten verletzen eine Datenbankregel&quot;);</span>
+        } else {
+<span class="nc" id="L131">            return createServerErrorResponse(&quot;Fehler beim Aktualisieren des Kunden: &quot; + e.getMessage());</span>
+        }
+    }
+
+    private Response handleUniqueViolation(String errorMsg) {
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (errorMsg.contains(&quot;email&quot;)) {</span>
+<span class="nc" id="L137">            return createConflictResponse(&quot;Die E-Mail-Adresse wird bereits von einem anderen Kunden verwendet&quot;);</span>
+        }
+<span class="nc" id="L139">        return createConflictResponse(&quot;Ein Kunde mit diesen Daten existiert bereits&quot;);</span>
+    }
+
+    private boolean isUniqueConstraintViolation(String errorMsg) {
+<span class="nc bnc" id="L143" title="All 4 branches missed.">        return errorMsg.contains(&quot;unique&quot;) || errorMsg.contains(&quot;duplicate&quot;);</span>
+    }
+
+    private Response createConflictResponse(String message) {
+<span class="nc" id="L147">        return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L148">                .entity(new HashMap&lt;String, String&gt;() {</span>
+                    {
+<span class="nc" id="L150">                        put(&quot;message&quot;, message);</span>
+                    }
+                })
+<span class="nc" id="L153">                .build();</span>
+    }
+
+    private Response createBadRequestResponse(String message) {
+<span class="nc" id="L157">        return Response.status(Response.Status.BAD_REQUEST)</span>
+<span class="nc" id="L158">                .entity(new HashMap&lt;String, String&gt;() {</span>
+                    {
+<span class="nc" id="L160">                        put(&quot;message&quot;, message);</span>
+                    }
+                })
+<span class="nc" id="L163">                .build();</span>
+    }
+
+    private Response createServerErrorResponse(String message) {
+<span class="nc" id="L167">        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L168">                .entity(new HashMap&lt;String, String&gt;() {</span>
+                    {
+<span class="nc" id="L170">                        put(&quot;message&quot;, message);</span>
+                    }
+                })
+<span class="nc" id="L173">                .build();</span>
+    }
+
+    private Response handleDeleteKundeException(Exception e) {
+<span class="nc" id="L177">        String errorMsg = getFullErrorMessage(e);</span>
+
+<span class="nc bnc" id="L179" title="All 4 branches missed.">        if (errorMsg.contains(&quot;bestellung&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
+<span class="nc" id="L180">            return createConflictResponseWithDetails(</span>
+                    &quot;Kunde kann nicht gelöscht werden, da noch Bestellungen existieren&quot;,
+                    &quot;Bitte löschen Sie zuerst alle Bestellungen dieses Kunden&quot;);
+<span class="nc bnc" id="L183" title="All 4 branches missed.">        } else if (errorMsg.contains(&quot;rechnung&quot;) &amp;&amp; errorMsg.contains(&quot;foreign key&quot;)) {</span>
+<span class="nc" id="L184">            return createConflictResponseWithDetails(</span>
+                    &quot;Kunde kann nicht gelöscht werden, da noch Rechnungen existieren&quot;,
+                    &quot;Bitte löschen Sie zuerst alle Rechnungen dieses Kunden&quot;);
+<span class="nc bnc" id="L187" title="All 4 branches missed.">        } else if (errorMsg.contains(&quot;foreign key&quot;) || errorMsg.contains(&quot;violates&quot;)) {</span>
+<span class="nc" id="L188">            return createConflictResponseWithDetails(</span>
+                    &quot;Kunde kann nicht gelöscht werden, da noch Abhängigkeiten bestehen&quot;,
+                    &quot;Der Kunde wird noch von anderen Datensätzen referenziert&quot;);
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        } else if (errorMsg.contains(&quot;constraintviolationexception&quot;)) {</span>
+<span class="nc" id="L192">            return createConflictResponse(&quot;Kunde kann nicht gelöscht werden (Datenbankregel verletzt)&quot;);</span>
+        } else {
+<span class="nc" id="L194">            return createServerErrorResponse(&quot;Fehler beim Löschen des Kunden: &quot; + e.getMessage());</span>
+        }
+    }
+
+    private Response createConflictResponseWithDetails(String message, String details) {
+<span class="nc" id="L199">        return Response.status(Response.Status.CONFLICT)</span>
+<span class="nc" id="L200">                .entity(new HashMap&lt;String, String&gt;() {</span>
+                    {
+<span class="nc" id="L202">                        put(&quot;message&quot;, message);</span>
+<span class="nc" id="L203">                        put(&quot;details&quot;, details);</span>
+                    }
+                })
+<span class="nc" id="L206">                .build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

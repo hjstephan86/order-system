@@ -183,9 +183,9 @@ import jakarta.ws.rs.core.Response;
 <span class="nc" id="L183">        Throwable current = e;</span>
 <span class="nc bnc" id="L184" title="All 2 branches missed.">        while (current != null) {</span>
 <span class="nc bnc" id="L185" title="All 2 branches missed.">            if (current.getMessage() != null) {</span>
-<span class="nc" id="L186">                sb.append(current.getMessage()).append(&quot; &quot;);</span>
+<span class="nc" id="L186">                sb.append(current.getMessage()).append(' ');</span>
             }
-<span class="nc" id="L188">            sb.append(current.getClass().getName()).append(&quot; &quot;);</span>
+<span class="nc" id="L188">            sb.append(current.getClass().getName()).append(' ');</span>
 <span class="nc" id="L189">            current = current.getCause();</span>
         }
 <span class="nc" id="L191">        return sb.toString().toLowerCase();</span>

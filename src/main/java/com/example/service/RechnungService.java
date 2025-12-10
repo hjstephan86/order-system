@@ -106,9 +106,10 @@ public class RechnungService {
         return rechnungRepository.findByStatus(RechnungsStatus.OFFEN);
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public List<Bestellung> rechnungslauf() {
         List<Bestellung> neueBestellungen = bestellungRepository.findByStatus(BestellStatus.NEU);
-        List<Bestellung> neueBestellungenMitRechnung = new ArrayList<Bestellung>();
+        List<Bestellung> neueBestellungenMitRechnung = new ArrayList<>();
         for (Bestellung bestellung : neueBestellungen) {
             Long bestellungId = bestellung.getId();
             Rechnung existingRechnung = rechnungRepository.findByBestellungId(bestellungId);

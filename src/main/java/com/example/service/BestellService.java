@@ -7,6 +7,8 @@ import com.example.entity.BestellStatus;
 import com.example.entity.Bestellung;
 import com.example.entity.Kunde;
 import com.example.entity.Produkt;
+import com.example.exception.EntityNotFoundException;
+import com.example.exception.InsufficientStockException;
 import com.example.repository.BestellungRepository;
 import com.example.repository.KundeRepository;
 import com.example.repository.ProduktRepository;
@@ -29,8 +31,10 @@ public class BestellService {
     private ProduktRepository produktRepo;
 
     /**
-     * Ruft alle Bestellungen ab und initialisiert die lazy-geladene 'positionen' Kollektion.
-     * Dadurch wird die LazyInitializationException während der JSON-Serialisierung vermieden.
+     * Ruft alle Bestellungen ab und initialisiert die lazy-geladene 'positionen'
+     * Kollektion.
+     * Dadurch wird die LazyInitializationException während der JSON-Serialisierung
+     * vermieden.
      */
     public List<Bestellung> findAllAndInitializePositions() {
         List<Bestellung> bestellungen = bestellungRepo.findAll();
@@ -38,25 +42,29 @@ public class BestellService {
         // Explizite Initialisierung der lazy-geladenen Kollektion
         for (Bestellung bestellung : bestellungen) {
             // Durch Aufruf einer Methode auf der Collection wird sie geladen
-            bestellung.getPositionen().size(); 
+            bestellung.getPositionen().size();
         }
-        
+
         return bestellungen;
     }
-    
+
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public Bestellung erstelleBestellung(Long kundeId, List<BestellPositionDTO> positionen) {
         Kunde kunde = kundeRepo.findById(kundeId)
-                .orElseThrow(() -> new RuntimeException("Kunde nicht gefunden"));
+                .orElseThrow(() -> new EntityNotFoundException("Kunde", kundeId));
 
         Bestellung bestellung = new Bestellung();
         bestellung.setKunde(kunde);
 
         for (BestellPositionDTO dto : positionen) {
             Produkt produkt = produktRepo.findById(dto.getProduktId())
-                    .orElseThrow(() -> new RuntimeException("Produkt nicht gefunden"));
+                    .orElseThrow(() -> new EntityNotFoundException("Produkt", dto.getProduktId()));
 
             if (produkt.getLagerbestand() < dto.getMenge()) {
-                throw new RuntimeException("Nicht genug Lagerbestand für: " + produkt.getName());
+                throw new InsufficientStockException(
+                        produkt.getName(),
+                        produkt.getLagerbestand(),
+                        dto.getMenge());
             }
 
             BestellPosition position = new BestellPosition(produkt, dto.getMenge());
