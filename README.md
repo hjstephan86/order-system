@@ -219,11 +219,32 @@ tail -f /opt/wildfly/standalone/log/server.log
 
 ## Cyclomatic Complexity Overview
 ```bash
-# Run pmd code analysis
+# Run PMD code analysis
 mvn pmd:pmd
 
 # Generate cyclomatic complexity overview as TXT
 python3 cc.py
+```
+
+## SonarQube Analysis
+```bash
+# Run with SonarQube analysis
+mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+  -Dsonar.projectKey=order-system \
+  -Dsonar.projectName='order-system' \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=sqp_6387765bba30d3a250661a9edb69d82e6eb16f51 \
+  -Dsonar.coverage.jacoco.xmlReportPaths=doc/jacoco/jacoco.xml
+  
+# Export SQL SonarQube analysis results
+sudo -u postgres pg_dump sonarqube \
+  -t issues \
+  -t project_measures \
+  -t metrics \
+  -t snapshots \
+  -t projects \
+  -t project_branches \
+  > doc/SQL/sonarqube_metrics_export.sql
 ```
 
 ## Read Database Dump
