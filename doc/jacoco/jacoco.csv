@@ -41,7 +41,7 @@ Order System,com.example.entity,BestellStatus,0,33,0,0,0,6,0,1,0,1
 Order System,com.example.entity,Kunde,0,132,0,0,0,53,0,31,0,31
 Order System,com.example.entity,Rechnung,0,65,0,0,0,28,0,17,0,17
 Order System,com.example.entity,RechnungsStatus,0,21,0,0,0,4,0,1,0,1
-Order System,com.example.repository,KundeRepository,8,56,2,2,1,11,2,6,0,6
+Order System,com.example.repository,KundeRepository,0,64,0,4,0,12,0,8,0,6
 Order System,com.example.repository,BestellungRepository,0,61,0,2,0,13,0,7,0,6
-Order System,com.example.repository,ProduktRepository,4,55,1,3,0,12,1,7,0,6
-Order System,com.example.repository,RechnungRepository,9,84,2,4,1,19,2,8,0,7
+Order System,com.example.repository,ProduktRepository,0,59,0,4,0,12,0,8,0,6
+Order System,com.example.repository,RechnungRepository,0,93,0,6,0,20,0,10,0,7

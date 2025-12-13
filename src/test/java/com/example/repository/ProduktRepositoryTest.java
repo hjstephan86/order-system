@@ -104,4 +104,45 @@ public class ProduktRepositoryTest {
         repo.delete(p);
         verify(em).remove(p);
     }
+
+    // Ergänzungen für ProduktRepositoryTest.java
+    // Diese Tests fügen Sie der bestehenden Klasse hinzu
+
+    @Test
+    public void findByIdReturnsEmptyWhenNotFound() {
+        when(em.find(Produkt.class, 999L)).thenReturn(null);
+
+        assertThat(repo.findById(999L)).isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void findByNameContainingReturnsMatchingProducts() {
+        TypedQuery<Produkt> q = (TypedQuery<Produkt>) Mockito.mock(TypedQuery.class);
+        when(em.createQuery(org.mockito.ArgumentMatchers.anyString(), Mockito.eq(Produkt.class))).thenReturn(q);
+        when(q.setParameter(Mockito.eq("name"), Mockito.eq("%laptop%"))).thenReturn(q);
+
+        Produkt p1 = new Produkt();
+        Produkt p2 = new Produkt();
+        when(q.getResultList()).thenReturn(List.of(p1, p2));
+
+        List<Produkt> results = repo.findByNameContaining("laptop");
+
+        assertThat(results).hasSize(2);
+        assertThat(results).containsExactly(p1, p2);
+    }
+
+    @Test
+    public void deleteCallsMergeAndRemoveWhenNotContained() {
+        Produkt p = new Produkt();
+        Produkt merged = new Produkt();
+
+        when(em.contains(p)).thenReturn(false);
+        when(em.merge(p)).thenReturn(merged);
+
+        repo.delete(p);
+
+        verify(em).merge(p);
+        verify(em).remove(merged);
+    }
 }

@@ -235,7 +235,7 @@ mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
   -Dsonar.host.url=http://localhost:9000 \
   -Dsonar.token=sqp_6387765bba30d3a250661a9edb69d82e6eb16f51 \
   -Dsonar.coverage.jacoco.xmlReportPaths=doc/jacoco/jacoco.xml
-  
+
 # Export SQL SonarQube analysis results
 sudo -u postgres pg_dump sonarqube \
   -t issues \
@@ -245,6 +245,48 @@ sudo -u postgres pg_dump sonarqube \
   -t projects \
   -t project_branches \
   > doc/SQL/sonarqube_metrics_export.sql
+
+# Get the current quality gate status with details
+curl -s -u admin:admin "http://localhost:9000/api/qualitygates/project_status?projectKey=order-system" | jq .
+{
+  "projectStatus": {
+    "status": "OK",
+    "conditions": [
+      {
+        "status": "OK",
+        "metricKey": "new_coverage",
+        "comparator": "LT",
+        "errorThreshold": "80"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_duplicated_lines_density",
+        "comparator": "GT",
+        "errorThreshold": "3",
+        "actualValue": "0.0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_security_hotspots_reviewed",
+        "comparator": "LT",
+        "errorThreshold": "100"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_violations",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      }
+    ],
+    "ignoredConditions": false,
+    "period": {
+      "mode": "PREVIOUS_VERSION",
+      "date": "2025-12-12T09:08:08+0100"
+    },
+    "caycStatus": "compliant"
+  }
+}
 ```
 
 ## Read Database Dump

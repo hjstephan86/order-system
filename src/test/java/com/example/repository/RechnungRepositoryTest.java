@@ -101,4 +101,41 @@ public class RechnungRepositoryTest {
         repo.delete(r);
         verify(em).remove(r);
     }
+
+    // Ergänzungen für RechnungRepositoryTest.java
+    // Diese Tests fügen Sie der bestehenden Klasse hinzu
+
+    @Test
+    public void findByIdReturnsEmptyWhenNotFound() {
+        when(em.find(Rechnung.class, 999L)).thenReturn(null);
+
+        assertThat(repo.findById(999L)).isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void findByBestellungIdReturnsFirstWhenFound() {
+        TypedQuery<Rechnung> q = (TypedQuery<Rechnung>) Mockito.mock(TypedQuery.class);
+        when(em.createQuery(org.mockito.ArgumentMatchers.anyString(), Mockito.eq(Rechnung.class))).thenReturn(q);
+        when(q.setParameter(Mockito.eq("bestellungId"), Mockito.eq(7L))).thenReturn(q);
+
+        Rechnung r1 = new Rechnung();
+        Rechnung r2 = new Rechnung();
+        when(q.getResultList()).thenReturn(List.of(r1, r2));
+
+        Rechnung result = repo.findByBestellungId(7L);
+
+        assertThat(result).isSameAs(r1);
+    }
+
+    @Test
+    public void deleteRemovesDirectlyWhenContained() {
+        Rechnung r = new Rechnung();
+        when(em.contains(r)).thenReturn(true);
+
+        repo.delete(r);
+
+        verify(em).remove(r);
+        verify(em, Mockito.never()).merge(r);
+    }
 }

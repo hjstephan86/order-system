@@ -82,4 +82,54 @@ public class KundeRepositoryTest {
         repo.delete(k);
         verify(em).remove(k);
     }
+
+    // Ergänzungen für KundeRepositoryTest.java
+    // Diese Tests ergänzen die bestehende Klasse
+
+    @Test
+    public void saveMergesWhenIdNotNull() {
+        Kunde k = new Kunde();
+        k.setId(1L);
+        Kunde merged = new Kunde();
+
+        when(em.merge(k)).thenReturn(merged);
+
+        Kunde saved = repo.save(k);
+
+        verify(em).merge(k);
+        assertThat(saved).isSameAs(merged);
+    }
+
+    @Test
+    public void findByIdReturnsEmptyWhenNotFound() {
+        when(em.find(Kunde.class, 99L)).thenReturn(null);
+
+        Optional<Kunde> opt = repo.findById(99L);
+
+        assertThat(opt).isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void findByEmailReturnsEmptyWhenNotFound() {
+        TypedQuery<Kunde> q = (TypedQuery<Kunde>) Mockito.mock(TypedQuery.class);
+        when(em.createQuery(org.mockito.ArgumentMatchers.anyString(), Mockito.eq(Kunde.class))).thenReturn(q);
+        when(q.setParameter(Mockito.eq("email"), Mockito.eq("notfound@test.de"))).thenReturn(q);
+        when(q.getResultList()).thenReturn(List.of());
+
+        Optional<Kunde> opt = repo.findByEmail("notfound@test.de");
+
+        assertThat(opt).isEmpty();
+    }
+
+    @Test
+    public void deleteCallsRemoveWhenContained() {
+        Kunde k = new Kunde();
+        when(em.contains(k)).thenReturn(true);
+
+        repo.delete(k);
+
+        verify(em).remove(k);
+        verify(em, Mockito.never()).merge(k);
+    }
 }

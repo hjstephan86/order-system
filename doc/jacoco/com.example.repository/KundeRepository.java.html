@@ -17,11 +17,11 @@ import jakarta.persistence.TypedQuery;
     private EntityManager em;
 
     public Kunde save(Kunde kunde) {
-<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (kunde.getId() == null) {</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        if (kunde.getId() == null) {</span>
 <span class="fc" id="L21">            em.persist(kunde);</span>
 <span class="fc" id="L22">            return kunde;</span>
         } else {
-<span class="nc" id="L24">            return em.merge(kunde);</span>
+<span class="fc" id="L24">            return em.merge(kunde);</span>
         }
     }
 
@@ -41,7 +41,7 @@ import jakarta.persistence.TypedQuery;
     }
 
     public void delete(Kunde kunde) {
-<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        em.remove(em.contains(kunde) ? kunde : em.merge(kunde));</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        em.remove(em.contains(kunde) ? kunde : em.merge(kunde));</span>
 <span class="fc" id="L45">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
